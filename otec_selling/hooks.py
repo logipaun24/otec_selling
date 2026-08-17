@@ -285,7 +285,10 @@ _fixture_doctypes = _selling_doctypes + _custom_doctypes
 fixtures = [
     {"dt": "DocType", "filters": [["custom", "=", 1]]},
     {"dt": "Custom Field", "filters": [["dt", "in", _fixture_doctypes]]},
-    {"dt": "Property Setter", "filters": [["doc_type", "in", _fixture_doctypes]]},
+    {"dt": "Property Setter", "filters": [
+        ["doc_type", "in", _fixture_doctypes],
+        ["property", "!=", "title_field"],
+    ]},
     {"dt": "Custom DocPerm", "filters": [["parent", "in", _fixture_doctypes]]},
     {"dt": "Client Script", "filters": [["dt", "in", _selling_doctypes]]},
     {"dt": "Server Script", "filters": [["reference_doctype", "in", _fixture_doctypes]]},
