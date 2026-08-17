@@ -31,11 +31,21 @@ def _branch_from_text(company: str | None, *values: str | None) -> str | None:
 
 
 def _warehouses(child_doctype: str, parent: str) -> list[str]:
-    return frappe.get_all(
+    warehouses = frappe.get_all(
         child_doctype,
         filters={"parent": parent},
         pluck="warehouse",
     )
+    context = list(warehouses)
+    for warehouse in warehouses:
+        current = warehouse
+        seen = set()
+        while current and current not in seen:
+            seen.add(current)
+            current = frappe.db.get_value("Warehouse", current, "parent_warehouse")
+            if current:
+                context.append(current)
+    return context
 
 
 def _set_document_branch(doctype: str, child_doctype: str, name: str, branch: str) -> None:
