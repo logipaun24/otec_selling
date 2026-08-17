@@ -280,25 +280,37 @@ _custom_doctypes = [
     "Sales Team Group", "Sample Issuance", "Sample Issuance Item",
 ]
 
+_hr_expense_doctypes = [
+    "Employee Advance", "Expense Claim", "Expense Claim Detail",
+    "Expense Claim Type",
+]
+
 _fixture_doctypes = _selling_doctypes + _custom_doctypes
 
 fixtures = [
     {"dt": "DocType", "filters": [["custom", "=", 1]]},
     {"dt": "Custom Field", "filters": [["dt", "in", _fixture_doctypes]]},
+    {"dt": "Custom Field", "prefix": "hr_expense", "filters": [["dt", "in", _hr_expense_doctypes]]},
     {"dt": "Property Setter", "filters": [
         ["doc_type", "in", _fixture_doctypes],
+        ["property", "!=", "title_field"],
+    ]},
+    {"dt": "Property Setter", "prefix": "hr_expense", "filters": [
+        ["doc_type", "in", _hr_expense_doctypes],
         ["property", "!=", "title_field"],
     ]},
     {"dt": "Custom DocPerm", "filters": [["parent", "in", _fixture_doctypes]]},
     {"dt": "Client Script", "filters": [["dt", "in", _selling_doctypes]]},
     {"dt": "Server Script", "filters": [["reference_doctype", "in", _fixture_doctypes]]},
     {"dt": "Workflow", "filters": [["document_type", "in", _selling_doctypes]]},
+    {"dt": "Workflow", "prefix": "hr_expense", "filters": [["document_type", "=", "Expense Claim"]]},
     "Workflow State",
     "Workflow Action Master",
     {"dt": "Workspace", "filters": [["module", "=", "Selling"]]},
     {"dt": "Number Card", "filters": [["module", "=", "Selling"], ["is_standard", "=", 0]]},
     {"dt": "Dashboard Chart", "filters": [["module", "=", "Selling"], ["is_standard", "=", 0]]},
     {"dt": "Report", "filters": [["ref_doctype", "in", _fixture_doctypes], ["is_standard", "=", "No"]]},
+    {"dt": "Report", "prefix": "hr_expense", "filters": [["ref_doctype", "=", "Expense Claim"], ["is_standard", "=", "No"]]},
     {"dt": "Print Format", "filters": [["doc_type", "in", _selling_doctypes], ["custom_format", "=", 1]]},
     {"dt": "Role", "filters": [["name", "in", [
         "Business Owner", "General Manager", "Senior Operations Manager",
