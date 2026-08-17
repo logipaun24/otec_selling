@@ -1,0 +1,219 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-02-04 10:17:43.519729",
+  "name": "Review",
+  "workflow_action_name": "Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-02-13 17:39:27.144598",
+  "name": "Sent",
+  "workflow_action_name": "Sent"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-02-13 17:41:03.280798",
+  "name": "Accepted",
+  "workflow_action_name": "Accepted"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-02-13 17:48:17.050227",
+  "name": "Received",
+  "workflow_action_name": "Received"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-02-13 17:48:29.705700",
+  "name": "Receive",
+  "workflow_action_name": "Receive"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-02-13 17:48:44.126511",
+  "name": "Mark as Sent",
+  "workflow_action_name": "Mark as Sent"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-02-13 17:54:09.108243",
+  "name": "Mark as Received",
+  "workflow_action_name": "Mark as Received"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-03-07 02:22:02.172308",
+  "name": "Pack and DIspatch",
+  "workflow_action_name": "Pack and DIspatch"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-03-07 02:31:16.509667",
+  "name": "Done Picking",
+  "workflow_action_name": "Done Picking"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-14 02:37:46.252968",
+  "name": "Issue Samples",
+  "workflow_action_name": "Issue Samples"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-24 19:59:06.911897",
+  "name": "Request Sales Manager Approval",
+  "workflow_action_name": "Request Sales Manager Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-24 20:04:56.220945",
+  "name": "Revise",
+  "workflow_action_name": "Revise"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-16 00:54:58.318489",
+  "name": "Request Approval",
+  "workflow_action_name": "Request Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-16 00:55:44.339795",
+  "name": "Approve for Warehouse",
+  "workflow_action_name": "Approve for Warehouse"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-16 01:20:43.226034",
+  "name": "Send to Warehouse",
+  "workflow_action_name": "Send to Warehouse"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-16 01:21:17.028945",
+  "name": "Start Picking",
+  "workflow_action_name": "Start Picking"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-16 01:22:16.667837",
+  "name": "Return to Sales",
+  "workflow_action_name": "Return to Sales"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-16 01:22:45.670829",
+  "name": "Confirm Picked",
+  "workflow_action_name": "Confirm Picked"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-08-15 04:46:04.502894",
+  "name": "Request Supervisor Approval",
+  "workflow_action_name": "Request Supervisor Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-08-15 04:47:24.111431",
+  "name": "Request Team Lead Approval",
+  "workflow_action_name": "Request Team Lead Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-02-13 15:54:04.445494",
+  "name": "For Review",
+  "workflow_action_name": "For Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-02-13 18:31:53.563783",
+  "name": "Confirmed",
+  "workflow_action_name": "Confirmed"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-03-07 02:21:03.551051",
+  "name": "Initiate Picking",
+  "workflow_action_name": "Initiate Picking"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-14 02:36:07.861470",
+  "name": "Request GM Approval",
+  "workflow_action_name": "Request GM Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-14 02:38:53.877525",
+  "name": "Cancel",
+  "workflow_action_name": "Cancel"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-05 01:34:56.861595",
+  "name": "Resubmit for Approval",
+  "workflow_action_name": "Resubmit for Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-03-07 03:25:23.854587",
+  "name": "Submit",
+  "workflow_action_name": "Submit"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-24 20:01:49.850106",
+  "name": "Request Business Owner Approval",
+  "workflow_action_name": "Request Business Owner Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-06-24 20:02:49.509549",
+  "name": "Approve Special Pricing",
+  "workflow_action_name": "Approve Special Pricing"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-02-04 10:17:43.519187",
+  "name": "Reject",
+  "workflow_action_name": "Reject"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-02-04 10:17:43.518012",
+  "name": "Approve",
+  "workflow_action_name": "Approve"
+ }
+]

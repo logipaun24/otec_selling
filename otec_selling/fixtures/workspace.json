@@ -1,0 +1,1761 @@
+[
+ {
+  "app": "erpnext",
+  "charts": [
+   {
+    "chart_name": "Sales Order Value Trend",
+    "label": "Sales Order Trends"
+   }
+  ],
+  "content": "[{\"id\":\"58489b2724\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Sales Order Trends\",\"col\":12}},{\"id\":\"0c7c94660e\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Sales Overview</b></span>\",\"col\":12}},{\"id\":\"b2761d173c\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Quotations\",\"col\":4}},{\"id\":\"82792496bd\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Sales Orders\",\"col\":4}},{\"id\":\"4922a3db22\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Open Orders\",\"col\":4}},{\"id\":\"4ec357efa0\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Pending Delivery\",\"col\":4}},{\"id\":\"31d3aabb43\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Unpaid Invoices\",\"col\":4}},{\"id\":\"3a14b2611b\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Monthly Sales\",\"col\":4}},{\"id\":\"8c6cb59b8d\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Actions</b></span>\",\"col\":12}},{\"id\":\"3e5ea832f4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Quotation\",\"col\":3}},{\"id\":\"9b46c7bfd1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations\",\"col\":3}},{\"id\":\"85d570bae1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Sales Order\",\"col\":3}},{\"id\":\"5dc9dfe04c\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Orders\",\"col\":3}},{\"id\":\"b51994c1d0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customers\",\"col\":3}},{\"id\":\"5c153ef4e0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Items\",\"col\":3}},{\"id\":\"0c3cc42b76\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Leads\",\"col\":3}},{\"id\":\"2cf26a61cc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Opportunities\",\"col\":3}},{\"id\":\"126ab888d6\",\"type\":\"card\",\"data\":{\"card_name\":\"Quotation & Sales\",\"col\":4}},{\"id\":\"d080d484df\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "external_link": null,
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "sell",
+  "indicator_color": null,
+  "is_hidden": 0,
+  "label": "Selling",
+  "link_to": null,
+  "link_type": null,
+  "links": [
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Quotation & Sales",
+    "link_count": 0,
+    "link_to": null,
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Card Break"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Quotation",
+    "link_count": 0,
+    "link_to": "Quotation",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Sales Order",
+    "link_count": 0,
+    "link_to": "Sales Order",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Customer",
+    "link_count": 0,
+    "link_to": "Customer",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Item",
+    "link_count": 0,
+    "link_to": "Item",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Reports",
+    "link_count": 0,
+    "link_to": null,
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Card Break"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Sales Analytics",
+    "link_count": 0,
+    "link_to": "Sales Analytics",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Quotation Trends",
+    "link_count": 0,
+    "link_to": "Quotation Trends",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Sales Order Analysis",
+    "link_count": 0,
+    "link_to": "Sales Order Analysis",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Sales Register",
+    "link_count": 0,
+    "link_to": "Sales Register",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Gross Profit",
+    "link_count": 0,
+    "link_to": "Gross Profit",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Accounts Receivable",
+    "link_count": 0,
+    "link_to": "Accounts Receivable",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   }
+  ],
+  "modified": "2026-08-17 02:11:11.360767",
+  "module": "Selling",
+  "name": "Selling",
+  "number_cards": [
+   {
+    "label": "My Quotations",
+    "number_card_name": "My Quotations"
+   },
+   {
+    "label": "My Sales Orders",
+    "number_card_name": "My Sales Orders"
+   },
+   {
+    "label": "Open Orders",
+    "number_card_name": "Open Orders"
+   },
+   {
+    "label": "Pending Delivery",
+    "number_card_name": "Pending Delivery"
+   },
+   {
+    "label": "Unpaid Invoices",
+    "number_card_name": "Unpaid Invoices"
+   },
+   {
+    "label": "Monthly Sales",
+    "number_card_name": "Monthly Sales"
+   }
+  ],
+  "parent_page": "",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": "",
+  "roles": [],
+  "sequence_id": 6.0,
+  "shortcuts": [
+   {
+    "color": "Blue",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "New Quotation",
+    "link_to": "Quotation",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Blue",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Quotations",
+    "link_to": "Quotation",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Green",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "New Sales Order",
+    "link_to": "Sales Order",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Green",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Sales Orders",
+    "link_to": "Sales Order",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Customers",
+    "link_to": "Customer",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Items",
+    "link_to": "Item",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Cyan",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Leads",
+    "link_to": "Lead",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Cyan",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Opportunities",
+    "link_to": "Opportunity",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   }
+  ],
+  "title": "Selling",
+  "type": "Workspace"
+ },
+ {
+  "app": "erpnext",
+  "charts": [
+   {
+    "chart_name": "Sales Order Value Trend",
+    "label": "Sales Order Trends"
+   }
+  ],
+  "content": "[{\"id\":\"58489b2724\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Sales Order Trends\",\"col\":12}},{\"id\":\"0c7c94660e\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Sales Overview</b></span>\",\"col\":12}},{\"id\":\"b2761d173c\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Quotations\",\"col\":4}},{\"id\":\"82792496bd\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Sales Orders\",\"col\":4}},{\"id\":\"4922a3db22\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Open Orders\",\"col\":4}},{\"id\":\"4ec357efa0\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Pending Delivery\",\"col\":4}},{\"id\":\"31d3aabb43\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Unpaid Invoices\",\"col\":4}},{\"id\":\"3a14b2611b\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Monthly Sales\",\"col\":4}},{\"id\":\"8c6cb59b8d\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Actions</b></span>\",\"col\":12}},{\"id\":\"3e5ea832f4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Quotation\",\"col\":3}},{\"id\":\"9b46c7bfd1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations\",\"col\":3}},{\"id\":\"85d570bae1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Sales Order\",\"col\":3}},{\"id\":\"5dc9dfe04c\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Orders\",\"col\":3}},{\"id\":\"b51994c1d0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customers\",\"col\":3}},{\"id\":\"5c153ef4e0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Items\",\"col\":3}},{\"id\":\"0c3cc42b76\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Leads\",\"col\":3}},{\"id\":\"2cf26a61cc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Opportunities\",\"col\":3}},{\"id\":\"126ab888d6\",\"type\":\"card\",\"data\":{\"card_name\":\"Quotation & Sales\",\"col\":4}},{\"id\":\"d080d484df\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "external_link": null,
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "sell",
+  "indicator_color": "green",
+  "is_hidden": 1,
+  "label": "Selling Operations",
+  "link_to": null,
+  "link_type": "DocType",
+  "links": [
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Quotation & Sales",
+    "link_count": 0,
+    "link_to": null,
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Card Break"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Quotation",
+    "link_count": 0,
+    "link_to": "Quotation",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Sales Order",
+    "link_count": 0,
+    "link_to": "Sales Order",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Customer",
+    "link_count": 0,
+    "link_to": "Customer",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Item",
+    "link_count": 0,
+    "link_to": "Item",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Reports",
+    "link_count": 0,
+    "link_to": null,
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Card Break"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Sales Analytics",
+    "link_count": 0,
+    "link_to": "Sales Analytics",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Quotation Trends",
+    "link_count": 0,
+    "link_to": "Quotation Trends",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Sales Order Analysis",
+    "link_count": 0,
+    "link_to": "Sales Order Analysis",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Sales Register",
+    "link_count": 0,
+    "link_to": "Sales Register",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Gross Profit",
+    "link_count": 0,
+    "link_to": "Gross Profit",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 1,
+    "label": "Accounts Receivable",
+    "link_count": 0,
+    "link_to": "Accounts Receivable",
+    "link_type": "Report",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   }
+  ],
+  "modified": "2026-08-17 02:11:11.417048",
+  "module": "Selling",
+  "name": "Selling Operations",
+  "number_cards": [
+   {
+    "label": "My Quotations",
+    "number_card_name": "My Quotations"
+   },
+   {
+    "label": "My Sales Orders",
+    "number_card_name": "My Sales Orders"
+   },
+   {
+    "label": "Open Orders",
+    "number_card_name": "Open Orders"
+   },
+   {
+    "label": "Pending Delivery",
+    "number_card_name": "Pending Delivery"
+   },
+   {
+    "label": "Unpaid Invoices",
+    "number_card_name": "Unpaid Invoices"
+   },
+   {
+    "label": "Monthly Sales",
+    "number_card_name": "Monthly Sales"
+   }
+  ],
+  "parent_page": "",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": null,
+  "roles": [],
+  "sequence_id": 0.0,
+  "shortcuts": [
+   {
+    "color": "Blue",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "New Quotation",
+    "link_to": "Quotation",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Blue",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Quotations",
+    "link_to": "Quotation",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Green",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "New Sales Order",
+    "link_to": "Sales Order",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Green",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Sales Orders",
+    "link_to": "Sales Order",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Customers",
+    "link_to": "Customer",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Items",
+    "link_to": "Item",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Cyan",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Leads",
+    "link_to": "Lead",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Cyan",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Opportunities",
+    "link_to": "Opportunity",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   }
+  ],
+  "title": "Selling Operations",
+  "type": "Workspace"
+ },
+ {
+  "app": "erpnext",
+  "charts": [],
+  "content": "[{\"id\":\"5505128dae\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Actions</b></span>\",\"col\":12}},{\"id\":\"a10f6a984e\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations for TL Approval\",\"col\":3}},{\"id\":\"5cfdffa9e4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations for Supervisor Approval\",\"col\":3}},{\"id\":\"b05ed31bb2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations for Business Owner Approval\",\"col\":3}},{\"id\":\"e9f957b5be\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Orders for Approval\",\"col\":3}},{\"id\":\"5323a2700f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected / For Revision\",\"col\":3}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "external_link": null,
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "sell",
+  "indicator_color": "green",
+  "is_hidden": 0,
+  "label": "Selling Approvals",
+  "link_to": null,
+  "link_type": "DocType",
+  "links": [],
+  "modified": "2026-08-17 02:01:43.080395",
+  "module": "Selling",
+  "name": "Selling Approvals",
+  "number_cards": [],
+  "parent_page": "Selling",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "role": "Sales Team Leader"
+   },
+   {
+    "role": "Sales Supervisor"
+   },
+   {
+    "role": "Business Owner"
+   },
+   {
+    "role": "Sales Manager"
+   },
+   {
+    "role": "Senior Operations Manager"
+   },
+   {
+    "role": "General Manager"
+   }
+  ],
+  "sequence_id": 0.0,
+  "shortcuts": [
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Quotations for TL Approval",
+    "link_to": "Quotation",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[[\"Quotation\",\"workflow_state\",\"=\",\"For TL Approval\"]]",
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Quotations for Supervisor Approval",
+    "link_to": "Quotation",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[[\"Quotation\",\"workflow_state\",\"=\",\"For Supervisor Approval\"]]",
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Red",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Quotations for Business Owner Approval",
+    "link_to": "Quotation",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[[\"Quotation\",\"workflow_state\",\"=\",\"For Business Owner Approval\"]]",
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Sales Orders for Approval",
+    "link_to": "Sales Order",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[[\"Sales Order\",\"workflow_state\",\"=\",\"For Supervisor Approval\"]]",
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Red",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Rejected / For Revision",
+    "link_to": "Quotation",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[[\"Quotation\",\"workflow_state\",\"=\",\"Rejected\"]]",
+    "type": "DocType",
+    "url": null
+   }
+  ],
+  "title": "Selling Approvals",
+  "type": "Workspace"
+ },
+ {
+  "app": "erpnext",
+  "charts": [],
+  "content": "[{\"id\":\"b004a9ee15\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Actions</b></span>\",\"col\":12}},{\"id\":\"262232e75f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Central Fulfillment Orders\",\"col\":3}},{\"id\":\"05ff0448f9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pick Lists\",\"col\":3}},{\"id\":\"ad1a2bbf28\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Notes\",\"col\":3}},{\"id\":\"7b1b26e5f9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Trips\",\"col\":3}},{\"id\":\"588ae616c0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Availability\",\"col\":3}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "external_link": null,
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "sell",
+  "indicator_color": "green",
+  "is_hidden": 0,
+  "label": "Selling Fulfillment",
+  "link_to": null,
+  "link_type": "DocType",
+  "links": [],
+  "modified": "2026-08-17 02:01:43.140660",
+  "module": "Selling",
+  "name": "Selling Fulfillment",
+  "number_cards": [],
+  "parent_page": "Selling",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "role": "Sales User"
+   },
+   {
+    "role": "Sales Team Leader"
+   },
+   {
+    "role": "Sales Supervisor"
+   },
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Stock Manager"
+   },
+   {
+    "role": "Business Owner"
+   },
+   {
+    "role": "Senior Operations Manager"
+   },
+   {
+    "role": "General Manager"
+   }
+  ],
+  "sequence_id": 0.0,
+  "shortcuts": [
+   {
+    "color": "Purple",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Central Fulfillment Orders",
+    "link_to": "Sales Order",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[[\"Sales Order\",\"custom_central_fulfillment\",\"=\",1]]",
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Pick Lists",
+    "link_to": "Pick List",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Green",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Delivery Notes",
+    "link_to": "Delivery Note",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Blue",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Delivery Trips",
+    "link_to": "Delivery Trip",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Cyan",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Stock Availability",
+    "link_to": "Stock Balance",
+    "report_ref_doctype": "Stock Ledger Entry",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   }
+  ],
+  "title": "Selling Fulfillment",
+  "type": "Workspace"
+ },
+ {
+  "app": "erpnext",
+  "charts": [],
+  "content": "[{\"id\":\"7b98014627\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Actions</b></span>\",\"col\":12}},{\"id\":\"54bd3c7570\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoices\",\"col\":3}},{\"id\":\"ecb759a07b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Payment Entries\",\"col\":3}},{\"id\":\"d8fd3c2d41\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Accounts Receivable\",\"col\":3}},{\"id\":\"7e8e0fa9c0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customer Ledger\",\"col\":3}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "external_link": null,
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "sell",
+  "indicator_color": "green",
+  "is_hidden": 0,
+  "label": "Selling Billing & Collection",
+  "link_to": null,
+  "link_type": "DocType",
+  "links": [],
+  "modified": "2026-08-17 02:01:43.110139",
+  "module": "Selling",
+  "name": "Selling Billing & Collection",
+  "number_cards": [],
+  "parent_page": "Selling",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "role": "Sales User"
+   },
+   {
+    "role": "Sales Team Leader"
+   },
+   {
+    "role": "Accounts User"
+   },
+   {
+    "role": "Accounts Manager"
+   },
+   {
+    "role": "Business Owner"
+   },
+   {
+    "role": "Senior Operations Manager"
+   },
+   {
+    "role": "General Manager"
+   }
+  ],
+  "sequence_id": 0.0,
+  "shortcuts": [
+   {
+    "color": "Green",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Sales Invoices",
+    "link_to": "Sales Invoice",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Blue",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Payment Entries",
+    "link_to": "Payment Entry",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Accounts Receivable",
+    "link_to": "Accounts Receivable",
+    "report_ref_doctype": "Sales Invoice",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   },
+   {
+    "color": "Cyan",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Customer Ledger",
+    "link_to": "General Ledger",
+    "report_ref_doctype": "GL Entry",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   }
+  ],
+  "title": "Selling Billing & Collection",
+  "type": "Workspace"
+ },
+ {
+  "app": "erpnext",
+  "charts": [
+   {
+    "chart_name": "Sales Order Value Trend",
+    "label": "Sales Order Trends"
+   },
+   {
+    "chart_name": "Top Customers",
+    "label": "Top Customers"
+   }
+  ],
+  "content": "[{\"id\":\"683cf7f0b6\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Key Metrics</b></span>\",\"col\":12}},{\"id\":\"7516baa4d0\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Open Orders\",\"col\":4}},{\"id\":\"9fb2281f99\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Pending Delivery\",\"col\":4}},{\"id\":\"503c7065ae\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Unpaid Invoices\",\"col\":4}},{\"id\":\"b8373e1563\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Monthly Sales\",\"col\":4}},{\"id\":\"562684466f\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Drill-down</b></span>\",\"col\":12}},{\"id\":\"3a002dd1a6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Team Quotations\",\"col\":3}},{\"id\":\"5a1bdfca0a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Team Sales Orders\",\"col\":3}},{\"id\":\"d64a17ef45\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Team Deliveries\",\"col\":3}},{\"id\":\"e1e4aeace2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Team Collections\",\"col\":3}},{\"id\":\"3b3307d825\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Performance\",\"col\":3}},{\"id\":\"e44f1fa5ac\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Trends</b></span>\",\"col\":12}},{\"id\":\"d4b617ea6f\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Sales Order Trends\",\"col\":6}},{\"id\":\"e983909144\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Top Customers\",\"col\":6}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "external_link": null,
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "dashboard",
+  "indicator_color": "green",
+  "is_hidden": 0,
+  "label": "Selling Team Monitoring",
+  "link_to": null,
+  "link_type": "DocType",
+  "links": [],
+  "modified": "2026-08-17 02:11:11.441477",
+  "module": "Selling",
+  "name": "Selling Team Monitoring",
+  "number_cards": [
+   {
+    "label": "Open Orders",
+    "number_card_name": "Open Orders"
+   },
+   {
+    "label": "Pending Delivery",
+    "number_card_name": "Pending Delivery"
+   },
+   {
+    "label": "Unpaid Invoices",
+    "number_card_name": "Unpaid Invoices"
+   },
+   {
+    "label": "Monthly Sales",
+    "number_card_name": "Monthly Sales"
+   }
+  ],
+  "parent_page": "Selling",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "role": "Sales Team Leader"
+   },
+   {
+    "role": "Sales Supervisor"
+   },
+   {
+    "role": "Sales Manager"
+   },
+   {
+    "role": "Business Owner"
+   },
+   {
+    "role": "Senior Operations Manager"
+   },
+   {
+    "role": "General Manager"
+   }
+  ],
+  "sequence_id": 0.0,
+  "shortcuts": [
+   {
+    "color": "Blue",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Team Quotations",
+    "link_to": "Quotation",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Green",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Team Sales Orders",
+    "link_to": "Sales Order",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Team Deliveries",
+    "link_to": "Delivery Note",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Cyan",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Team Collections",
+    "link_to": "Payment Entry",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Purple",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Sales Performance",
+    "link_to": "Sales Analytics",
+    "report_ref_doctype": "Sales Order",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   }
+  ],
+  "title": "Selling Team Monitoring",
+  "type": "Workspace"
+ },
+ {
+  "app": "erpnext",
+  "charts": [],
+  "content": "[{\"id\":\"c57e26301a\",\"type\":\"card\",\"data\":{\"card_name\":\"Sales Structure\",\"col\":4}},{\"id\":\"469e0cae0c\",\"type\":\"card\",\"data\":{\"card_name\":\"Selling Configuration\",\"col\":4}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "external_link": null,
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "sell",
+  "indicator_color": "green",
+  "is_hidden": 0,
+  "label": "Selling Administration",
+  "link_to": null,
+  "link_type": "DocType",
+  "links": [
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Sales Structure",
+    "link_count": 0,
+    "link_to": null,
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Card Break"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Sales Access Hierarchy",
+    "link_count": 0,
+    "link_to": "Sales Access Hierarchy",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Sales Team Group",
+    "link_count": 0,
+    "link_to": "Sales Team Group",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Branch",
+    "link_count": 0,
+    "link_to": "Branch",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Territory",
+    "link_count": 0,
+    "link_to": "Territory",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Sales Person",
+    "link_count": 0,
+    "link_to": "Sales Person",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Selling Configuration",
+    "link_count": 0,
+    "link_to": null,
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Card Break"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Selling Settings",
+    "link_count": 0,
+    "link_to": "Selling Settings",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Price List",
+    "link_count": 0,
+    "link_to": "Price List",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Pricing Rule",
+    "link_count": 0,
+    "link_to": "Pricing Rule",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   },
+   {
+    "dependencies": null,
+    "description": null,
+    "hidden": 0,
+    "icon": null,
+    "is_query_report": 0,
+    "label": "Branch Markup Setting",
+    "link_count": 0,
+    "link_to": "Branch Markup Setting",
+    "link_type": "DocType",
+    "onboard": 0,
+    "only_for": null,
+    "report_ref_doctype": null,
+    "type": "Link"
+   }
+  ],
+  "modified": "2026-08-17 01:31:40.308189",
+  "module": "Selling",
+  "name": "Selling Administration",
+  "number_cards": [],
+  "parent_page": "Selling",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "role": "Sales Master Manager"
+   },
+   {
+    "role": "Business Owner"
+   },
+   {
+    "role": "System Manager"
+   }
+  ],
+  "sequence_id": 0.0,
+  "shortcuts": [],
+  "title": "Selling Administration",
+  "type": "Workspace"
+ },
+ {
+  "app": "erpnext",
+  "charts": [
+   {
+    "chart_name": "Sales Order Value Trend",
+    "label": "Sales Order Trends"
+   },
+   {
+    "chart_name": "Top Customers",
+    "label": "Top Customers"
+   },
+   {
+    "chart_name": "Item-wise Annual Sales",
+    "label": "Item-wise Annual Sales"
+   }
+  ],
+  "content": "[{\"id\":\"06f2d4aabe\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Key Metrics</b></span>\",\"col\":12}},{\"id\":\"e47cda652a\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Executive Monthly Revenue\",\"col\":4}},{\"id\":\"5a542a504e\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Executive Outstanding Receivables\",\"col\":4}},{\"id\":\"8bcfd6e3ae\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Executive Open Orders\",\"col\":4}},{\"id\":\"ac988d8df9\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Executive Pending Delivery\",\"col\":4}},{\"id\":\"033c39c9de\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Executive Pending Billing\",\"col\":4}},{\"id\":\"634aa1dc0c\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Executive Approval Queue\",\"col\":4}},{\"id\":\"d7221b9818\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Drill-down</b></span>\",\"col\":12}},{\"id\":\"c3e93d36b5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Analytics\",\"col\":3}},{\"id\":\"43361f00fd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Accounts Receivable\",\"col\":3}},{\"id\":\"5772f8996c\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Gross Profit\",\"col\":3}},{\"id\":\"f8b41c522a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Register\",\"col\":3}},{\"id\":\"a4eb601b7b\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Trends</b></span>\",\"col\":12}},{\"id\":\"39222b68b0\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Sales Order Trends\",\"col\":6}},{\"id\":\"1e880368a4\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Top Customers\",\"col\":6}},{\"id\":\"25071837f5\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Item-wise Annual Sales\",\"col\":6}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "external_link": null,
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "dashboard",
+  "indicator_color": "green",
+  "is_hidden": 0,
+  "label": "Selling Executive Dashboard",
+  "link_to": null,
+  "link_type": "DocType",
+  "links": [],
+  "modified": "2026-08-17 02:11:11.394088",
+  "module": "Selling",
+  "name": "Selling Executive Dashboard",
+  "number_cards": [
+   {
+    "label": "Executive Monthly Revenue",
+    "number_card_name": "Executive Monthly Revenue"
+   },
+   {
+    "label": "Executive Outstanding Receivables",
+    "number_card_name": "Executive Outstanding Receivables"
+   },
+   {
+    "label": "Executive Open Orders",
+    "number_card_name": "Executive Open Orders"
+   },
+   {
+    "label": "Executive Pending Delivery",
+    "number_card_name": "Executive Pending Delivery"
+   },
+   {
+    "label": "Executive Pending Billing",
+    "number_card_name": "Executive Pending Billing"
+   },
+   {
+    "label": "Executive Approval Queue",
+    "number_card_name": "Executive Approval Queue"
+   }
+  ],
+  "parent_page": "Selling",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "role": "Business Owner"
+   },
+   {
+    "role": "Sales Master Manager"
+   },
+   {
+    "role": "System Manager"
+   }
+  ],
+  "sequence_id": 0.0,
+  "shortcuts": [
+   {
+    "color": "Blue",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Sales Analytics",
+    "link_to": "Sales Analytics",
+    "report_ref_doctype": "Sales Order",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Accounts Receivable",
+    "link_to": "Accounts Receivable",
+    "report_ref_doctype": "Sales Invoice",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   },
+   {
+    "color": "Green",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Gross Profit",
+    "link_to": "Gross Profit",
+    "report_ref_doctype": "Sales Invoice",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   },
+   {
+    "color": "Cyan",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Sales Register",
+    "link_to": "Sales Register",
+    "report_ref_doctype": "Sales Invoice",
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "Report",
+    "url": null
+   }
+  ],
+  "title": "Selling Executive Dashboard",
+  "type": "Workspace"
+ },
+ {
+  "app": "erpnext",
+  "charts": [],
+  "content": "[{\"id\":\"6361a67eaf\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>My Sales Overview</b></span>\",\"col\":12}},{\"id\":\"9b20fbe385\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Draft Quotations\",\"col\":4}},{\"id\":\"c3072175f1\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Approved Quotations\",\"col\":4}},{\"id\":\"8b97ce8a29\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Open Sales Orders\",\"col\":4}},{\"id\":\"53a8483ec9\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Pending Deliveries\",\"col\":4}},{\"id\":\"8701d9c9c9\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Outstanding Invoices\",\"col\":4}},{\"id\":\"2b368f13c4\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Recorded Collections\",\"col\":4}},{\"id\":\"a20004ca29\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"e2a6298c78\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Start a Sale</b></span>\",\"col\":12}},{\"id\":\"1c85f3de9a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Quotation\",\"col\":3}},{\"id\":\"9bfc3e0f02\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Sales Order\",\"col\":3}},{\"id\":\"b8c60ebcc4\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"c702a6fb0b\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>My Sales Pipeline</b></span>\",\"col\":12}},{\"id\":\"f8317de111\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations\",\"col\":3}},{\"id\":\"1a366f2a44\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Orders\",\"col\":3}},{\"id\":\"00de20f845\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customers\",\"col\":3}},{\"id\":\"4b9ea0d7e4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Items and Prices\",\"col\":3}},{\"id\":\"0b852e3f0e\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"38be92009f\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Fulfillment and Collection Status</b></span>\",\"col\":12}},{\"id\":\"972eaada31\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pick Lists\",\"col\":3}},{\"id\":\"0c728f32a8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Notes\",\"col\":3}},{\"id\":\"6b198034b3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoices\",\"col\":3}},{\"id\":\"3c1a13786a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Payment Entries\",\"col\":3}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "external_link": null,
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "sell",
+  "indicator_color": "green",
+  "is_hidden": 0,
+  "label": "My Sales Desk",
+  "link_to": null,
+  "link_type": "DocType",
+  "links": [],
+  "modified": "2026-08-17 12:51:53.640031",
+  "module": "Selling",
+  "name": "My Sales Desk",
+  "number_cards": [
+   {
+    "label": "My Draft Quotations",
+    "number_card_name": "My Draft Quotations"
+   },
+   {
+    "label": "My Approved Quotations",
+    "number_card_name": "My Approved Quotations"
+   },
+   {
+    "label": "My Open Sales Orders",
+    "number_card_name": "My Open Sales Orders"
+   },
+   {
+    "label": "My Pending Deliveries",
+    "number_card_name": "My Pending Deliveries"
+   },
+   {
+    "label": "My Outstanding Invoices",
+    "number_card_name": "My Outstanding Invoices"
+   },
+   {
+    "label": "My Recorded Collections",
+    "number_card_name": "My Recorded Collections"
+   }
+  ],
+  "parent_page": "",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": null,
+  "roles": [
+   {
+    "role": "Sales User"
+   }
+  ],
+  "sequence_id": 0.0,
+  "shortcuts": [
+   {
+    "color": "Blue",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "New Quotation",
+    "link_to": "Quotation",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Green",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "New Sales Order",
+    "link_to": "Sales Order",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Blue",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Quotations",
+    "link_to": "Quotation",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Green",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Sales Orders",
+    "link_to": "Sales Order",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Customers",
+    "link_to": "Customer",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Cyan",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Items and Prices",
+    "link_to": "Item",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Orange",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Pick Lists",
+    "link_to": "Pick List",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Green",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Delivery Notes",
+    "link_to": "Delivery Note",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Purple",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Sales Invoices",
+    "link_to": "Sales Invoice",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Blue",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Payment Entries",
+    "link_to": "Payment Entry",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "DocType",
+    "url": null
+   }
+  ],
+  "title": "My Sales Desk",
+  "type": "Workspace"
+ }
+]

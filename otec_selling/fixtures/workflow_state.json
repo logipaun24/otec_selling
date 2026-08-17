@@ -1,0 +1,299 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "question-sign",
+  "modified": "2026-02-04 10:17:43.508533",
+  "name": "Pending",
+  "style": "",
+  "workflow_state_name": "Pending"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-02-13 15:53:06.378895",
+  "name": "Open",
+  "style": "",
+  "workflow_state_name": "Open"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-02-13 18:38:11.305986",
+  "name": "Mark as Sent",
+  "style": "Warning",
+  "workflow_state_name": "Mark as Sent"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-02-13 17:40:26.003273",
+  "name": "Accepted",
+  "style": "",
+  "workflow_state_name": "Accepted"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-03-07 02:23:44.399411",
+  "name": "Packed",
+  "style": "Success",
+  "workflow_state_name": "Packed"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-24 19:59:18.230419",
+  "name": "Pending Sales Manager Approval",
+  "style": "",
+  "workflow_state_name": "Pending Sales Manager Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-16 00:47:43.268806",
+  "name": "Approved for Warehouse",
+  "style": "",
+  "workflow_state_name": "Approved for Warehouse"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-16 01:07:49.987354",
+  "name": "Approved for Fulfillment",
+  "style": "",
+  "workflow_state_name": "Approved for Fulfillment"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-16 01:19:00.944962",
+  "name": "Returned to Sales",
+  "style": "",
+  "workflow_state_name": "Returned to Sales"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-08-15 04:43:47.067114",
+  "name": "Pending Team Lead Approval",
+  "style": "",
+  "workflow_state_name": "Pending Team Lead Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-08-15 04:44:25.892247",
+  "name": "Pending Sales Supervisor Approval",
+  "style": "",
+  "workflow_state_name": "Pending Sales Supervisor Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-02-13 18:44:24.441550",
+  "name": "Sent",
+  "style": "Primary",
+  "workflow_state_name": "Sent"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-16 00:47:04.664113",
+  "name": "For Branch Approval",
+  "style": "",
+  "workflow_state_name": "For Branch Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-16 01:15:46.259793",
+  "name": "Picking",
+  "style": "",
+  "workflow_state_name": "Picking"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-02-13 18:46:29.567456",
+  "name": "Received",
+  "style": "Success",
+  "workflow_state_name": "Received"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-02-13 18:37:05.017098",
+  "name": "Confirmed",
+  "style": "Success",
+  "workflow_state_name": "Confirmed"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-14 02:35:01.336271",
+  "name": "Issued",
+  "style": "",
+  "workflow_state_name": "Issued"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-08-15 06:01:23.980211",
+  "name": "For TL Approval",
+  "style": "",
+  "workflow_state_name": "For TL Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-14 02:35:28.186016",
+  "name": "Cancelled",
+  "style": "",
+  "workflow_state_name": "Cancelled"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-24 20:02:00.751774",
+  "name": "Pending Business Owner Approval",
+  "style": "",
+  "workflow_state_name": "Pending Business Owner Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-08-15 06:04:49.584559",
+  "name": "For Business Owner Approval",
+  "style": "",
+  "workflow_state_name": "For Business Owner Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-08-15 04:51:50.598160",
+  "name": "For Supervisor Approval",
+  "style": "",
+  "workflow_state_name": "For Supervisor Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-02-13 15:23:54.727940",
+  "name": "For Approval",
+  "style": "",
+  "workflow_state_name": "For Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-14 02:34:01.312163",
+  "name": "For GM Approval",
+  "style": "",
+  "workflow_state_name": "For GM Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-24 19:33:22.926338",
+  "name": "Pending Management Approval",
+  "style": "",
+  "workflow_state_name": "Pending Management Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "remove",
+  "modified": "2026-02-04 10:17:43.510502",
+  "name": "Rejected",
+  "style": "Danger",
+  "workflow_state_name": "Rejected"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-02-13 16:18:39.714560",
+  "name": "For Product Approval",
+  "style": "",
+  "workflow_state_name": "For Product Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-02-13 15:21:51.644391",
+  "name": "For Review",
+  "style": "",
+  "workflow_state_name": "For Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-06-24 19:33:35.244535",
+  "name": "Pending Manager Approval",
+  "style": "",
+  "workflow_state_name": "Pending Manager Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-03-07 02:36:15.664235",
+  "name": "Picked",
+  "style": "Success",
+  "workflow_state_name": "Picked"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-03-07 02:34:39.306343",
+  "name": "For Picking",
+  "style": "Info",
+  "workflow_state_name": "For Picking"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-02-13 15:23:30.027108",
+  "name": "Draft",
+  "style": "",
+  "workflow_state_name": "Draft"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "ok-sign",
+  "modified": "2026-02-04 10:17:43.509819",
+  "name": "Approved",
+  "style": "Success",
+  "workflow_state_name": "Approved"
+ }
+]

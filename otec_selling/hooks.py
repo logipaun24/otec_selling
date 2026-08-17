@@ -256,3 +256,50 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+
+# Phase 6 portability manifest. Operational records (users, hierarchy rows,
+# transactions, serial allocations, and company/branch master data) are
+# intentionally excluded.
+required_apps = ["erpnext"]
+
+_selling_doctypes = [
+    "Quotation", "Quotation Item", "Sales Order", "Sales Order Item",
+    "Pick List", "Pick List Item", "Delivery Note", "Delivery Note Item",
+    "Sales Invoice", "Sales Invoice Item", "Payment Entry", "Customer",
+    "Branch", "Warehouse", "User",
+]
+
+_custom_doctypes = [
+    "Branch Markup Setting", "Container Landed Cost",
+    "Container Landed Cost Item", "Container Landed Cost Receipt",
+    "Container Receiving", "Container Receiving Item",
+    "Container Receiving Warehouse Mapping", "DR Paper Batch",
+    "DR Paper Serial Log", "Employment Contract", "OTEC Quotation",
+    "PO Box Detail", "Sales Access Hierarchy", "Sales Hierarchy Branch Access",
+    "Sales Hierarchy Company Access", "Sales Hierarchy Team Access",
+    "Sales Team Group", "Sample Issuance", "Sample Issuance Item",
+]
+
+_fixture_doctypes = _selling_doctypes + _custom_doctypes
+
+fixtures = [
+    {"dt": "DocType", "filters": [["custom", "=", 1]]},
+    {"dt": "Custom Field", "filters": [["dt", "in", _fixture_doctypes]]},
+    {"dt": "Property Setter", "filters": [["doc_type", "in", _fixture_doctypes]]},
+    {"dt": "Custom DocPerm", "filters": [["parent", "in", _fixture_doctypes]]},
+    {"dt": "Client Script", "filters": [["dt", "in", _selling_doctypes]]},
+    {"dt": "Server Script", "filters": [["reference_doctype", "in", _fixture_doctypes]]},
+    {"dt": "Workflow", "filters": [["document_type", "in", _selling_doctypes]]},
+    "Workflow State",
+    "Workflow Action Master",
+    {"dt": "Workspace", "filters": [["module", "=", "Selling"]]},
+    {"dt": "Number Card", "filters": [["module", "=", "Selling"], ["is_standard", "=", 0]]},
+    {"dt": "Dashboard Chart", "filters": [["module", "=", "Selling"], ["is_standard", "=", 0]]},
+    {"dt": "Report", "filters": [["ref_doctype", "in", _fixture_doctypes], ["is_standard", "=", "No"]]},
+    {"dt": "Print Format", "filters": [["doc_type", "in", _selling_doctypes], ["custom_format", "=", 1]]},
+    {"dt": "Role", "filters": [["name", "in", [
+        "Business Owner", "General Manager", "Senior Operations Manager",
+        "Sales Master Manager", "Sales Supervisor", "Sales Team Leader",
+        "Sales User", "Quotation Creator",
+    ]]]},
+]
