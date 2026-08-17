@@ -89,7 +89,7 @@ doctype_js = {
 # ------------
 
 # before_install = "otec_selling.install.before_install"
-# after_install = "otec_selling.install.after_install"
+after_install = "otec_selling.patches.v0_0.configure_purchasing_lifecycle.execute"
 
 # Uninstallation
 # ------------
