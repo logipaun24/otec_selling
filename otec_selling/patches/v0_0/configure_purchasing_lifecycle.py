@@ -190,6 +190,7 @@ def execute() -> None:
     roles = {
         "Inventory Controller",
         "Inventory Controller Supervisor",
+        "Warehouse Picker",
         "Business Owner",
         "General Manager",
     }
