@@ -88,6 +88,17 @@ jobs:
       - name: Install
         working-directory: /home/runner/frappe-bench
         run: |
+          exec > >(tee install.log) 2>&1
+          report_install_failure() {
+            status=$?
+            if [ "$status" -ne 0 ]; then
+              echo "### Install failure (last 100 lines)" >> "$GITHUB_STEP_SUMMARY"
+              echo '~~~text' >> "$GITHUB_STEP_SUMMARY"
+              tail -n 100 install.log >> "$GITHUB_STEP_SUMMARY"
+              echo '~~~' >> "$GITHUB_STEP_SUMMARY"
+            fi
+          }
+          trap report_install_failure EXIT
           bench get-app --branch version-16 erpnext https://github.com/frappe/erpnext
           bench get-app otec_selling $GITHUB_WORKSPACE
           bench setup requirements --dev
