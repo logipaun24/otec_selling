@@ -43,7 +43,10 @@ app_license = "mit"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {
+    "Container Receiving": "public/js/container_receiving.js",
+    "Container Landed Cost": "public/js/container_landed_cost.js",
+}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -138,13 +141,28 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+    "Purchase Order": {
+        "validate": "otec_selling.purchasing_lifecycle.validate_purchase_order",
+        "before_submit": "otec_selling.purchasing_lifecycle.before_submit_purchase_order",
+    },
+    "Purchase Receipt": {
+        "validate": "otec_selling.purchasing_lifecycle.validate_purchase_receipt",
+        "before_submit": "otec_selling.purchasing_lifecycle.before_submit_purchase_receipt",
+        "after_submit": "otec_selling.purchasing_lifecycle.sync_container_receiving_from_receipt",
+        "after_cancel": "otec_selling.purchasing_lifecycle.sync_container_receiving_from_receipt",
+    },
+    "Landed Cost Voucher": {
+        "validate": "otec_selling.purchasing_lifecycle.validate_landed_cost_voucher",
+        "before_submit": "otec_selling.purchasing_lifecycle.before_submit_landed_cost_voucher",
+        "after_submit": "otec_selling.purchasing_lifecycle.after_submit_landed_cost_voucher",
+        "after_cancel": "otec_selling.purchasing_lifecycle.after_cancel_landed_cost_voucher",
+    },
+    "Container Landed Cost": {
+        "before_submit": "otec_selling.purchasing_lifecycle.before_submit_container_landed_cost",
+        "before_cancel": "otec_selling.purchasing_lifecycle.before_cancel_container_landed_cost",
+    },
+}
 
 # Scheduled Tasks
 # ---------------
@@ -280,12 +298,17 @@ _custom_doctypes = [
     "Sales Team Group", "Sample Issuance", "Sample Issuance Item",
 ]
 
+_purchasing_doctypes = [
+    "Company", "Purchase Order", "Purchase Order Item", "Purchase Receipt",
+    "Purchase Receipt Item", "Landed Cost Voucher", "Landed Cost Item",
+]
+
 _hr_expense_doctypes = [
     "Employee Advance", "Expense Claim", "Expense Claim Detail",
     "Expense Claim Type",
 ]
 
-_fixture_doctypes = _selling_doctypes + _custom_doctypes
+_fixture_doctypes = _selling_doctypes + _purchasing_doctypes + _custom_doctypes
 
 fixtures = [
     {"dt": "DocType", "filters": [["custom", "=", 1]]},
@@ -300,7 +323,7 @@ fixtures = [
         ["property", "!=", "title_field"],
     ]},
     {"dt": "Custom DocPerm", "filters": [["parent", "in", _fixture_doctypes]]},
-    {"dt": "Client Script", "filters": [["dt", "in", _selling_doctypes]]},
+    {"dt": "Client Script", "filters": [["dt", "in", _fixture_doctypes]]},
     {"dt": "Server Script", "filters": [["reference_doctype", "in", _fixture_doctypes]]},
     {"dt": "Workflow", "filters": [["document_type", "in", _selling_doctypes]]},
     {"dt": "Workflow", "prefix": "hr_expense", "filters": [["document_type", "=", "Expense Claim"]]},
