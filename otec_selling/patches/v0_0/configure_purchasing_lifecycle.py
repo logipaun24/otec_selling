@@ -4,6 +4,25 @@ import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 
+CUSTOM_SELLING_WORKSPACES = (
+    "Selling Operations",
+    "Selling Approvals",
+    "Selling Fulfillment",
+    "Selling Billing & Collection",
+    "Selling Team Monitoring",
+    "Selling Administration",
+    "Selling Executive Dashboard",
+    "My Sales Desk",
+)
+
+
+def _repair_custom_workspace_ownership() -> None:
+    """Keep fixture-managed workspaces out of standard-app orphan cleanup."""
+    for name in CUSTOM_SELLING_WORKSPACES:
+        if frappe.db.exists("Workspace", name):
+            frappe.db.set_value("Workspace", name, "app", None, update_modified=False)
+
+
 def _ensure_role(role: str) -> None:
     if not frappe.db.exists("Role", role):
         frappe.get_doc({"doctype": "Role", "role_name": role, "desk_access": 1}).insert(
@@ -495,4 +514,5 @@ def execute() -> None:
 
         _sync_container_receiving(name)
 
+    _repair_custom_workspace_ownership()
     frappe.clear_cache()
