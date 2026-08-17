@@ -96,6 +96,11 @@ jobs:
               echo '~~~text' >> "$GITHUB_STEP_SUMMARY"
               tail -n 100 install.log >> "$GITHUB_STEP_SUMMARY"
               echo '~~~' >> "$GITHUB_STEP_SUMMARY"
+              details="$(tail -n 40 install.log)"
+              details="${details//'%'/'%25'}"
+              details="${details//$'\r'/'%0D'}"
+              details="${details//$'\n'/'%0A'}"
+              echo "::error title=Install traceback::$details"
             fi
           }
           trap report_install_failure EXIT
