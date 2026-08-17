@@ -355,7 +355,7 @@
   "type": "Workspace"
  },
  {
-  "app": "erpnext",
+  "app": null,
   "charts": [
    {
     "chart_name": "Sales Order Value Trend",
@@ -710,7 +710,7 @@
   "type": "Workspace"
  },
  {
-  "app": "erpnext",
+  "app": null,
   "charts": [],
   "content": "[{\"id\":\"5505128dae\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Actions</b></span>\",\"col\":12}},{\"id\":\"a10f6a984e\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations for TL Approval\",\"col\":3}},{\"id\":\"5cfdffa9e4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations for Supervisor Approval\",\"col\":3}},{\"id\":\"b05ed31bb2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations for Business Owner Approval\",\"col\":3}},{\"id\":\"e9f957b5be\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Orders for Approval\",\"col\":3}},{\"id\":\"5323a2700f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected / For Revision\",\"col\":3}}]",
   "custom_blocks": [],
@@ -831,7 +831,7 @@
   "type": "Workspace"
  },
  {
-  "app": "erpnext",
+  "app": null,
   "charts": [],
   "content": "[{\"id\":\"b004a9ee15\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Actions</b></span>\",\"col\":12}},{\"id\":\"262232e75f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Central Fulfillment Orders\",\"col\":3}},{\"id\":\"05ff0448f9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pick Lists\",\"col\":3}},{\"id\":\"ad1a2bbf28\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Notes\",\"col\":3}},{\"id\":\"7b1b26e5f9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Trips\",\"col\":3}},{\"id\":\"588ae616c0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Stock Availability\",\"col\":3}}]",
   "custom_blocks": [],
@@ -958,7 +958,7 @@
   "type": "Workspace"
  },
  {
-  "app": "erpnext",
+  "app": null,
   "charts": [],
   "content": "[{\"id\":\"7b98014627\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick Actions</b></span>\",\"col\":12}},{\"id\":\"54bd3c7570\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoices\",\"col\":3}},{\"id\":\"ecb759a07b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Payment Entries\",\"col\":3}},{\"id\":\"d8fd3c2d41\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Accounts Receivable\",\"col\":3}},{\"id\":\"7e8e0fa9c0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customer Ledger\",\"col\":3}}]",
   "custom_blocks": [],
@@ -1068,7 +1068,7 @@
   "type": "Workspace"
  },
  {
-  "app": "erpnext",
+  "app": null,
   "charts": [
    {
     "chart_name": "Sales Order Value Trend",
@@ -1215,7 +1215,7 @@
   "type": "Workspace"
  },
  {
-  "app": "erpnext",
+  "app": null,
   "charts": [],
   "content": "[{\"id\":\"c57e26301a\",\"type\":\"card\",\"data\":{\"card_name\":\"Sales Structure\",\"col\":4}},{\"id\":\"469e0cae0c\",\"type\":\"card\",\"data\":{\"card_name\":\"Selling Configuration\",\"col\":4}}]",
   "custom_blocks": [],
@@ -1422,7 +1422,7 @@
   "type": "Workspace"
  },
  {
-  "app": "erpnext",
+  "app": null,
   "charts": [
    {
     "chart_name": "Sales Order Value Trend",
@@ -1558,7 +1558,7 @@
   "type": "Workspace"
  },
  {
-  "app": "erpnext",
+  "app": null,
   "charts": [],
   "content": "[{\"id\":\"6361a67eaf\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>My Sales Overview</b></span>\",\"col\":12}},{\"id\":\"9b20fbe385\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Draft Quotations\",\"col\":4}},{\"id\":\"c3072175f1\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Approved Quotations\",\"col\":4}},{\"id\":\"8b97ce8a29\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Open Sales Orders\",\"col\":4}},{\"id\":\"53a8483ec9\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Pending Deliveries\",\"col\":4}},{\"id\":\"8701d9c9c9\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Outstanding Invoices\",\"col\":4}},{\"id\":\"2b368f13c4\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"My Recorded Collections\",\"col\":4}},{\"id\":\"a20004ca29\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"e2a6298c78\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Start a Sale</b></span>\",\"col\":12}},{\"id\":\"1c85f3de9a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Quotation\",\"col\":3}},{\"id\":\"9bfc3e0f02\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Sales Order\",\"col\":3}},{\"id\":\"b8c60ebcc4\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"c702a6fb0b\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>My Sales Pipeline</b></span>\",\"col\":12}},{\"id\":\"f8317de111\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations\",\"col\":3}},{\"id\":\"1a366f2a44\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Orders\",\"col\":3}},{\"id\":\"00de20f845\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customers\",\"col\":3}},{\"id\":\"4b9ea0d7e4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Items and Prices\",\"col\":3}},{\"id\":\"0b852e3f0e\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"38be92009f\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Fulfillment and Collection Status</b></span>\",\"col\":12}},{\"id\":\"972eaada31\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pick Lists\",\"col\":3}},{\"id\":\"0c728f32a8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Delivery Notes\",\"col\":3}},{\"id\":\"6b198034b3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoices\",\"col\":3}},{\"id\":\"3c1a13786a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Payment Entries\",\"col\":3}}]",
   "custom_blocks": [],
