@@ -181,7 +181,24 @@ def _transitions(
     return rows
 
 
+def _expense_account(company: str, account_name: str) -> str | None:
+    return frappe.db.get_value(
+        "Account",
+        {
+            "company": company,
+            "account_name": account_name,
+            "root_type": "Expense",
+            "is_group": 0,
+            "disabled": 0,
+        },
+        "name",
+    )
+
+
 def _default_expense_account(company: str) -> str | None:
+    valuation = _expense_account(company, "Expenses Included In Valuation")
+    if valuation:
+        return valuation
     submitted = frappe.db.sql(
         """
         select tax.expense_account
@@ -453,16 +470,17 @@ def execute() -> None:
         account = _default_expense_account(company)
         if not account:
             continue
+        freight_account = _expense_account(company, "Freight and Forwarding Charges") or account
         frappe.db.set_value(
             "Company",
             company,
             {
-                "custom_lcv_freight_account": account,
+                "custom_lcv_freight_account": freight_account,
                 "custom_lcv_customs_duty_account": account,
                 "custom_lcv_import_tax_account": account,
                 "custom_lcv_brokerage_account": account,
                 "custom_lcv_port_charges_account": account,
-                "custom_lcv_trucking_account": account,
+                "custom_lcv_trucking_account": freight_account,
                 "custom_lcv_insurance_account": account,
                 "custom_lcv_other_charges_account": account,
             },
