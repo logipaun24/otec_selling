@@ -1,6 +1,22 @@
 [
  {
   "default_value": null,
+  "doc_type": "Container Landed Cost",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "naming_series",
+  "is_system_generated": 1,
+  "modified": "2026-08-17 13:27:11.528893",
+  "module": null,
+  "name": "Container Landed Cost-naming_series-options",
+  "property": "options",
+  "property_type": "Text",
+  "row_name": null,
+  "value": "CLC-.YYYY.-.#####"
+ },
+ {
+  "default_value": null,
   "doc_type": "Quotation",
   "docstatus": 0,
   "doctype": "Property Setter",
