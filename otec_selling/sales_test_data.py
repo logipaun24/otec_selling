@@ -13,6 +13,7 @@ CUSTOMER_GROUP = "TEST Customers - CHS"
 TERRITORY = "TEST Philippines - CHS"
 PAYMENT_TERM = "TEST Net 30 - CHS"
 PAYMENT_TEMPLATE = "TEST 30 Days - CHS"
+CASH_TEMPLATE = "TEST Cash - CHS"
 PRICE_LIST = "Standard Selling"
 STOCK_WAREHOUSE = "R2L1S2 - CHS"
 MANIFEST_FILE = f"{BATCH_ID}-manifest.json"
@@ -82,6 +83,7 @@ CUSTOMERS = (
         "branch": "Warehouse Porac",
         "email": "walkin.cash@example.invalid",
         "credit_limit": 5_000,
+        "payment_template": CASH_TEMPLATE,
     },
 )
 
@@ -155,6 +157,21 @@ def _ensure_payment_terms() -> str:
                 ],
             }
         ).insert(ignore_permissions=True)
+    if not frappe.db.exists("Payment Terms Template", CASH_TEMPLATE):
+        frappe.get_doc(
+            {
+                "doctype": "Payment Terms Template",
+                "template_name": CASH_TEMPLATE,
+                "terms": [
+                    {
+                        "payment_term": "COD",
+                        "invoice_portion": 100,
+                        "due_date_based_on": "Day(s) after invoice date",
+                        "credit_days": 0,
+                    }
+                ],
+            }
+        ).insert(ignore_permissions=True)
     return PAYMENT_TEMPLATE
 
 
@@ -164,6 +181,7 @@ def _customer_by_name(customer_name: str) -> str | None:
 
 def _ensure_customer(spec: dict) -> str:
     customer = _customer_by_name(spec["customer_name"])
+    payment_template = spec.get("payment_template", PAYMENT_TEMPLATE)
     if not customer:
         doc = frappe.get_doc(
             {
@@ -173,7 +191,7 @@ def _ensure_customer(spec: dict) -> str:
                 "customer_group": CUSTOMER_GROUP,
                 "territory": TERRITORY,
                 "default_price_list": PRICE_LIST,
-                "payment_terms": PAYMENT_TEMPLATE,
+                "payment_terms": payment_template,
                 "credit_limits": [
                     {
                         "company": COMPANY,
@@ -184,6 +202,10 @@ def _ensure_customer(spec: dict) -> str:
             }
         )
         customer = doc.insert(ignore_permissions=True).name
+    elif frappe.db.get_value("Customer", customer, "payment_terms") != payment_template:
+        frappe.db.set_value(
+            "Customer", customer, "payment_terms", payment_template, update_modified=False
+        )
 
     address_title = f"{spec['customer_name']} - Billing"
     if not frappe.db.exists("Address", {"address_title": address_title}):
@@ -303,6 +325,7 @@ def seed_sales_sample_data() -> dict:
         "territory": TERRITORY,
         "payment_term": PAYMENT_TERM,
         "payment_terms_template": PAYMENT_TEMPLATE,
+        "cash_payment_terms_template": CASH_TEMPLATE,
         "customers": customers,
         "items_used": list(ITEMS),
         "warehouse_used": STOCK_WAREHOUSE,
