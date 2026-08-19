@@ -1,0 +1,150 @@
+{% set company_logo = frappe.db.get_value("Company", doc.company, "company_logo") if doc.company else None %}
+{% set currency = doc.currency or "PHP" %}
+<style>
+@page { size: A4 landscape; margin: 9mm 8mm 10mm; }
+.print-format {
+  orientation: Landscape;
+  page-size: A4;
+  margin-top: 9mm;
+  margin-bottom: 10mm;
+  margin-left: 8mm;
+  margin-right: 8mm;
+  padding: 0 !important;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #111;
+  font-size: 8.5pt;
+}
+.otec-quote { width: 100%; }
+.otec-title { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+.otec-title td { border: 0; vertical-align: middle; }
+.otec-logo { width: 15%; text-align: center; }
+.otec-logo img { max-width: 78px; max-height: 66px; }
+.otec-heading { width: 85%; text-align: center; font-size: 17pt; font-weight: 700; letter-spacing: .4px; }
+.otec-info { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+.otec-info td { border: 0; padding: 1px 3px; line-height: 1.25; }
+.otec-info .label { width: 10%; font-weight: 700; }
+.otec-info .value { width: 24%; border-bottom: .5px solid #999; }
+.otec-items { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.otec-items th, .otec-items td { border: 1px solid #111; padding: 3px 4px; vertical-align: middle; }
+.otec-items thead th { background: #111 !important; color: #fff !important; text-align: center; font-weight: 700; line-height: 1.15; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.otec-items .subhead th { font-size: 7.5pt; }
+.otec-items .reference { width: 15%; text-align: center; }
+.otec-items .location { width: 11%; }
+.otec-items .category { width: 14%; }
+.otec-items .specs { width: 25%; }
+.otec-items .dimension { width: 6%; text-align: center; }
+.otec-items .sets { width: 6%; text-align: center; }
+.otec-items .money { width: 11%; text-align: right; white-space: nowrap; }
+.reference-image { max-width: 115px; max-height: 82px; object-fit: contain; }
+.spec-line { display: block; margin-bottom: 1px; }
+.amount-row td { padding: 3px 5px; }
+.amount-label { text-align: right; font-weight: 700; }
+.grand-total td { background: #f1f1f1 !important; font-size: 10pt; font-weight: 700; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.vat-note { font-size: 7.5pt; font-style: italic; }
+.terms-page { page-break-before: always; font-size: 8.5pt; line-height: 1.35; }
+.terms-title { border-bottom: 2px solid #111; padding-bottom: 3px; margin: 0 0 8px; font-size: 11pt; font-weight: 700; }
+.terms-block { margin-bottom: 13px; }
+.terms-block ol, .terms-block ul { margin: 4px 0 4px 18px; padding: 0; }
+.terms-block p { margin: 2px 0; }
+.signature-grid { width: 100%; border-collapse: collapse; margin-top: 25px; }
+.signature-grid td { width: 50%; padding: 30px 30px 0; text-align: center; }
+.signature-line { border-top: 1px solid #111; padding-top: 4px; }
+</style>
+
+<div class="otec-quote">
+  <table class="otec-title">
+    <tr>
+      <td class="otec-logo">
+        {% if company_logo %}<img src="{{ company_logo }}" alt="OTEC">{% else %}<strong style="font-size:18pt;letter-spacing:3px;">OTEC</strong>{% endif %}
+      </td>
+      <td class="otec-heading">INITIAL QUOTATION</td>
+    </tr>
+  </table>
+
+  <table class="otec-info">
+    <tr>
+      <td class="label">PI No.</td><td class="value">{{ doc.name }}</td>
+      <td class="label">Date</td><td class="value">{{ frappe.utils.formatdate(doc.transaction_date, "MMMM d, YYYY") }}</td>
+    </tr>
+    <tr>
+      <td class="label">Client</td><td class="value">{{ doc.customer_name or doc.customer or "" }}</td>
+      <td class="label">Project Type</td><td class="value">{{ doc.project_type or "" }}</td>
+    </tr>
+    <tr>
+      <td class="label">Contact</td><td class="value">{{ doc.contact_no or "" }}</td>
+      <td class="label">Prepared by</td><td class="value">{{ frappe.db.get_value("User", doc.prepared_by, "full_name") or doc.prepared_by or "" }}</td>
+    </tr>
+    <tr>
+      <td class="label">Address</td><td class="value" colspan="3">{{ doc.project_address or "" }}</td>
+    </tr>
+  </table>
+
+  <table class="otec-items">
+    <thead>
+      <tr>
+        <th rowspan="2" class="reference">Reference</th>
+        <th rowspan="2" class="location">Location</th>
+        <th rowspan="2" class="category">Product Category</th>
+        <th rowspan="2" class="specs">Product Specs</th>
+        <th colspan="2">Size</th>
+        <th rowspan="2" class="sets">Set/s</th>
+        <th rowspan="2" class="money">Unit Cost</th>
+        <th rowspan="2" class="money">Total Amount</th>
+      </tr>
+      <tr class="subhead"><th class="dimension">Width</th><th class="dimension">Height</th></tr>
+    </thead>
+    <tbody>
+      {% for row in doc.items %}
+      <tr>
+        <td class="reference">
+          {% if row.reference_drawing %}<img class="reference-image" src="{{ row.reference_drawing }}" alt="Reference drawing">{% endif %}
+        </td>
+        <td class="location">{{ row.location or "" }}</td>
+        <td class="category">
+          <strong>{{ row.secondary_product_category or row.item_name or row.item_code }}</strong>
+          {% if row.main_product_category %}<br><small>{{ row.main_product_category }}</small>{% endif %}
+        </td>
+        <td class="specs">
+          {% if row.glass_specification %}<span class="spec-line"><strong>Glass:</strong> {{ row.glass_specification }}</span>{% endif %}
+          {% if row.frame_specification %}<span class="spec-line"><strong>Frame:</strong> {{ row.frame_specification }}</span>{% endif %}
+          {% if row.color %}<span class="spec-line"><strong>Color:</strong> {{ row.color }}</span>{% endif %}
+          {% if row.series %}<span class="spec-line"><strong>Series:</strong> {{ row.series }}</span>{% endif %}
+        </td>
+        <td class="dimension">{{ frappe.utils.fmt_money(row.width_m, precision=2, currency=None) }}</td>
+        <td class="dimension">{{ frappe.utils.fmt_money(row.height_m, precision=2, currency=None) }}</td>
+        <td class="sets">{{ frappe.utils.flt(row.sets) | int if frappe.utils.flt(row.sets) == (frappe.utils.flt(row.sets) | int) else row.sets }}</td>
+        <td class="money">{{ frappe.utils.fmt_money(row.unit_rate, currency=currency) }}</td>
+        <td class="money">{{ frappe.utils.fmt_money(row.amount, currency=currency) }}</td>
+      </tr>
+      {% endfor %}
+      <tr class="amount-row">
+        <td colspan="6" rowspan="{{ 4 + (1 if doc.apply_vat else 0) }}" class="vat-note">
+          {% if doc.apply_vat %}VAT is applied to the grand total.{% else %}VAT is applied if requested by the client.{% endif %}
+        </td>
+        <td class="sets"><strong>{{ frappe.utils.flt(doc.total_sets) | int if frappe.utils.flt(doc.total_sets) == (frappe.utils.flt(doc.total_sets) | int) else doc.total_sets }}</strong></td>
+        <td class="amount-label">Items Total</td><td class="money">{{ frappe.utils.fmt_money(doc.items_subtotal, currency=currency) }}</td>
+      </tr>
+      <tr class="amount-row"><td></td><td class="amount-label">Delivery Fee</td><td class="money">{{ frappe.utils.fmt_money(doc.delivery_fee, currency=currency) }}</td></tr>
+      <tr class="amount-row"><td></td><td class="amount-label">Installation Fee</td><td class="money">{{ frappe.utils.fmt_money(doc.installation_fee, currency=currency) }}</td></tr>
+      {% if doc.apply_vat %}<tr class="amount-row"><td></td><td class="amount-label">VAT ({{ doc.vat_rate }}%)</td><td class="money">{{ frappe.utils.fmt_money(doc.vat_amount, currency=currency) }}</td></tr>{% endif %}
+      <tr class="amount-row grand-total"><td></td><td class="amount-label">Grand Total</td><td class="money">{{ frappe.utils.fmt_money(doc.grand_total, currency=currency) }}</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="terms-page">
+  <div class="terms-block">
+    <div class="terms-title">Terms &amp; Conditions</div>
+    {{ doc.terms_and_conditions or "" }}
+  </div>
+  <div class="terms-block">
+    <div class="terms-title">Payment Terms</div>
+    {{ doc.payment_terms or "" }}
+  </div>
+  <table class="signature-grid">
+    <tr>
+      <td><div class="signature-line">Prepared by: {{ frappe.db.get_value("User", doc.prepared_by, "full_name") or doc.prepared_by or "" }}</div></td>
+      <td><div class="signature-line">Client Conforme</div></td>
+    </tr>
+  </table>
+</div>

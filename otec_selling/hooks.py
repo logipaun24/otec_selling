@@ -46,6 +46,7 @@ app_license = "mit"
 doctype_js = {
     "Container Receiving": "public/js/container_receiving.js",
     "Container Landed Cost": "public/js/container_landed_cost.js",
+    "OTEC Quotation": "public/js/otec_quotation.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -90,6 +91,7 @@ doctype_js = {
 
 # before_install = "otec_selling.install.before_install"
 after_sync = "otec_selling.patches.v0_0.configure_purchasing_lifecycle.execute"
+after_migrate = "otec_selling.setup.setup_otec_quotation"
 
 # Uninstallation
 # ------------
