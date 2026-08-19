@@ -105,11 +105,13 @@ jobs:
           }
           trap report_install_failure EXIT
           bench get-app --branch version-16 erpnext https://github.com/frappe/erpnext
+          bench get-app --branch version-16 payments https://github.com/frappe/payments
           bench get-app otec_selling $GITHUB_WORKSPACE
           bench setup requirements --dev
           bench new-site --db-root-password root --admin-password admin test_site
           bench --site test_site set-config server_script_enabled true
           bench --site test_site install-app erpnext
+          bench --site test_site install-app payments
           bench --site test_site install-app otec_selling
           bench build
         env:
