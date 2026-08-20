@@ -34,7 +34,12 @@ class TestPurchasingLifecycleConfiguration(IntegrationTestCase):
             "custom_lcv_insurance_account",
             "custom_lcv_other_charges_account",
         )
+        # The configuration patch only maps accounts for companies that have a
+        # default expense account. Skip companies without one (e.g. ERPNext's
+        # "_Test Company" fixture) so the test verifies real configuration.
         for company in frappe.get_all("Company", pluck="name"):
+            if not frappe.db.get_value("Company", company, "default_expense_account"):
+                continue
             values = frappe.db.get_value("Company", company, fields, as_dict=True)
             self.assertTrue(all(values.get(field) for field in fields))
 

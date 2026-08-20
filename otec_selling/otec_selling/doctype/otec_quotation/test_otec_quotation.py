@@ -1,6 +1,21 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
+# The OTEC Quotation test only exercises in-memory pricing math and never
+# inserts records, so it must not pull in ERPNext's test-record dependency
+# tree (e.g. Purchase Receipt, which the app's branch validation rejects).
+IGNORE_TEST_RECORD_DEPENDENCIES = [
+    "OTEC Quotation",
+    "OTEC Quotation Item",
+    "Sales Order",
+    "Customer",
+    "Contact",
+    "Company",
+    "Currency",
+    "User",
+    "Item",
+]
+
 
 class TestOTECQuotation(IntegrationTestCase):
     def test_category_sqm_and_markup_are_allocated_per_row(self):
