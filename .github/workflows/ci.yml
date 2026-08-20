@@ -76,9 +76,10 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install MariaDB Client
+        timeout-minutes: 5
         run: |
           sudo apt update
-          sudo apt-get install mariadb-client
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mariadb-client
 
       - name: Setup
         run: |
