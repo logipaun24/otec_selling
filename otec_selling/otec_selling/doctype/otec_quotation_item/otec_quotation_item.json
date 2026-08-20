@@ -169,7 +169,7 @@
    "label": "Allocated Category SQM",
    "precision": 4,
    "read_only": 1,
-   "description": "Category shortfall pool divided proportionally to each row's actual SQM."
+   "description": "Rows with the highest shortfall receive 0; remaining rows split the category pool proportionally to actual SQM."
   },
   {
    "fieldname": "pricing_section",

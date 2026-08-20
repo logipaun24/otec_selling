@@ -71,18 +71,20 @@ class OTECQuotation(Document):
         total_sets = 0
 
         for category, rows in category_rows.items():
-            total_actual_sqm = category_actual_sqm[category]
+            # Rows tied for the highest shortfall receive none of the pool;
+            # everyone else splits it proportionally to actual SQM.
+            max_shortfall = max((row.sqm_shortfall for row in rows), default=0)
+            eligible = [row for row in rows if row.sqm_shortfall < max_shortfall]
+            eligible_actual_sqm = sum(row.actual_sqm for row in eligible)
             for row in rows:
-                # Allocate the category shortfall pool proportionally to each
-                # row's actual SQM: larger items absorb more of the shortfall,
-                # while the row with the highest shortfall (typically the
-                # smallest item) receives only its proportional share rather
-                # than an equal cut of the total.
-                row.allocated_sqm = (
-                    category_shortfall[category] * row.actual_sqm / total_actual_sqm
-                    if total_actual_sqm
-                    else 0
-                )
+                if row.sqm_shortfall >= max_shortfall:
+                    row.allocated_sqm = 0
+                else:
+                    row.allocated_sqm = (
+                        category_shortfall[category] * row.actual_sqm / eligible_actual_sqm
+                        if eligible_actual_sqm
+                        else 0
+                    )
                 row.allocated_sqm_amount = row.allocated_sqm * flt(row.sqm_rate)
                 row.base_line_amount = row.actual_sqm * flt(row.sqm_rate) * flt(row.sets)
                 row.operable_amount = (

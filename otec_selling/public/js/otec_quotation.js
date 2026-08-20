@@ -61,6 +61,7 @@ function calculate_quotation(frm) {
 	const rows = frm.doc.items || [];
 	const shortfalls = {};
 	const actualSqms = {};
+	const maxShortfalls = {};
 	const counts = {};
 
 	for (const row of rows) {
@@ -69,7 +70,21 @@ function calculate_quotation(frm) {
 		const category = row.main_product_category || "Uncategorized";
 		shortfalls[category] = flt(shortfalls[category]) + row.sqm_shortfall;
 		actualSqms[category] = flt(actualSqms[category]) + row.actual_sqm;
+		maxShortfalls[category] = Math.max(
+			flt(maxShortfalls[category]) || 0,
+			row.sqm_shortfall
+		);
 		counts[category] = flt(counts[category]) + 1;
+	}
+
+	// Sum of actual SQM for rows below the category's max shortfall;
+	// they are the only ones that receive a share of the pool.
+	const eligibleActualSqms = {};
+	for (const row of rows) {
+		const category = row.main_product_category || "Uncategorized";
+		if (row.sqm_shortfall < maxShortfalls[category]) {
+			eligibleActualSqms[category] = flt(eligibleActualSqms[category]) + row.actual_sqm;
+		}
 	}
 
 	const markup_per_row = rows.length ? flt(frm.doc.total_manual_markup) / rows.length : 0;
@@ -78,9 +93,15 @@ function calculate_quotation(frm) {
 
 	for (const row of rows) {
 		const category = row.main_product_category || "Uncategorized";
-		row.allocated_sqm = actualSqms[category]
-			? shortfalls[category] * flt(row.actual_sqm) / actualSqms[category]
-			: 0;
+		// Rows tied for the highest shortfall receive none of the pool;
+		// everyone else splits it proportionally to actual SQM.
+		if (row.sqm_shortfall >= maxShortfalls[category]) {
+			row.allocated_sqm = 0;
+		} else {
+			row.allocated_sqm = eligibleActualSqms[category]
+				? shortfalls[category] * flt(row.actual_sqm) / eligibleActualSqms[category]
+				: 0;
+		}
 		row.allocated_sqm_amount = row.allocated_sqm * flt(row.sqm_rate);
 		row.base_line_amount = row.actual_sqm * flt(row.sqm_rate) * flt(row.sets);
 		row.operable_amount = row.operable && row.operable_available
