@@ -3,6 +3,15 @@ from pathlib import Path
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
+ALUMINUM_THICKNESS = "\n1.4\n1.6\n1.8\n2.0\n3.0\n4.0"
+
+GLASS_TYPES = (
+    "\n5mm + 20A + 5mm\n5mm + 14A + 5mm\n5mm + 12A + 5mm"
+    "\n8mm\n6mm\n6mm + 12A + 6mm\n6mm + 1.52pvb + 6mm"
+    "\nNylon Mesh\nMetal\nA10 Uchannel"
+)
+
+STOCK_COLORS = "\nGray\nBlack\nBrown"
 
 ITEM_FIELDS = {
     "Item": [
@@ -74,10 +83,18 @@ ITEM_FIELDS = {
             "collapsible": 1,
         },
         {
+            "fieldname": "otec_aluminum_thickness",
+            "label": "Aluminum Thickness",
+            "fieldtype": "Select",
+            "options": ALUMINUM_THICKNESS,
+            "insert_after": "otec_specs_section",
+        },
+        {
             "fieldname": "otec_glass_specification",
             "label": "Glass Specification",
-            "fieldtype": "Data",
-            "insert_after": "otec_specs_section",
+            "fieldtype": "Select",
+            "options": GLASS_TYPES,
+            "insert_after": "otec_aluminum_thickness",
         },
         {
             "fieldname": "otec_frame_specification",
@@ -88,8 +105,16 @@ ITEM_FIELDS = {
         {
             "fieldname": "otec_color",
             "label": "Color",
-            "fieldtype": "Data",
+            "fieldtype": "Select",
+            "options": STOCK_COLORS,
             "insert_after": "otec_frame_specification",
+        },
+        {
+            "fieldname": "otec_addon_notes",
+            "label": "Add-on Notes",
+            "fieldtype": "Text",
+            "insert_after": "otec_color",
+            "description": "Surcharges and options from the OTEC price list (grills, screens, locksets, handles, minimum SQM rules, dimension limits, etc.).",
         },
     ]
 }

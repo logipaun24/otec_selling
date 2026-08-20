@@ -25,7 +25,8 @@ class OTECQuotation(Document):
         fields = [
             "item_name", "otec_main_product_category", "otec_secondary_product_category",
             "otec_series", "otec_minimum_sqm", "otec_sqm_rate", "otec_operable_available",
-            "otec_operable_rate", "otec_glass_specification", "otec_frame_specification", "otec_color",
+            "otec_operable_rate", "otec_aluminum_thickness", "otec_glass_specification",
+            "otec_frame_specification", "otec_color", "otec_addon_notes",
         ]
         previous = self.get_doc_before_save()
         previous_items = {
@@ -46,9 +47,11 @@ class OTECQuotation(Document):
             row.sqm_rate = flt(values.get("otec_sqm_rate"))
             row.operable_available = flt(values.get("otec_operable_available"))
             row.operable_rate = flt(values.get("otec_operable_rate"))
+            row.aluminum_thickness = values.get("otec_aluminum_thickness")
             row.glass_specification = values.get("otec_glass_specification")
             row.frame_specification = values.get("otec_frame_specification")
             row.color = values.get("otec_color")
+            row.addon_notes = values.get("otec_addon_notes")
             if not row.operable_available:
                 row.operable = 0
 

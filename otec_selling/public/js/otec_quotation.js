@@ -7,9 +7,11 @@ const OTEC_ITEM_FIELDS = [
 	"otec_sqm_rate",
 	"otec_operable_available",
 	"otec_operable_rate",
+	"otec_aluminum_thickness",
 	"otec_glass_specification",
 	"otec_frame_specification",
 	"otec_color",
+	"otec_addon_notes",
 ];
 
 frappe.ui.form.on("OTEC Quotation", {
@@ -41,9 +43,11 @@ frappe.ui.form.on("OTEC Quotation Item", {
 			sqm_rate: item.otec_sqm_rate,
 			operable_available: item.otec_operable_available,
 			operable_rate: item.otec_operable_rate,
+			aluminum_thickness: item.otec_aluminum_thickness,
 			glass_specification: item.otec_glass_specification,
 			frame_specification: item.otec_frame_specification,
 			color: item.otec_color,
+			addon_notes: item.otec_addon_notes,
 		};
 		if (!item.otec_operable_available) values.operable = 0;
 		await frappe.model.set_value(cdt, cdn, values);
@@ -76,9 +80,11 @@ async function calculate_totals(frm) {
 			"main_product_category",
 			"secondary_product_category",
 			"series",
+			"aluminum_thickness",
 			"glass_specification",
 			"frame_specification",
 			"color",
+			"addon_notes",
 			"minimum_sqm",
 			"sqm_rate",
 			"operable_available",

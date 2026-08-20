@@ -14,9 +14,11 @@
   "secondary_product_category",
   "series",
   "specification_column",
+  "aluminum_thickness",
   "glass_specification",
   "frame_specification",
   "color",
+  "addon_notes",
   "dimensions_section",
   "width_m",
   "height_m",
@@ -93,10 +95,16 @@
    "fieldtype": "Column Break"
   },
   {
+   "fieldname": "aluminum_thickness",
+   "fieldtype": "Select",
+   "label": "Alum. Thk",
+   "options": "\n1.4\n1.6\n1.8\n2.0\n3.0\n4.0"
+  },
+  {
    "fieldname": "glass_specification",
-   "fieldtype": "Data",
+   "fieldtype": "Select",
    "label": "Glass",
-   "read_only": 1
+   "options": "\n5mm + 20A + 5mm\n5mm + 14A + 5mm\n5mm + 12A + 5mm\n8mm\n6mm\n6mm + 12A + 6mm\n6mm + 1.52pvb + 6mm\nNylon Mesh\nMetal\nA10 Uchannel"
   },
   {
    "fieldname": "frame_specification",
@@ -106,9 +114,15 @@
   },
   {
    "fieldname": "color",
-   "fieldtype": "Data",
+   "fieldtype": "Select",
    "label": "Color",
-   "read_only": 1
+   "options": "\nGray\nBlack\nBrown"
+  },
+  {
+   "fieldname": "addon_notes",
+   "fieldtype": "Small Text",
+   "label": "Add-on Notes",
+   "description": "Surcharges and options from the item master (grills, screens, locksets, min SQM rules, dimension limits)."
   },
   {
    "fieldname": "dimensions_section",

@@ -105,6 +105,7 @@
           {% if row.main_product_category %}<br><small>{{ row.main_product_category }}</small>{% endif %}
         </td>
         <td class="specs">
+          {% if row.aluminum_thickness %}<span class="spec-line"><strong>Alum. Thk:</strong> {{ row.aluminum_thickness }}</span>{% endif %}
           {% if row.glass_specification %}<span class="spec-line"><strong>Glass:</strong> {{ row.glass_specification }}</span>{% endif %}
           {% if row.frame_specification %}<span class="spec-line"><strong>Frame:</strong> {{ row.frame_specification }}</span>{% endif %}
           {% if row.color %}<span class="spec-line"><strong>Color:</strong> {{ row.color }}</span>{% endif %}
