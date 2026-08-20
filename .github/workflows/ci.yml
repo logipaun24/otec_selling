@@ -110,7 +110,7 @@ jobs:
           bench get-app otec_selling $GITHUB_WORKSPACE
           bench setup requirements --dev
           bench new-site --db-root-password root --admin-password admin test_site
-          bench --site test_site set-config server_script_enabled true
+          bench set-common-config -c server_script_enabled true
           bench --site test_site install-app erpnext
           bench --site test_site install-app payments
           bench --site test_site install-app otec_selling
