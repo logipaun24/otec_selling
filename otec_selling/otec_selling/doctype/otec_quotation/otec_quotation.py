@@ -103,3 +103,27 @@ class OTECQuotation(Document):
         before_vat = items_subtotal + flt(self.delivery_fee) + flt(self.installation_fee)
         self.vat_amount = before_vat * flt(self.vat_rate) / 100 if self.apply_vat else 0
         self.grand_total = before_vat + self.vat_amount
+
+
+@frappe.whitelist()
+def calculate_quotation(doc):
+    """Compute item master values and totals from the form's current state.
+
+    Used by the "Calculate Totals" button: the document dict is sent from
+    the client, recomputed server-side, and the results returned so the
+    form can be refreshed. No record is saved.
+    """
+    data = frappe._dict(doc)
+    # Build an unsaved document from the submitted data so edits made in
+    # the form (including on a previously saved quotation) are respected.
+    data["name"] = None
+    quotation = frappe.get_doc(data)
+    quotation.set_item_master_values()
+    quotation.calculate_totals()
+    return {
+        "items": [row.as_dict() for row in quotation.items],
+        "total_sets": quotation.total_sets,
+        "items_subtotal": quotation.items_subtotal,
+        "vat_amount": quotation.vat_amount,
+        "grand_total": quotation.grand_total,
+    }

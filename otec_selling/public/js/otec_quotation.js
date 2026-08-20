@@ -18,12 +18,11 @@ frappe.ui.form.on("OTEC Quotation", {
 			query: "frappe.contacts.doctype.contact.contact.contact_query",
 			filters: { link_doctype: "Customer", link_name: frm.doc.customer },
 		}));
+
+		if (frm.doc.docstatus === 0) {
+			frm.add_custom_btn(__("Calculate Totals"), () => calculate_totals(frm));
+		}
 	},
-	total_manual_markup: calculate_quotation,
-	delivery_fee: calculate_quotation,
-	installation_fee: calculate_quotation,
-	apply_vat: calculate_quotation,
-	vat_rate: calculate_quotation,
 });
 
 frappe.ui.form.on("OTEC Quotation Item", {
@@ -48,78 +47,72 @@ frappe.ui.form.on("OTEC Quotation Item", {
 		};
 		if (!item.otec_operable_available) values.operable = 0;
 		await frappe.model.set_value(cdt, cdn, values);
-		calculate_quotation(frm);
 	},
-	width_m: calculate_quotation,
-	height_m: calculate_quotation,
-	sets: calculate_quotation,
-	operable: calculate_quotation,
-	items_remove: calculate_quotation,
 });
 
-function calculate_quotation(frm) {
-	const rows = frm.doc.items || [];
-	const shortfalls = {};
-	const actualSqms = {};
-	const maxShortfalls = {};
-	const counts = {};
-
-	for (const row of rows) {
-		row.actual_sqm = flt(row.width_m) * flt(row.height_m);
-		row.sqm_shortfall = Math.max(flt(row.minimum_sqm) - row.actual_sqm, 0);
-		const category = row.main_product_category || "Uncategorized";
-		shortfalls[category] = flt(shortfalls[category]) + row.sqm_shortfall;
-		actualSqms[category] = flt(actualSqms[category]) + row.actual_sqm;
-		maxShortfalls[category] = Math.max(
-			flt(maxShortfalls[category]) || 0,
-			row.sqm_shortfall
-		);
-		counts[category] = flt(counts[category]) + 1;
+async function calculate_totals(frm) {
+	if (!frm.doc.items || !frm.doc.items.length) {
+		frappe.msgprint(__("Add quotation items before calculating totals."));
+		return;
 	}
 
-	// Sum of actual SQM for rows below the category's max shortfall;
-	// they are the only ones that receive a share of the pool.
-	const eligibleActualSqms = {};
-	for (const row of rows) {
-		const category = row.main_product_category || "Uncategorized";
-		if (row.sqm_shortfall < maxShortfalls[category]) {
-			eligibleActualSqms[category] = flt(eligibleActualSqms[category]) + row.actual_sqm;
+	frappe.dom.freeze(__("Calculating totals..."));
+	try {
+		const result = await frappe.call({
+			method:
+				"otec_selling.otec_selling.doctype.otec_quotation.otec_quotation.calculate_quotation",
+			args: { doc: frm.doc },
+		});
+		const data = result.message;
+		if (!data) return;
+
+		const rows_by_name = {};
+		for (const item of data.items || []) {
+			rows_by_name[item.name] = item;
 		}
-	}
 
-	const markup_per_row = rows.length ? flt(frm.doc.total_manual_markup) / rows.length : 0;
-	let items_subtotal = 0;
-	let total_sets = 0;
+		const fields_to_apply = [
+			"item_name",
+			"main_product_category",
+			"secondary_product_category",
+			"series",
+			"glass_specification",
+			"frame_specification",
+			"color",
+			"minimum_sqm",
+			"sqm_rate",
+			"operable_available",
+			"operable_rate",
+			"actual_sqm",
+			"sqm_shortfall",
+			"allocated_sqm",
+			"allocated_sqm_amount",
+			"base_line_amount",
+			"operable_amount",
+			"allocated_markup",
+			"unit_rate",
+			"amount",
+		];
 
-	for (const row of rows) {
-		const category = row.main_product_category || "Uncategorized";
-		// Rows tied for the highest shortfall receive none of the pool;
-		// everyone else splits it proportionally to actual SQM.
-		if (row.sqm_shortfall >= maxShortfalls[category]) {
-			row.allocated_sqm = 0;
-		} else {
-			row.allocated_sqm = eligibleActualSqms[category]
-				? shortfalls[category] * flt(row.actual_sqm) / eligibleActualSqms[category]
-				: 0;
+		for (const row of frm.doc.items || []) {
+			const computed = rows_by_name[row.name];
+			if (!computed) continue;
+			for (const field of fields_to_apply) {
+				if (field in computed) {
+					row[field] = computed[field];
+				}
+			}
 		}
-		row.allocated_sqm_amount = row.allocated_sqm * flt(row.sqm_rate);
-		row.base_line_amount = row.actual_sqm * flt(row.sqm_rate) * flt(row.sets);
-		row.operable_amount = row.operable && row.operable_available
-			? flt(row.operable_rate) * flt(row.sets)
-			: 0;
-		row.allocated_markup = markup_per_row;
-		row.amount = row.base_line_amount + row.allocated_sqm_amount
-			+ row.operable_amount + row.allocated_markup;
-		row.unit_rate = flt(row.sets) ? row.amount / flt(row.sets) : 0;
-		items_subtotal += row.amount;
-		total_sets += flt(row.sets);
-	}
 
-	const before_vat = items_subtotal + flt(frm.doc.delivery_fee) + flt(frm.doc.installation_fee);
-	const vat_amount = frm.doc.apply_vat ? before_vat * flt(frm.doc.vat_rate) / 100 : 0;
-	frm.doc.total_sets = total_sets;
-	frm.doc.items_subtotal = items_subtotal;
-	frm.doc.vat_amount = vat_amount;
-	frm.doc.grand_total = before_vat + vat_amount;
-	frm.refresh_fields();
+		frm.set_value("total_sets", data.total_sets);
+		frm.set_value("items_subtotal", data.items_subtotal);
+		frm.set_value("vat_amount", data.vat_amount);
+		frm.set_value("grand_total", data.grand_total);
+		frm.refresh_fields();
+	} catch (error) {
+		console.error(error);
+		frappe.msgprint(__("Failed to calculate totals. Please check the items and try again."));
+	} finally {
+		frappe.dom.unfreeze();
+	}
 }
