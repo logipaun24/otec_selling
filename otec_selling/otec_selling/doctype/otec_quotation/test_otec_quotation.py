@@ -1,8 +1,8 @@
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 
 
-class TestOTECQuotation(FrappeTestCase):
+class TestOTECQuotation(IntegrationTestCase):
     def test_category_sqm_and_markup_are_allocated_per_row(self):
         doc = frappe.new_doc("OTEC Quotation")
         doc.total_manual_markup = 3000
