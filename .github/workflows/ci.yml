@@ -110,7 +110,7 @@ jobs:
           bench get-app otec_selling $GITHUB_WORKSPACE
           bench setup requirements --dev
           bench new-site --db-root-password root --admin-password admin test_site
-          bench set-common-config -c server_script_enabled true
+          python -c "import json, pathlib; p = pathlib.Path('sites/common_site_config.json'); c = json.loads(p.read_text()); c['server_script_enabled'] = True; p.write_text(json.dumps(c, indent=1))"
           bench --site test_site install-app erpnext
           bench --site test_site install-app payments
           bench --site test_site install-app otec_selling
