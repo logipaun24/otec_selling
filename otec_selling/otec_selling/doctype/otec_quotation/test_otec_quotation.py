@@ -35,7 +35,12 @@ class TestOTECQuotation(IntegrationTestCase):
             row.sets = 1
         doc.calculate_totals()
 
-        self.assertEqual(doc.items[0].allocated_sqm, 0.5 / 3)
+        # Shortfall pool = 0.5 (row 1 only). Split proportionally to each
+        # row's actual SQM (total actual = 6.0): the smallest row (which has
+        # the highest shortfall) receives only its proportional share.
+        self.assertAlmostEqual(doc.items[0].allocated_sqm, 0.5 * (1.0 / 6.0))
+        self.assertAlmostEqual(doc.items[1].allocated_sqm, 0.5 * (2.0 / 6.0))
+        self.assertAlmostEqual(doc.items[2].allocated_sqm, 0.5 * (3.0 / 6.0))
         self.assertEqual(doc.items[0].allocated_markup, 1000)
         self.assertEqual(doc.total_sets, 3)
         self.assertAlmostEqual(doc.grand_total, (600 + 50 + 3000 + 3000) * 1.12)

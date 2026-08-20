@@ -60,6 +60,7 @@ frappe.ui.form.on("OTEC Quotation Item", {
 function calculate_quotation(frm) {
 	const rows = frm.doc.items || [];
 	const shortfalls = {};
+	const actualSqms = {};
 	const counts = {};
 
 	for (const row of rows) {
@@ -67,6 +68,7 @@ function calculate_quotation(frm) {
 		row.sqm_shortfall = Math.max(flt(row.minimum_sqm) - row.actual_sqm, 0);
 		const category = row.main_product_category || "Uncategorized";
 		shortfalls[category] = flt(shortfalls[category]) + row.sqm_shortfall;
+		actualSqms[category] = flt(actualSqms[category]) + row.actual_sqm;
 		counts[category] = flt(counts[category]) + 1;
 	}
 
@@ -76,7 +78,9 @@ function calculate_quotation(frm) {
 
 	for (const row of rows) {
 		const category = row.main_product_category || "Uncategorized";
-		row.allocated_sqm = counts[category] ? shortfalls[category] / counts[category] : 0;
+		row.allocated_sqm = actualSqms[category]
+			? shortfalls[category] * flt(row.actual_sqm) / actualSqms[category]
+			: 0;
 		row.allocated_sqm_amount = row.allocated_sqm * flt(row.sqm_rate);
 		row.base_line_amount = row.actual_sqm * flt(row.sqm_rate) * flt(row.sets);
 		row.operable_amount = row.operable && row.operable_available

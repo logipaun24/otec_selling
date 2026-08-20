@@ -54,6 +54,7 @@ class OTECQuotation(Document):
 
     def calculate_totals(self):
         category_shortfall = defaultdict(float)
+        category_actual_sqm = defaultdict(float)
         category_rows = defaultdict(list)
 
         for row in self.items:
@@ -61,6 +62,7 @@ class OTECQuotation(Document):
             row.sqm_shortfall = max(flt(row.minimum_sqm) - row.actual_sqm, 0)
             category = row.main_product_category or "Uncategorized"
             category_shortfall[category] += row.sqm_shortfall
+            category_actual_sqm[category] += row.actual_sqm
             category_rows[category].append(row)
 
         row_count = len(self.items)
@@ -69,10 +71,19 @@ class OTECQuotation(Document):
         total_sets = 0
 
         for category, rows in category_rows.items():
-            allocated_sqm = category_shortfall[category] / len(rows) if rows else 0
+            total_actual_sqm = category_actual_sqm[category]
             for row in rows:
-                row.allocated_sqm = allocated_sqm
-                row.allocated_sqm_amount = allocated_sqm * flt(row.sqm_rate)
+                # Allocate the category shortfall pool proportionally to each
+                # row's actual SQM: larger items absorb more of the shortfall,
+                # while the row with the highest shortfall (typically the
+                # smallest item) receives only its proportional share rather
+                # than an equal cut of the total.
+                row.allocated_sqm = (
+                    category_shortfall[category] * row.actual_sqm / total_actual_sqm
+                    if total_actual_sqm
+                    else 0
+                )
+                row.allocated_sqm_amount = row.allocated_sqm * flt(row.sqm_rate)
                 row.base_line_amount = row.actual_sqm * flt(row.sqm_rate) * flt(row.sets)
                 row.operable_amount = (
                     flt(row.operable_rate) * flt(row.sets) if row.operable and row.operable_available else 0

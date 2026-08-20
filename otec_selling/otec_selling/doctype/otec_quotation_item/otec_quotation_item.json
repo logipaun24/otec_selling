@@ -5,45 +5,254 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "item_code", "item_name", "location", "reference_drawing", "classification_section",
-  "main_product_category", "secondary_product_category", "series", "specification_column",
-  "glass_specification", "frame_specification", "color", "dimensions_section", "width_m", "height_m",
-  "sets", "actual_sqm", "minimum_sqm", "sqm_shortfall", "allocated_sqm", "pricing_section", "sqm_rate",
-  "base_line_amount", "allocated_sqm_amount", "operable_available", "operable", "operable_rate",
-  "operable_amount", "allocated_markup", "unit_rate", "amount"
+  "item_code",
+  "item_name",
+  "location",
+  "reference_drawing",
+  "classification_section",
+  "main_product_category",
+  "secondary_product_category",
+  "series",
+  "specification_column",
+  "glass_specification",
+  "frame_specification",
+  "color",
+  "dimensions_section",
+  "width_m",
+  "height_m",
+  "sets",
+  "actual_sqm",
+  "minimum_sqm",
+  "sqm_shortfall",
+  "allocated_sqm",
+  "pricing_section",
+  "sqm_rate",
+  "base_line_amount",
+  "allocated_sqm_amount",
+  "operable_available",
+  "operable",
+  "operable_rate",
+  "operable_amount",
+  "allocated_markup",
+  "unit_rate",
+  "amount"
  ],
  "fields": [
-  {"fieldname":"item_code","fieldtype":"Link","in_list_view":1,"label":"Item","options":"Item","reqd":1},
-  {"fieldname":"item_name","fieldtype":"Data","label":"Item Name","read_only":1},
-  {"fieldname":"location","fieldtype":"Data","in_list_view":1,"label":"Location","reqd":1},
-  {"fieldname":"reference_drawing","fieldtype":"Attach Image","label":"Reference Drawing"},
-  {"fieldname":"classification_section","fieldtype":"Section Break","label":"Classification and Specifications"},
-  {"fieldname":"main_product_category","fieldtype":"Data","label":"Main Product Category","read_only":1},
-  {"fieldname":"secondary_product_category","fieldtype":"Data","in_list_view":1,"label":"Product Category","read_only":1},
-  {"fieldname":"series","fieldtype":"Data","label":"Series","read_only":1},
-  {"fieldname":"specification_column","fieldtype":"Column Break"},
-  {"fieldname":"glass_specification","fieldtype":"Data","label":"Glass","read_only":1},
-  {"fieldname":"frame_specification","fieldtype":"Data","label":"Frame","read_only":1},
-  {"fieldname":"color","fieldtype":"Data","label":"Color","read_only":1},
-  {"fieldname":"dimensions_section","fieldtype":"Section Break","label":"Dimensions and SQM"},
-  {"fieldname":"width_m","fieldtype":"Float","in_list_view":1,"label":"Width (m)","non_negative":1,"precision":4,"reqd":1},
-  {"fieldname":"height_m","fieldtype":"Float","in_list_view":1,"label":"Height (m)","non_negative":1,"precision":4,"reqd":1},
-  {"default":"1","fieldname":"sets","fieldtype":"Float","in_list_view":1,"label":"Set/s","non_negative":1,"reqd":1},
-  {"fieldname":"actual_sqm","fieldtype":"Float","label":"Actual SQM","precision":4,"read_only":1},
-  {"fieldname":"minimum_sqm","fieldtype":"Float","label":"Minimum SQM","precision":4,"read_only":1},
-  {"fieldname":"sqm_shortfall","fieldtype":"Float","label":"SQM Shortfall","precision":4,"read_only":1},
-  {"fieldname":"allocated_sqm","fieldtype":"Float","label":"Allocated Category SQM","precision":4,"read_only":1},
-  {"fieldname":"pricing_section","fieldtype":"Section Break","label":"Internal Pricing","permlevel":1},
-  {"fieldname":"sqm_rate","fieldtype":"Currency","label":"Rate per SQM","options":"currency","permlevel":1,"read_only":1},
-  {"fieldname":"base_line_amount","fieldtype":"Currency","label":"Base Line Amount","options":"currency","permlevel":1,"read_only":1},
-  {"fieldname":"allocated_sqm_amount","fieldtype":"Currency","label":"Allocated SQM Amount","options":"currency","permlevel":1,"read_only":1},
-  {"fieldname":"operable_available","fieldtype":"Check","hidden":1,"label":"Operable Available","read_only":1},
-  {"fieldname":"operable","fieldtype":"Check","label":"Operable"},
-  {"fieldname":"operable_rate","fieldtype":"Currency","label":"Operable Rate","options":"currency","permlevel":1,"read_only":1},
-  {"fieldname":"operable_amount","fieldtype":"Currency","label":"Operable Amount","options":"currency","permlevel":1,"read_only":1},
-  {"fieldname":"allocated_markup","fieldtype":"Currency","label":"Allocated Markup","options":"currency","permlevel":1,"read_only":1},
-  {"fieldname":"unit_rate","fieldtype":"Currency","in_list_view":1,"label":"Unit Cost","options":"currency","read_only":1},
-  {"fieldname":"amount","fieldtype":"Currency","in_list_view":1,"label":"Total Amount","options":"currency","read_only":1}
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Location",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reference_drawing",
+   "fieldtype": "Attach Image",
+   "label": "Reference Drawing"
+  },
+  {
+   "fieldname": "classification_section",
+   "fieldtype": "Section Break",
+   "label": "Classification and Specifications"
+  },
+  {
+   "fieldname": "main_product_category",
+   "fieldtype": "Data",
+   "label": "Main Product Category",
+   "read_only": 1
+  },
+  {
+   "fieldname": "secondary_product_category",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Product Category",
+   "read_only": 1
+  },
+  {
+   "fieldname": "series",
+   "fieldtype": "Data",
+   "label": "Series",
+   "read_only": 1
+  },
+  {
+   "fieldname": "specification_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "glass_specification",
+   "fieldtype": "Data",
+   "label": "Glass",
+   "read_only": 1
+  },
+  {
+   "fieldname": "frame_specification",
+   "fieldtype": "Data",
+   "label": "Frame",
+   "read_only": 1
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Data",
+   "label": "Color",
+   "read_only": 1
+  },
+  {
+   "fieldname": "dimensions_section",
+   "fieldtype": "Section Break",
+   "label": "Dimensions and SQM"
+  },
+  {
+   "fieldname": "width_m",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Width (m)",
+   "non_negative": 1,
+   "precision": 4,
+   "reqd": 1
+  },
+  {
+   "fieldname": "height_m",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Height (m)",
+   "non_negative": 1,
+   "precision": 4,
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "sets",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Set/s",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "actual_sqm",
+   "fieldtype": "Float",
+   "label": "Actual SQM",
+   "precision": 4,
+   "read_only": 1
+  },
+  {
+   "fieldname": "minimum_sqm",
+   "fieldtype": "Float",
+   "label": "Minimum SQM",
+   "precision": 4,
+   "read_only": 1
+  },
+  {
+   "fieldname": "sqm_shortfall",
+   "fieldtype": "Float",
+   "label": "SQM Shortfall",
+   "precision": 4,
+   "read_only": 1
+  },
+  {
+   "fieldname": "allocated_sqm",
+   "fieldtype": "Float",
+   "label": "Allocated Category SQM",
+   "precision": 4,
+   "read_only": 1,
+   "description": "Category shortfall pool divided proportionally to each row's actual SQM."
+  },
+  {
+   "fieldname": "pricing_section",
+   "fieldtype": "Section Break",
+   "label": "Internal Pricing",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "sqm_rate",
+   "fieldtype": "Currency",
+   "label": "Rate per SQM",
+   "options": "currency",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "base_line_amount",
+   "fieldtype": "Currency",
+   "label": "Base Line Amount",
+   "options": "currency",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "allocated_sqm_amount",
+   "fieldtype": "Currency",
+   "label": "Allocated SQM Amount",
+   "options": "currency",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "operable_available",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Operable Available",
+   "read_only": 1
+  },
+  {
+   "fieldname": "operable",
+   "fieldtype": "Check",
+   "label": "Operable"
+  },
+  {
+   "fieldname": "operable_rate",
+   "fieldtype": "Currency",
+   "label": "Operable Rate",
+   "options": "currency",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "operable_amount",
+   "fieldtype": "Currency",
+   "label": "Operable Amount",
+   "options": "currency",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "allocated_markup",
+   "fieldtype": "Currency",
+   "label": "Allocated Markup",
+   "options": "currency",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "unit_rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Unit Cost",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Amount",
+   "options": "currency",
+   "read_only": 1
+  }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
