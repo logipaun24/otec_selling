@@ -26,7 +26,7 @@ class OTECQuotation(Document):
             "item_name", "otec_main_product_category", "otec_secondary_product_category",
             "otec_series", "otec_minimum_sqm", "otec_sqm_rate", "otec_operable_available",
             "otec_operable_rate", "otec_aluminum_thickness", "otec_glass_specification",
-            "otec_frame_specification", "otec_color", "otec_addon_notes",
+            "otec_frame_specification", "otec_color", "otec_addon_notes", "otec_addons",
         ]
         previous = self.get_doc_before_save()
         previous_items = {
@@ -52,6 +52,7 @@ class OTECQuotation(Document):
             row.frame_specification = values.get("otec_frame_specification")
             row.color = values.get("otec_color")
             row.addon_notes = values.get("otec_addon_notes")
+            row.addons = values.get("otec_addons") or []
             if not row.operable_available:
                 row.operable = 0
 
@@ -94,8 +95,10 @@ class OTECQuotation(Document):
                     flt(row.operable_rate) * flt(row.sets) if row.operable and row.operable_available else 0
                 )
                 row.allocated_markup = markup_per_row
+                row.addon_amount = _addon_amount(row.addons)
                 row.amount = (
-                    row.base_line_amount + row.allocated_sqm_amount + row.operable_amount + row.allocated_markup
+                    row.base_line_amount + row.allocated_sqm_amount + row.operable_amount
+                    + row.allocated_markup + row.addon_amount
                 )
                 row.unit_rate = row.amount / flt(row.sets) if flt(row.sets) else 0
                 items_subtotal += row.amount
@@ -106,6 +109,20 @@ class OTECQuotation(Document):
         before_vat = items_subtotal + flt(self.delivery_fee) + flt(self.installation_fee)
         self.vat_amount = before_vat * flt(self.vat_rate) / 100 if self.apply_vat else 0
         self.grand_total = before_vat + self.vat_amount
+
+
+def _addon_amount(addons) -> float:
+    """Sum rates for the selected add-ons from the OTEC Add-on master."""
+    if not addons:
+        return 0
+    names = [name for name in addons if name]
+    if not names:
+        return 0
+    rates = frappe.db.get_values(
+        "OTEC Add-on", {"name": ["in", names]}, "rate", as_dict=True
+    )
+    rate_map = {row["name"]: flt(row["rate"]) for row in rates}
+    return sum(rate_map.get(name, 0) for name in names)
 
 
 @frappe.whitelist()

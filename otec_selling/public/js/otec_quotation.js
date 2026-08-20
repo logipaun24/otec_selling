@@ -12,6 +12,7 @@ const OTEC_ITEM_FIELDS = [
 	"otec_frame_specification",
 	"otec_color",
 	"otec_addon_notes",
+	"otec_addons",
 ];
 
 frappe.ui.form.on("OTEC Quotation", {
@@ -48,6 +49,7 @@ frappe.ui.form.on("OTEC Quotation Item", {
 			frame_specification: item.otec_frame_specification,
 			color: item.otec_color,
 			addon_notes: item.otec_addon_notes,
+			addons: item.otec_addons || [],
 		};
 		if (!item.otec_operable_available) values.operable = 0;
 		await frappe.model.set_value(cdt, cdn, values);
@@ -84,7 +86,9 @@ async function calculate_totals(frm) {
 			"glass_specification",
 			"frame_specification",
 			"color",
+			"addons",
 			"addon_notes",
+			"addon_amount",
 			"minimum_sqm",
 			"sqm_rate",
 			"operable_available",

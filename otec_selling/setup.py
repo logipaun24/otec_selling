@@ -13,6 +13,24 @@ GLASS_TYPES = (
 
 STOCK_COLORS = "\nGray\nBlack\nBrown"
 
+# Add-on options with their rates, from the OTEC price list (June 3, 2026).
+ADDONS = [
+    {"addon_name": "Integrated Grills", "rate": 2700, "description": "Per SQM. For windows with integrated grills."},
+    {"addon_name": "High Visibility Metal Screen", "rate": 2500, "description": "Per panel (Slide Up windows)."},
+    {"addon_name": "Fixed Metal Screen", "rate": 2500, "description": "Per panel (Glass Louver)."},
+    {"addon_name": "Key Lockset", "rate": 2500, "description": "Folding / Sliding / Swing doors."},
+    {"addon_name": "Key Lockset (Narrow)", "rate": 2000, "description": "Folding Narrow (45*16)."},
+    {"addon_name": "Pair of Big Handles", "rate": 2000, "description": "Sliding doors."},
+    {"addon_name": "Locksets (208 Series)", "rate": 8000, "description": "3 Tracks 208 Series sliding."},
+    {"addon_name": "Buffers / Soft Close", "rate": 1800, "description": "Each (Narrow Frames)."},
+    {"addon_name": "Ground Rail Buffer", "rate": 960, "description": "With ground rail buffer (Narrow Frames)."},
+    {"addon_name": "Handle Key Lock", "rate": 2000, "description": "Telescopic sliding."},
+    {"addon_name": "Linkage (No Bottom Track)", "rate": 6600, "description": "Telescopic sliding, no bottom track."},
+    {"addon_name": "Mirror Type Slim Profile", "rate": 2500, "description": "Per SQM. Ghost Door."},
+    {"addon_name": "Soft Screen", "rate": 4306, "description": "Per SQM. Slide and Swing."},
+    {"addon_name": "Aluminum Strips in Insulated Glass", "rate": 800, "description": "Per SQM."},
+]
+
 ITEM_FIELDS = {
     "Item": [
         {
@@ -116,6 +134,14 @@ ITEM_FIELDS = {
             "insert_after": "otec_color",
             "description": "Surcharges and options from the OTEC price list (grills, screens, locksets, handles, minimum SQM rules, dimension limits, etc.).",
         },
+        {
+            "fieldname": "otec_addons",
+            "label": "Available Add-ons",
+            "fieldtype": "MultiSelect",
+            "options": "OTEC Add-on",
+            "insert_after": "otec_addon_notes",
+            "description": "Select the add-ons offered for this item. Rates come from the OTEC Add-on master.",
+        },
     ]
 }
 
@@ -123,10 +149,29 @@ ITEM_FIELDS = {
 def setup_otec_quotation():
     # OTEC Quotation previously existed as an empty custom DocType fixture.
     # Reload the version-controlled standard schema after fixtures are imported.
+    frappe.reload_doc("otec_selling", "doctype", "otec_addon", force=True)
     frappe.reload_doc("otec_selling", "doctype", "otec_quotation", force=True)
     frappe.reload_doc("otec_selling", "doctype", "otec_quotation_item", force=True)
     create_custom_fields(ITEM_FIELDS, update=True)
+    _seed_addons()
     _install_print_format()
+
+
+def _seed_addons():
+    for addon in ADDONS:
+        name = addon["addon_name"]
+        if frappe.db.exists("OTEC Add-on", name):
+            frappe.db.set_value("OTEC Add-on", name, "rate", addon["rate"])
+        else:
+            frappe.get_doc(
+                {
+                    "doctype": "OTEC Add-on",
+                    "addon_name": name,
+                    "rate": addon["rate"],
+                    "description": addon.get("description"),
+                }
+            ).insert(ignore_permissions=True)
+    frappe.db.commit()
 
 
 def _install_print_format():

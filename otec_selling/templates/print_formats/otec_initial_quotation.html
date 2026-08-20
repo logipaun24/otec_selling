@@ -110,6 +110,7 @@
           {% if row.frame_specification %}<span class="spec-line"><strong>Frame:</strong> {{ row.frame_specification }}</span>{% endif %}
           {% if row.color %}<span class="spec-line"><strong>Color:</strong> {{ row.color }}</span>{% endif %}
           {% if row.series %}<span class="spec-line"><strong>Series:</strong> {{ row.series }}</span>{% endif %}
+          {% if row.addons %}<span class="spec-line"><strong>Add-ons:</strong> {{ row.addons | join(", ") }}</span>{% endif %}
         </td>
         <td class="dimension">{{ frappe.utils.fmt_money(row.width_m, precision=2, currency=None) }}</td>
         <td class="dimension">{{ frappe.utils.fmt_money(row.height_m, precision=2, currency=None) }}</td>

@@ -18,6 +18,8 @@
   "glass_specification",
   "frame_specification",
   "color",
+  "addons",
+  "addon_amount",
   "addon_notes",
   "dimensions_section",
   "width_m",
@@ -117,6 +119,19 @@
    "fieldtype": "Select",
    "label": "Color",
    "options": "\nGray\nBlack\nBrown"
+  },
+  {
+   "fieldname": "addons",
+   "fieldtype": "MultiSelect",
+   "label": "Add-ons",
+   "options": "OTEC Add-on"
+  },
+  {
+   "fieldname": "addon_amount",
+   "fieldtype": "Currency",
+   "label": "Add-on Amount",
+   "options": "currency",
+   "read_only": 1
   },
   {
    "fieldname": "addon_notes",
