@@ -5,22 +5,10 @@ from frappe.tests import IntegrationTestCase
 
 from otec_selling.otec_selling.doctype.otec_quotation.otec_quotation import calculate_quotation
 
-# The OTEC Quotation test only exercises in-memory pricing math and never
-# inserts records, so it must not pull in ERPNext's test-record dependency
-# tree (e.g. Purchase Receipt, which the app's branch validation rejects).
-IGNORE_TEST_RECORD_DEPENDENCIES = [
-    "OTEC Quotation",
-    "OTEC Quotation Item",
-    "Sales Order",
-    "Customer",
-    "Contact",
-    "Company",
-    "Currency",
-    "User",
-    "Item",
-]
 
-
+# These tests exercise in-memory pricing math. Keeping them outside the
+# DocType test module prevents Frappe from generating unrelated ERPNext test
+# records merely to construct unsaved OTEC Quotation documents.
 class TestOTECQuotation(IntegrationTestCase):
     def test_calculation_endpoint_accepts_serialized_desk_document(self):
         doc = frappe.new_doc("OTEC Quotation")
