@@ -285,7 +285,10 @@ def get_product_configurator(item_code):
 
 @frappe.whitelist()
 def calculate_quotation(doc):
-    data = frappe._dict(doc)
+    # Desk serializes frm.doc when it is sent through frappe.call. Accept that
+    # JSON string as well as a mapping so the method also remains usable from
+    # server-side callers.
+    data = frappe._dict(frappe.parse_json(doc))
     data["name"] = None
     quotation = frappe.get_doc(data)
     quotation.set_item_master_values()

@@ -1,5 +1,9 @@
+import json
+
 import frappe
 from frappe.tests import IntegrationTestCase
+
+from otec_selling.otec_selling.doctype.otec_quotation.otec_quotation import calculate_quotation
 
 # The OTEC Quotation test only exercises in-memory pricing math and never
 # inserts records, so it must not pull in ERPNext's test-record dependency
@@ -18,6 +22,20 @@ IGNORE_TEST_RECORD_DEPENDENCIES = [
 
 
 class TestOTECQuotation(IntegrationTestCase):
+    def test_calculation_endpoint_accepts_serialized_desk_document(self):
+        doc = frappe.new_doc("OTEC Quotation")
+        row = doc.append("items", {})
+        row.main_product_category = "Windows"
+        row.width_m = 1
+        row.height_m = 1
+        row.minimum_sqm = 1.35
+        row.sqm_rate = 8400
+        row.sets = 1
+
+        result = calculate_quotation(json.dumps(doc.as_dict()))
+
+        self.assertAlmostEqual(result["items"][0]["amount"], 1.35 * 8400)
+
     def test_single_row_still_enforces_minimum_sqm(self):
         doc = frappe.new_doc("OTEC Quotation")
         row = doc.append("items", {})
