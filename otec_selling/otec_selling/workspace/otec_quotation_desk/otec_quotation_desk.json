@@ -20,7 +20,7 @@
   {"hidden":0,"is_query_report":0,"label":"Item Add-on Rules","link_count":0,"link_to":"OTEC Item Add-on Rule","link_type":"DocType","onboard":0,"type":"Link"}
  ],
  "module": "OTEC Selling",
- "name": "OTEC Quotation",
+ "name": "OTEC Quotation Desk",
  "number_cards": [],
  "parent_page": "",
  "public": 1,
