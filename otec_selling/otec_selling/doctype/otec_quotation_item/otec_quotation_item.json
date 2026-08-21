@@ -18,6 +18,8 @@
   "configure_product",
   "specification_column",
   "aluminum_thickness",
+  "glass_type",
+  "glass_color",
   "glass_specification",
   "frame_specification",
   "color",
@@ -34,10 +36,10 @@
   "sqm_shortfall",
   "allocated_sqm",
   "pricing_section",
-  "pricing_method",
   "base_product_sqm_rate",
   "aluminum_price_per_sqm",
-  "glass_price_per_sqm",
+  "glass_type_price_per_sqm",
+  "glass_color_price_per_sqm",
   "sqm_rate",
   "base_line_amount",
   "allocated_sqm_amount",
@@ -127,15 +129,30 @@
   },
   {
    "fieldname": "aluminum_thickness",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "Alum. Thk",
-   "options": "\n1.4\n1.6\n1.8\n2.0\n3.0\n4.0"
+   "options": "OTEC Aluminum Thickness",
+   "reqd": 1
+  },
+  {
+   "fieldname": "glass_type",
+   "fieldtype": "Link",
+   "label": "Glass Type",
+   "options": "OTEC Glass Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "glass_color",
+   "fieldtype": "Link",
+   "label": "Glass Color",
+   "options": "OTEC Glass Color",
+   "reqd": 1
   },
   {
    "fieldname": "glass_specification",
-   "fieldtype": "Select",
-   "label": "Glass",
-   "options": "\n5mm + 20A + 5mm\n5mm + 14A + 5mm\n5mm + 12A + 5mm\n8mm\n6mm\n6mm + 12A + 6mm\n6mm + 1.52pvb + 6mm\nNylon Mesh\nMetal\nA10 Uchannel"
+   "fieldtype": "Data",
+   "label": "Glass Build Specification",
+   "read_only": 1
   },
   {
    "fieldname": "frame_specification",
@@ -246,13 +263,6 @@
    "permlevel": 1
   },
   {
-   "fieldname": "pricing_method",
-   "fieldtype": "Data",
-   "label": "Specification Pricing Method",
-   "permlevel": 1,
-   "read_only": 1
-  },
-  {
    "fieldname": "base_product_sqm_rate",
    "fieldtype": "Currency",
    "label": "Base Product Rate per SQM",
@@ -269,9 +279,17 @@
    "read_only": 1
   },
   {
-   "fieldname": "glass_price_per_sqm",
+   "fieldname": "glass_type_price_per_sqm",
    "fieldtype": "Currency",
-   "label": "Glass Price per SQM",
+   "label": "Glass Type Price per SQM",
+   "options": "currency",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "glass_color_price_per_sqm",
+   "fieldtype": "Currency",
+   "label": "Glass Color Price per SQM",
    "options": "currency",
    "permlevel": 1,
    "read_only": 1

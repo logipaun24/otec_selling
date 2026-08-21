@@ -1,0 +1,1 @@
+{"actions":[],"doctype":"DocType","editable_grid":1,"engine":"InnoDB","field_order":["aluminum_thickness"],"fields":[{"fieldname":"aluminum_thickness","fieldtype":"Link","in_list_view":1,"label":"Aluminum Thickness","options":"OTEC Aluminum Thickness","reqd":1}],"istable":1,"module":"OTEC Selling","name":"OTEC Item Aluminum Option","permissions":[]}

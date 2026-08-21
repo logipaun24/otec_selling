@@ -1,0 +1,1 @@
+{"actions":[],"doctype":"DocType","editable_grid":1,"engine":"InnoDB","field_order":["glass_color"],"fields":[{"fieldname":"glass_color","fieldtype":"Link","in_list_view":1,"label":"Glass Color","options":"OTEC Glass Color","reqd":1}],"istable":1,"module":"OTEC Selling","name":"OTEC Item Glass Color Option","permissions":[]}

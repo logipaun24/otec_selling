@@ -4,8 +4,8 @@ import frappe
 from frappe.tests import IntegrationTestCase
 
 from otec_selling.otec_selling.doctype.otec_quotation.otec_quotation import (
-    _configuration_pricing,
-    calculate_quotation,
+	_effective_specification_rate,
+	calculate_quotation,
 )
 
 
@@ -13,122 +13,106 @@ from otec_selling.otec_selling.doctype.otec_quotation.otec_quotation import (
 # DocType test module prevents Frappe from generating unrelated ERPNext test
 # records merely to construct unsaved OTEC Quotation documents.
 class TestOTECQuotation(IntegrationTestCase):
-    def test_configuration_can_add_specification_prices_to_base_rate(self):
-        pricing = _configuration_pricing(
-            frappe._dict(
-                pricing_method="Base Rate Plus Adjustments",
-                aluminum_price_per_sqm=500,
-                glass_price_per_sqm=1200,
-                sqm_rate=99999,
-            ),
-            8400,
-        )
+	def test_selected_specification_prices_are_added_to_base_rate(self):
+		rate = _effective_specification_rate(8400, 500, 1200, 300)
 
-        self.assertEqual(pricing.effective_sqm_rate, 10100)
+		self.assertEqual(rate, 10400)
 
-    def test_configuration_can_override_full_combination_rate(self):
-        pricing = _configuration_pricing(
-            frappe._dict(
-                pricing_method="Full Rate Override",
-                aluminum_price_per_sqm=500,
-                glass_price_per_sqm=1200,
-                sqm_rate=12500,
-            ),
-            8400,
-        )
+	def test_zero_placeholder_component_rates_preserve_base_rate(self):
+		rate = _effective_specification_rate(8400, 0, 0, 0)
 
-        self.assertEqual(pricing.effective_sqm_rate, 12500)
+		self.assertEqual(rate, 8400)
 
-    def test_addon_link_survives_child_row_rename(self):
-        doc = frappe.new_doc("OTEC Quotation")
-        item = doc.append("items", {"item_code": "TEST-WINDOW"})
-        item.name = "current-item-row"
-        item.quotation_row_key = "stable-row-key"
-        addon = doc.append(
-            "quotation_addons",
-            {
-                "quotation_item_row_id": "old-temporary-row-name",
-                "quotation_item_row_key": "stable-row-key",
-                "item_code": "TEST-WINDOW",
-                "add_on": "Integrated Grills",
-            },
-        )
+	def test_addon_link_survives_child_row_rename(self):
+		doc = frappe.new_doc("OTEC Quotation")
+		item = doc.append("items", {"item_code": "TEST-WINDOW"})
+		item.name = "current-item-row"
+		item.quotation_row_key = "stable-row-key"
+		addon = doc.append(
+			"quotation_addons",
+			{
+				"quotation_item_row_id": "old-temporary-row-name",
+				"quotation_item_row_key": "stable-row-key",
+				"item_code": "TEST-WINDOW",
+				"add_on": "Integrated Grills",
+			},
+		)
 
-        doc._reconcile_addon_item_links()
+		doc._reconcile_addon_item_links()
 
-        self.assertEqual(addon.quotation_item_row_id, "current-item-row")
-        self.assertEqual(addon.quotation_item_row_key, "stable-row-key")
+		self.assertEqual(addon.quotation_item_row_id, "current-item-row")
+		self.assertEqual(addon.quotation_item_row_key, "stable-row-key")
 
-    def test_legacy_addon_link_is_repaired_when_item_match_is_unique(self):
-        doc = frappe.new_doc("OTEC Quotation")
-        item = doc.append("items", {"item_code": "TEST-WINDOW"})
-        item.name = "current-item-row"
-        addon = doc.append(
-            "quotation_addons",
-            {
-                "quotation_item_row_id": "old-temporary-row-name",
-                "item_code": "TEST-WINDOW",
-                "add_on": "Integrated Grills",
-            },
-        )
+	def test_legacy_addon_link_is_repaired_when_item_match_is_unique(self):
+		doc = frappe.new_doc("OTEC Quotation")
+		item = doc.append("items", {"item_code": "TEST-WINDOW"})
+		item.name = "current-item-row"
+		addon = doc.append(
+			"quotation_addons",
+			{
+				"quotation_item_row_id": "old-temporary-row-name",
+				"item_code": "TEST-WINDOW",
+				"add_on": "Integrated Grills",
+			},
+		)
 
-        doc._reconcile_addon_item_links()
+		doc._reconcile_addon_item_links()
 
-        self.assertEqual(addon.quotation_item_row_id, "current-item-row")
-        self.assertEqual(addon.quotation_item_row_key, item.quotation_row_key)
+		self.assertEqual(addon.quotation_item_row_id, "current-item-row")
+		self.assertEqual(addon.quotation_item_row_key, item.quotation_row_key)
 
-    def test_calculation_endpoint_accepts_serialized_desk_document(self):
-        doc = frappe.new_doc("OTEC Quotation")
-        row = doc.append("items", {})
-        row.main_product_category = "Windows"
-        row.width_m = 1
-        row.height_m = 1
-        row.minimum_sqm = 1.35
-        row.sqm_rate = 8400
-        row.sets = 1
+	def test_calculation_endpoint_accepts_serialized_desk_document(self):
+		doc = frappe.new_doc("OTEC Quotation")
+		row = doc.append("items", {})
+		row.main_product_category = "Windows"
+		row.width_m = 1
+		row.height_m = 1
+		row.minimum_sqm = 1.35
+		row.sqm_rate = 8400
+		row.sets = 1
 
-        result = calculate_quotation(json.dumps(doc.as_dict()))
+		result = calculate_quotation(json.dumps(doc.as_dict()))
 
-        self.assertAlmostEqual(result["items"][0]["amount"], 1.35 * 8400)
+		self.assertAlmostEqual(result["items"][0]["amount"], 1.35 * 8400)
 
-    def test_single_row_still_enforces_minimum_sqm(self):
-        doc = frappe.new_doc("OTEC Quotation")
-        row = doc.append("items", {})
-        row.main_product_category = "Windows"
-        row.width_m = 1
-        row.height_m = 1
-        row.minimum_sqm = 1.35
-        row.sqm_rate = 8400
-        row.sets = 1
+	def test_single_row_still_enforces_minimum_sqm(self):
+		doc = frappe.new_doc("OTEC Quotation")
+		row = doc.append("items", {})
+		row.main_product_category = "Windows"
+		row.width_m = 1
+		row.height_m = 1
+		row.minimum_sqm = 1.35
+		row.sqm_rate = 8400
+		row.sets = 1
 
-        doc.calculate_totals()
+		doc.calculate_totals()
 
-        self.assertAlmostEqual(row.allocated_sqm, 0.35)
-        self.assertAlmostEqual(row.amount, 1.35 * 8400)
+		self.assertAlmostEqual(row.allocated_sqm, 0.35)
+		self.assertAlmostEqual(row.amount, 1.35 * 8400)
 
-    def test_category_sqm_and_markup_are_allocated_per_row(self):
-        doc = frappe.new_doc("OTEC Quotation")
-        doc.total_manual_markup = 3000
-        doc.delivery_fee = 1000
-        doc.installation_fee = 2000
-        doc.apply_vat = 1
-        doc.vat_rate = 12
-        for actual_width, minimum_sqm in ((1.0, 1.5), (2.0, 1.0), (3.0, 1.0)):
-            row = doc.append("items", {})
-            row.main_product_category = "Windows"
-            row.width_m = actual_width
-            row.height_m = 1
-            row.minimum_sqm = minimum_sqm
-            row.sqm_rate = 100
-            row.sets = 1
-        doc.calculate_totals()
+	def test_category_sqm_and_markup_are_allocated_per_row(self):
+		doc = frappe.new_doc("OTEC Quotation")
+		doc.total_manual_markup = 3000
+		doc.delivery_fee = 1000
+		doc.installation_fee = 2000
+		doc.apply_vat = 1
+		doc.vat_rate = 12
+		for actual_width, minimum_sqm in ((1.0, 1.5), (2.0, 1.0), (3.0, 1.0)):
+			row = doc.append("items", {})
+			row.main_product_category = "Windows"
+			row.width_m = actual_width
+			row.height_m = 1
+			row.minimum_sqm = minimum_sqm
+			row.sqm_rate = 100
+			row.sets = 1
+		doc.calculate_totals()
 
-        # Shortfall pool = 0.5 (row 1 only). Row 1 has the highest shortfall
-        # so it receives none of the pool; rows 2+3 split it proportionally
-        # to their actual SQM (eligible total = 2.0 + 3.0 = 5.0).
-        self.assertEqual(doc.items[0].allocated_sqm, 0)
-        self.assertAlmostEqual(doc.items[1].allocated_sqm, 0.5 * (2.0 / 5.0))
-        self.assertAlmostEqual(doc.items[2].allocated_sqm, 0.5 * (3.0 / 5.0))
-        self.assertEqual(doc.items[0].allocated_markup, 1000)
-        self.assertEqual(doc.total_sets, 3)
-        self.assertAlmostEqual(doc.grand_total, (600 + 50 + 3000 + 3000) * 1.12)
+		# Shortfall pool = 0.5 (row 1 only). Row 1 has the highest shortfall
+		# so it receives none of the pool; rows 2+3 split it proportionally
+		# to their actual SQM (eligible total = 2.0 + 3.0 = 5.0).
+		self.assertEqual(doc.items[0].allocated_sqm, 0)
+		self.assertAlmostEqual(doc.items[1].allocated_sqm, 0.5 * (2.0 / 5.0))
+		self.assertAlmostEqual(doc.items[2].allocated_sqm, 0.5 * (3.0 / 5.0))
+		self.assertEqual(doc.items[0].allocated_markup, 1000)
+		self.assertEqual(doc.total_sets, 3)
+		self.assertAlmostEqual(doc.grand_total, (600 + 50 + 3000 + 3000) * 1.12)

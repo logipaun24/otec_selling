@@ -1,0 +1,18 @@
+{
+ "actions": [], "allow_import": 1, "autoname": "field:glass_color", "doctype": "DocType", "engine": "InnoDB",
+ "field_order": ["glass_color", "active", "rate_per_sqm", "requires_approval", "approval_reason"],
+ "fields": [
+  {"fieldname":"glass_color","fieldtype":"Data","in_list_view":1,"label":"Glass Color","reqd":1,"unique":1},
+  {"default":"1","fieldname":"active","fieldtype":"Check","label":"Active"},
+  {"fieldname":"rate_per_sqm","fieldtype":"Currency","in_list_view":1,"label":"Price per SQM","non_negative":1,"reqd":1},
+  {"default":"1","fieldname":"requires_approval","fieldtype":"Check","label":"Requires Pricing Approval"},
+  {"depends_on":"eval:doc.requires_approval","fieldname":"approval_reason","fieldtype":"Small Text","label":"Approval Reason"}
+ ],
+ "module":"OTEC Selling", "name":"OTEC Glass Color", "title_field":"glass_color", "track_changes":1,
+ "permissions":[
+  {"create":1,"delete":1,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"System Manager","share":1,"write":1},
+  {"create":1,"delete":1,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"Business Owner","share":1,"write":1},
+  {"create":1,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"Sales Master Manager","share":1,"write":1},
+  {"read":1,"role":"Sales User"}
+ ]
+}

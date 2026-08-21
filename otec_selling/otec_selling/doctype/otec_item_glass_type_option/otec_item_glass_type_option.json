@@ -1,0 +1,1 @@
+{"actions":[],"doctype":"DocType","editable_grid":1,"engine":"InnoDB","field_order":["glass_type"],"fields":[{"fieldname":"glass_type","fieldtype":"Link","in_list_view":1,"label":"Glass Type","options":"OTEC Glass Type","reqd":1}],"istable":1,"module":"OTEC Selling","name":"OTEC Item Glass Type Option","permissions":[]}

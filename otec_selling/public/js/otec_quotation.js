@@ -78,6 +78,9 @@ async function open_product_configurator(frm, cdt, cdn) {
 	});
 	const data = response.message || {};
 	const configurations = data.configurations || [];
+	const aluminum_options = data.aluminum_options || [];
+	const glass_type_options = data.glass_type_options || [];
+	const glass_color_options = data.glass_color_options || [];
 	const rules = data.add_on_rules || [];
 	if (!configurations.length) {
 		frappe.msgprint(__("No active product configuration exists for {0}.", [row.item_code]));
@@ -97,7 +100,34 @@ async function open_product_configurator(frm, cdt, cdn) {
 			fieldtype: "Select",
 			label: __("Product Configuration"),
 			options: configurations.map((config) => config.name),
-			default: row.configuration || configurations.find((config) => config.is_default)?.name || configurations[0].name,
+			default:
+				row.configuration ||
+				configurations.find((config) => config.is_default)?.name ||
+				configurations[0].name,
+			reqd: 1,
+		},
+		{
+			fieldname: "aluminum_thickness",
+			fieldtype: "Select",
+			label: __("Aluminum Thickness"),
+			options: ["", ...aluminum_options.map((option) => option.name)],
+			default: row.aluminum_thickness || "",
+			reqd: 1,
+		},
+		{
+			fieldname: "glass_type",
+			fieldtype: "Select",
+			label: __("Glass Type"),
+			options: ["", ...glass_type_options.map((option) => option.name)],
+			default: row.glass_type || "",
+			reqd: 1,
+		},
+		{
+			fieldname: "glass_color",
+			fieldtype: "Select",
+			label: __("Glass Color"),
+			options: ["", ...glass_color_options.map((option) => option.name)],
+			default: row.glass_color || "",
 			reqd: 1,
 		},
 		{
@@ -112,9 +142,13 @@ async function open_product_configurator(frm, cdt, cdn) {
 			fieldtype: "MultiCheck",
 			label: __("Available Add-ons"),
 			options: rules.map((rule) => ({
-				label: `${rule.add_on} — ${format_currency(rule.rate)} ${rule.pricing_basis}${rule.requires_approval ? " • Approval required" : ""}`,
+				label: `${rule.add_on} — ${format_currency(rule.rate)} ${rule.pricing_basis}${
+					rule.requires_approval ? " • Approval required" : ""
+				}`,
 				value: rule.add_on,
-				checked: Boolean(current_addons[rule.add_on] || rule.required || rule.default_selected),
+				checked: Boolean(
+					current_addons[rule.add_on] || rule.required || rule.default_selected
+				),
 			})),
 		},
 	];
@@ -134,31 +168,60 @@ async function open_product_configurator(frm, cdt, cdn) {
 		fields,
 		primary_action_label: __("Apply Configuration"),
 		async primary_action(values) {
-			const configuration = configurations.find((config) => config.name === values.configuration);
+			const configuration = configurations.find(
+				(config) => config.name === values.configuration
+			);
+			const aluminum = aluminum_options.find(
+				(option) => option.name === values.aluminum_thickness
+			);
+			const glass_type = glass_type_options.find(
+				(option) => option.name === values.glass_type
+			);
+			const glass_color = glass_color_options.find(
+				(option) => option.name === values.glass_color
+			);
+			const effective_rate =
+				Number(configuration.sqm_rate || 0) +
+				Number(aluminum.rate_per_sqm || 0) +
+				Number(glass_type.rate_per_sqm || 0) +
+				Number(glass_color.rate_per_sqm || 0);
+			const approvals = [configuration, aluminum, glass_type, glass_color].filter(
+				(entry) => entry.requires_approval
+			);
 			const selected = new Set(values.add_ons || []);
 			for (const rule of rules.filter((entry) => entry.required)) selected.add(rule.add_on);
 
 			await frappe.model.set_value(cdt, cdn, {
 				configuration: configuration.name,
-				aluminum_thickness: configuration.aluminum_thickness,
-				glass_specification: configuration.glass_specification,
-				pricing_method: configuration.pricing_method,
-				base_product_sqm_rate: configuration.base_product_sqm_rate,
-				aluminum_price_per_sqm: configuration.aluminum_price_per_sqm,
-				glass_price_per_sqm: configuration.glass_price_per_sqm,
-				sqm_rate: configuration.effective_sqm_rate,
+				aluminum_thickness: aluminum.name,
+				glass_type: glass_type.name,
+				glass_color: glass_color.name,
+				base_product_sqm_rate: configuration.sqm_rate,
+				aluminum_price_per_sqm: aluminum.rate_per_sqm,
+				glass_type_price_per_sqm: glass_type.rate_per_sqm,
+				glass_color_price_per_sqm: glass_color.rate_per_sqm,
+				sqm_rate: effective_rate,
 				operable_available: configuration.operable_available,
 				operable_rate: configuration.operable_rate,
-				pricing_approval_required: configuration.requires_approval,
-				pricing_approval_reason: configuration.approval_reason,
+				pricing_approval_required: approvals.length > 0,
+				pricing_approval_reason: approvals
+					.map((entry) => entry.approval_reason)
+					.filter(Boolean)
+					.join("\n"),
 				panels: values.panels || 1,
 			});
 
 			remove_row_addons(frm, row.name);
 			for (const rule of rules.filter((entry) => selected.has(entry.add_on))) {
-				const manual_index = manual_rules.findIndex((entry) => entry.add_on === rule.add_on);
+				const manual_index = manual_rules.findIndex(
+					(entry) => entry.add_on === rule.add_on
+				);
 				const quantity = manual_index >= 0 ? values[`quantity_${manual_index}`] : 0;
-				const child = frappe.model.add_child(frm.doc, "OTEC Quotation Add-on", "quotation_addons");
+				const child = frappe.model.add_child(
+					frm.doc,
+					"OTEC Quotation Add-on",
+					"quotation_addons"
+				);
 				Object.assign(child, {
 					quotation_item_row_id: row.name,
 					quotation_item_row_key: quotation_row_key,
@@ -178,28 +241,56 @@ async function open_product_configurator(frm, cdt, cdn) {
 	});
 
 	const update_preview = () => {
-		const config = configurations.find((entry) => entry.name === dialog.get_value("configuration"));
-		if (!config) return;
-		const approval = config.requires_approval
-			? `<div class="alert alert-warning">${frappe.utils.escape_html(config.approval_reason || __("Pricing approval required"))}</div>`
+		const config = configurations.find(
+			(entry) => entry.name === dialog.get_value("configuration")
+		);
+		const aluminum = aluminum_options.find(
+			(entry) => entry.name === dialog.get_value("aluminum_thickness")
+		);
+		const glass_type = glass_type_options.find(
+			(entry) => entry.name === dialog.get_value("glass_type")
+		);
+		const glass_color = glass_color_options.find(
+			(entry) => entry.name === dialog.get_value("glass_color")
+		);
+		if (!config || !aluminum || !glass_type || !glass_color) {
+			dialog.fields_dict.pricing_preview.$wrapper.html(
+				`<div class="text-muted mt-3">${__(
+					"Select all specifications to preview the price."
+				)}</div>`
+			);
+			return;
+		}
+		const approvals = [config, aluminum, glass_type, glass_color].filter(
+			(entry) => entry.requires_approval
+		);
+		const approval = approvals.length
+			? `<div class="alert alert-warning">${frappe.utils.escape_html(
+					approvals
+						.map((entry) => entry.approval_reason || __("Pricing approval required"))
+						.join("; ")
+			  )}</div>`
 			: "";
-		const pricing = config.pricing_method === "Base Rate Plus Adjustments"
-			? `${__("Base product")}: ${format_currency(config.base_product_sqm_rate)}<br>
-				${__("Aluminum specification")}: +${format_currency(config.aluminum_price_per_sqm)}<br>
-				${__("Glass specification")}: +${format_currency(config.glass_price_per_sqm)}<br>`
-			: `${__("Exact specification-combination override")}: ${format_currency(config.effective_sqm_rate)}<br>`;
+		const effective_rate =
+			Number(config.sqm_rate || 0) +
+			Number(aluminum.rate_per_sqm || 0) +
+			Number(glass_type.rate_per_sqm || 0) +
+			Number(glass_color.rate_per_sqm || 0);
 		dialog.fields_dict.pricing_preview.$wrapper.html(`
 			<div class="mt-3 border rounded p-3">
 				<strong>${frappe.utils.escape_html(config.configuration_label)}</strong><br>
-				${__("Aluminum")}: ${config.aluminum_thickness || __("TBC")} mm &nbsp;•&nbsp;
-				${__("Glass")}: ${frappe.utils.escape_html(config.glass_specification)}<br>
-				${__("Pricing method")}: ${frappe.utils.escape_html(config.pricing_method)}<br>
-				${pricing}
-				<strong>${__("Effective rate")}: ${format_currency(config.effective_sqm_rate)} / SQM</strong>
+				${__("Base product/system")}: ${format_currency(config.sqm_rate)}<br>
+				${__("Aluminum {0} mm", [aluminum.name])}: +${format_currency(aluminum.rate_per_sqm)}<br>
+				${__("Glass type — {0}", [glass_type.name])}: +${format_currency(glass_type.rate_per_sqm)}<br>
+				${__("Glass color — {0}", [glass_color.name])}: +${format_currency(glass_color.rate_per_sqm)}<br>
+				<strong>${__("Effective rate")}: ${format_currency(effective_rate)} / SQM</strong>
 				${approval}
 			</div>`);
 	};
 	dialog.fields_dict.configuration.df.onchange = update_preview;
+	dialog.fields_dict.aluminum_thickness.df.onchange = update_preview;
+	dialog.fields_dict.glass_type.df.onchange = update_preview;
+	dialog.fields_dict.glass_color.df.onchange = update_preview;
 	dialog.show();
 	update_preview();
 }
@@ -236,7 +327,7 @@ function render_computation_status(frm) {
 	const color = stale ? "orange" : "green";
 	const message = stale
 		? __("Computations need refresh. Click Refresh Computations before reviewing totals.")
-		: (frm.__otec_last_computed_label || __("Computations are current."));
+		: frm.__otec_last_computed_label || __("Computations are current.");
 	field.$wrapper.html(`
 		<div class="indicator ${color}" style="margin-top: 8px;">
 			${frappe.utils.escape_html(message)}
@@ -256,25 +347,70 @@ async function calculate_totals(frm) {
 		});
 		const data = result.message;
 		if (!data) return;
-		const rows_by_name = Object.fromEntries((data.items || []).map((item) => [item.name, item]));
+		const rows_by_name = Object.fromEntries(
+			(data.items || []).map((item) => [item.name, item])
+		);
 		const fields_to_apply = [
-			"quotation_row_key", "item_name", "main_product_category", "secondary_product_category", "series",
-			"configuration", "aluminum_thickness", "glass_specification", "frame_specification", "color",
-			"pricing_method", "base_product_sqm_rate", "aluminum_price_per_sqm", "glass_price_per_sqm",
-			"addons", "addon_notes", "addon_amount", "minimum_sqm", "sqm_rate", "operable_available",
-			"operable_rate", "actual_sqm", "sqm_shortfall", "allocated_sqm", "allocated_sqm_amount",
-			"base_line_amount", "operable_amount", "allocated_markup", "pricing_approval_required",
-			"pricing_approval_reason", "unit_rate", "amount",
+			"quotation_row_key",
+			"item_name",
+			"main_product_category",
+			"secondary_product_category",
+			"series",
+			"configuration",
+			"aluminum_thickness",
+			"glass_type",
+			"glass_color",
+			"glass_specification",
+			"frame_specification",
+			"color",
+			"base_product_sqm_rate",
+			"aluminum_price_per_sqm",
+			"glass_type_price_per_sqm",
+			"glass_color_price_per_sqm",
+			"addons",
+			"addon_notes",
+			"addon_amount",
+			"minimum_sqm",
+			"sqm_rate",
+			"operable_available",
+			"operable_rate",
+			"actual_sqm",
+			"sqm_shortfall",
+			"allocated_sqm",
+			"allocated_sqm_amount",
+			"base_line_amount",
+			"operable_amount",
+			"allocated_markup",
+			"pricing_approval_required",
+			"pricing_approval_reason",
+			"unit_rate",
+			"amount",
 		];
 		for (const row of frm.doc.items || []) {
 			const computed = rows_by_name[row.name];
 			if (!computed) continue;
-			for (const field of fields_to_apply) if (field in computed) row[field] = computed[field];
+			for (const field of fields_to_apply)
+				if (field in computed) row[field] = computed[field];
 		}
 		frm.clear_table("quotation_addons");
 		for (const values of data.quotation_addons || []) {
-			const child = frappe.model.add_child(frm.doc, "OTEC Quotation Add-on", "quotation_addons");
-			for (const field of ["quotation_item_row_id", "quotation_item_row_key", "item_code", "add_on", "pricing_basis", "quantity", "rate", "amount", "requires_approval", "notes"]) {
+			const child = frappe.model.add_child(
+				frm.doc,
+				"OTEC Quotation Add-on",
+				"quotation_addons"
+			);
+			for (const field of [
+				"quotation_item_row_id",
+				"quotation_item_row_key",
+				"item_code",
+				"add_on",
+				"pricing_basis",
+				"quantity",
+				"rate",
+				"amount",
+				"requires_approval",
+				"notes",
+			]) {
 				child[field] = values[field];
 			}
 		}
