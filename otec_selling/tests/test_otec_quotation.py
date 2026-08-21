@@ -10,6 +10,44 @@ from otec_selling.otec_selling.doctype.otec_quotation.otec_quotation import calc
 # DocType test module prevents Frappe from generating unrelated ERPNext test
 # records merely to construct unsaved OTEC Quotation documents.
 class TestOTECQuotation(IntegrationTestCase):
+    def test_addon_link_survives_child_row_rename(self):
+        doc = frappe.new_doc("OTEC Quotation")
+        item = doc.append("items", {"item_code": "TEST-WINDOW"})
+        item.name = "current-item-row"
+        item.quotation_row_key = "stable-row-key"
+        addon = doc.append(
+            "quotation_addons",
+            {
+                "quotation_item_row_id": "old-temporary-row-name",
+                "quotation_item_row_key": "stable-row-key",
+                "item_code": "TEST-WINDOW",
+                "add_on": "Integrated Grills",
+            },
+        )
+
+        doc._reconcile_addon_item_links()
+
+        self.assertEqual(addon.quotation_item_row_id, "current-item-row")
+        self.assertEqual(addon.quotation_item_row_key, "stable-row-key")
+
+    def test_legacy_addon_link_is_repaired_when_item_match_is_unique(self):
+        doc = frappe.new_doc("OTEC Quotation")
+        item = doc.append("items", {"item_code": "TEST-WINDOW"})
+        item.name = "current-item-row"
+        addon = doc.append(
+            "quotation_addons",
+            {
+                "quotation_item_row_id": "old-temporary-row-name",
+                "item_code": "TEST-WINDOW",
+                "add_on": "Integrated Grills",
+            },
+        )
+
+        doc._reconcile_addon_item_links()
+
+        self.assertEqual(addon.quotation_item_row_id, "current-item-row")
+        self.assertEqual(addon.quotation_item_row_key, item.quotation_row_key)
+
     def test_calculation_endpoint_accepts_serialized_desk_document(self):
         doc = frappe.new_doc("OTEC Quotation")
         row = doc.append("items", {})

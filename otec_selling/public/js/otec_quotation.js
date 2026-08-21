@@ -18,6 +18,10 @@ frappe.ui.form.on("OTEC Quotation", {
 			});
 		}
 	},
+
+	items_remove(frm, cdt, cdn) {
+		remove_row_addons(frm, cdn);
+	},
 });
 
 frappe.ui.form.on("OTEC Quotation Item", {
@@ -39,6 +43,7 @@ async function open_product_configurator(frm, cdt, cdn) {
 		frappe.msgprint(__("Select an OTEC item first."));
 		return;
 	}
+	const quotation_row_key = ensure_row_key(row);
 
 	const response = await frappe.call({
 		method: "otec_selling.otec_selling.doctype.otec_quotation.otec_quotation.get_product_configurator",
@@ -127,6 +132,7 @@ async function open_product_configurator(frm, cdt, cdn) {
 				const child = frappe.model.add_child(frm.doc, "OTEC Quotation Add-on", "quotation_addons");
 				Object.assign(child, {
 					quotation_item_row_id: row.name,
+					quotation_item_row_key: quotation_row_key,
 					item_code: row.item_code,
 					add_on: rule.add_on,
 					pricing_basis: rule.pricing_basis,
@@ -169,6 +175,11 @@ function remove_row_addons(frm, row_name) {
 	frm.refresh_field("quotation_addons");
 }
 
+function ensure_row_key(row) {
+	if (!row.quotation_row_key) row.quotation_row_key = frappe.utils.get_random(16);
+	return row.quotation_row_key;
+}
+
 async function calculate_totals(frm) {
 	if (!frm.doc.items || !frm.doc.items.length) {
 		frappe.msgprint(__("Add quotation items before calculating totals."));
@@ -184,7 +195,7 @@ async function calculate_totals(frm) {
 		if (!data) return;
 		const rows_by_name = Object.fromEntries((data.items || []).map((item) => [item.name, item]));
 		const fields_to_apply = [
-			"item_name", "main_product_category", "secondary_product_category", "series",
+			"quotation_row_key", "item_name", "main_product_category", "secondary_product_category", "series",
 			"configuration", "aluminum_thickness", "glass_specification", "frame_specification", "color",
 			"addons", "addon_notes", "addon_amount", "minimum_sqm", "sqm_rate", "operable_available",
 			"operable_rate", "actual_sqm", "sqm_shortfall", "allocated_sqm", "allocated_sqm_amount",
@@ -199,7 +210,7 @@ async function calculate_totals(frm) {
 		frm.clear_table("quotation_addons");
 		for (const values of data.quotation_addons || []) {
 			const child = frappe.model.add_child(frm.doc, "OTEC Quotation Add-on", "quotation_addons");
-			for (const field of ["quotation_item_row_id", "item_code", "add_on", "pricing_basis", "quantity", "rate", "amount", "requires_approval", "notes"]) {
+			for (const field of ["quotation_item_row_id", "quotation_item_row_key", "item_code", "add_on", "pricing_basis", "quantity", "rate", "amount", "requires_approval", "notes"]) {
 				child[field] = values[field];
 			}
 		}

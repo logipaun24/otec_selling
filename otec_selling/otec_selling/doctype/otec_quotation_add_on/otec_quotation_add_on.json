@@ -5,11 +5,12 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "quotation_item_row_id", "item_code", "add_on", "pricing_basis", "quantity", "rate", "amount",
+  "quotation_item_row_id", "quotation_item_row_key", "item_code", "add_on", "pricing_basis", "quantity", "rate", "amount",
   "requires_approval", "notes"
  ],
  "fields": [
   {"fieldname":"quotation_item_row_id","fieldtype":"Data","hidden":1,"label":"Quotation Item Row ID","reqd":1},
+  {"fieldname":"quotation_item_row_key","fieldtype":"Data","hidden":1,"label":"Quotation Item Row Key","read_only":1},
   {"fieldname":"item_code","fieldtype":"Link","in_list_view":1,"label":"Item","options":"Item","read_only":1,"reqd":1},
   {"fieldname":"add_on","fieldtype":"Link","in_list_view":1,"label":"Add-on","options":"OTEC Add-on","read_only":1,"reqd":1},
   {"fieldname":"pricing_basis","fieldtype":"Data","in_list_view":1,"label":"Pricing Basis","read_only":1},

@@ -131,7 +131,7 @@ class OTECQuotation(Document):
         self.grand_total = before_vat + self.vat_amount
 
     def _validate_and_price_addons(self):
-        item_rows = {row.name: row for row in self.items}
+        item_rows = self._reconcile_addon_item_links()
         amounts = defaultdict(float)
         summaries = defaultdict(list)
         selected_by_row = defaultdict(set)
@@ -189,6 +189,34 @@ class OTECQuotation(Document):
                     frappe.throw(_("Add-on {0} conflicts with {1} on row {2}.").format(addon_row.add_on, ", ".join(sorted(conflicts)), item_row.idx))
             item_row.addons = ", ".join(summaries[item_row.name])
         return amounts
+
+    def _reconcile_addon_item_links(self):
+        """Keep add-ons attached when Frappe renames new child rows on save."""
+        for item_row in self.items:
+            if not item_row.quotation_row_key:
+                item_row.quotation_row_key = frappe.generate_hash(length=16)
+
+        rows_by_name = {row.name: row for row in self.items}
+        rows_by_key = {row.quotation_row_key: row for row in self.items}
+        rows_by_item = defaultdict(list)
+        for item_row in self.items:
+            rows_by_item[item_row.item_code].append(item_row)
+
+        for addon_row in self.quotation_addons:
+            item_row = rows_by_key.get(addon_row.quotation_item_row_key)
+            if not item_row:
+                item_row = rows_by_name.get(addon_row.quotation_item_row_id)
+            if not item_row:
+                # Backward compatibility for add-ons created before stable row
+                # keys existed. Only repair an unambiguous item match.
+                candidates = rows_by_item.get(addon_row.item_code, [])
+                if len(candidates) == 1:
+                    item_row = candidates[0]
+            if item_row:
+                addon_row.quotation_item_row_id = item_row.name
+                addon_row.quotation_item_row_key = item_row.quotation_row_key
+
+        return rows_by_name
 
 
 def _get_configuration(item_code, configuration_name=None):

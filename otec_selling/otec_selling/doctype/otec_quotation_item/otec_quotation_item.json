@@ -5,6 +5,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "quotation_row_key",
   "item_code",
   "item_name",
   "location",
@@ -47,6 +48,13 @@
   "amount"
  ],
  "fields": [
+  {
+   "fieldname": "quotation_row_key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Quotation Row Key",
+   "read_only": 1
+  },
   {
    "fieldname": "item_code",
    "fieldtype": "Link",
