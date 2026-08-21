@@ -7,7 +7,6 @@ frappe.ui.form.on("OTEC Quotation", {
 		frm.set_query("item_code", "items", () => ({ filters: { item_group: "OTEC Products" } }));
 
 		if (frm.doc.docstatus === 0) {
-			frm.add_custom_btn(__("Calculate Totals"), () => calculate_totals(frm));
 			frm.add_custom_btn(__("Configure Selected Item"), () => {
 				const selected = frm.fields_dict.items.grid.get_selected_children();
 				if (selected.length !== 1) {
@@ -17,10 +16,29 @@ frappe.ui.form.on("OTEC Quotation", {
 				open_product_configurator(frm, selected[0].doctype, selected[0].name);
 			});
 		}
+		if (frm.__otec_computations_stale === undefined) {
+			frm.__otec_computations_stale = frm.is_new();
+		}
+		render_computation_status(frm);
 	},
 
 	items_remove(frm, cdt, cdn) {
 		remove_row_addons(frm, cdn);
+		mark_computations_stale(frm);
+	},
+
+	refresh_computations(frm) {
+		return calculate_totals(frm);
+	},
+
+	total_manual_markup: mark_computations_stale,
+	delivery_fee: mark_computations_stale,
+	installation_fee: mark_computations_stale,
+	apply_vat: mark_computations_stale,
+	vat_rate: mark_computations_stale,
+
+	after_save(frm) {
+		mark_computations_current(frm, __("Saved with current computations"));
 	},
 });
 
@@ -28,6 +46,7 @@ frappe.ui.form.on("OTEC Quotation Item", {
 	async item_code(frm, cdt, cdn) {
 		const row = locals[cdt][cdn];
 		remove_row_addons(frm, row.name);
+		mark_computations_stale(frm);
 		if (!row.item_code) return;
 		await open_product_configurator(frm, cdt, cdn);
 	},
@@ -35,6 +54,12 @@ frappe.ui.form.on("OTEC Quotation Item", {
 	configure_product(frm, cdt, cdn) {
 		open_product_configurator(frm, cdt, cdn);
 	},
+
+	width_m: mark_computations_stale,
+	height_m: mark_computations_stale,
+	panels: mark_computations_stale,
+	sets: mark_computations_stale,
+	operable: mark_computations_stale,
 });
 
 async function open_product_configurator(frm, cdt, cdn) {
@@ -144,7 +169,7 @@ async function open_product_configurator(frm, cdt, cdn) {
 			}
 			frm.refresh_field("quotation_addons");
 			dialog.hide();
-			await calculate_totals(frm);
+			mark_computations_stale(frm);
 		},
 	});
 
@@ -178,6 +203,33 @@ function remove_row_addons(frm, row_name) {
 function ensure_row_key(row) {
 	if (!row.quotation_row_key) row.quotation_row_key = frappe.utils.get_random(16);
 	return row.quotation_row_key;
+}
+
+function mark_computations_stale(frm) {
+	if (!frm || frm.doc.docstatus !== 0) return;
+	frm.__otec_computations_stale = true;
+	frm.__otec_last_computed_label = null;
+	render_computation_status(frm);
+}
+
+function mark_computations_current(frm, label) {
+	frm.__otec_computations_stale = false;
+	frm.__otec_last_computed_label = label || __("Refreshed {0}", [frappe.datetime.now_time()]);
+	render_computation_status(frm);
+}
+
+function render_computation_status(frm) {
+	const field = frm.fields_dict.computation_status;
+	if (!field?.$wrapper) return;
+	const stale = frm.__otec_computations_stale;
+	const color = stale ? "orange" : "green";
+	const message = stale
+		? __("Computations need refresh. Click Refresh Computations before reviewing totals.")
+		: (frm.__otec_last_computed_label || __("Computations are current."));
+	field.$wrapper.html(`
+		<div class="indicator ${color}" style="margin-top: 8px;">
+			${frappe.utils.escape_html(message)}
+		</div>`);
 }
 
 async function calculate_totals(frm) {
@@ -219,7 +271,9 @@ async function calculate_totals(frm) {
 		await frm.set_value("vat_amount", data.vat_amount);
 		await frm.set_value("grand_total", data.grand_total);
 		frm.refresh_fields();
+		mark_computations_current(frm);
 	} catch (error) {
+		mark_computations_stale(frm);
 		console.error(error);
 	} finally {
 		frappe.dom.unfreeze();
