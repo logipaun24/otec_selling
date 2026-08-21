@@ -13,6 +13,8 @@
   "main_product_category",
   "secondary_product_category",
   "series",
+  "configuration",
+  "configure_product",
   "specification_column",
   "aluminum_thickness",
   "glass_specification",
@@ -24,6 +26,7 @@
   "dimensions_section",
   "width_m",
   "height_m",
+  "panels",
   "sets",
   "actual_sqm",
   "minimum_sqm",
@@ -38,6 +41,8 @@
   "operable_rate",
   "operable_amount",
   "allocated_markup",
+  "pricing_approval_required",
+  "pricing_approval_reason",
   "unit_rate",
   "amount"
  ],
@@ -93,6 +98,18 @@
    "read_only": 1
   },
   {
+   "fieldname": "configuration",
+   "fieldtype": "Link",
+   "label": "Product Configuration",
+   "options": "OTEC Product Configuration",
+   "read_only": 1
+  },
+  {
+   "fieldname": "configure_product",
+   "fieldtype": "Button",
+   "label": "Configure Product"
+  },
+  {
    "fieldname": "specification_column",
    "fieldtype": "Column Break"
   },
@@ -122,9 +139,10 @@
   },
   {
    "fieldname": "addons",
-   "fieldtype": "MultiSelect",
-   "label": "Add-ons",
-   "options": "OTEC Add-on"
+   "fieldtype": "Small Text",
+   "label": "Add-on Summary",
+   "read_only": 1,
+   "description": "Configured from the Configure Product button."
   },
   {
    "fieldname": "addon_amount",
@@ -160,6 +178,15 @@
    "label": "Height (m)",
    "non_negative": 1,
    "precision": 4,
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "panels",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Panels per Set",
+   "non_negative": 1,
    "reqd": 1
   },
   {
@@ -264,6 +291,18 @@
    "label": "Allocated Markup",
    "options": "currency",
    "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "pricing_approval_required",
+   "fieldtype": "Check",
+   "label": "Pricing Approval Required",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pricing_approval_reason",
+   "fieldtype": "Small Text",
+   "label": "Pricing Approval Reason",
    "read_only": 1
   },
   {

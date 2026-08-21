@@ -1,0 +1,51 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "field:configuration_code",
+ "creation": "2026-08-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "configuration_code", "item_code", "configuration_label", "active", "is_default",
+  "specification_section", "aluminum_thickness", "glass_specification", "pricing_column",
+  "sqm_rate", "operable_available", "operable_rate", "effective_from", "effective_to",
+  "approval_section", "requires_approval", "approval_reason"
+ ],
+ "fields": [
+  {"fieldname":"configuration_code","fieldtype":"Data","in_list_view":1,"label":"Configuration Code","reqd":1,"unique":1},
+  {"fieldname":"item_code","fieldtype":"Link","in_list_view":1,"label":"Item","options":"Item","reqd":1},
+  {"fieldname":"configuration_label","fieldtype":"Data","in_list_view":1,"label":"Configuration Label","reqd":1},
+  {"default":"1","fieldname":"active","fieldtype":"Check","label":"Active"},
+  {"fieldname":"is_default","fieldtype":"Check","label":"Default Configuration"},
+  {"fieldname":"specification_section","fieldtype":"Section Break","label":"Specifications"},
+  {"fieldname":"aluminum_thickness","fieldtype":"Float","label":"Aluminum Thickness (mm)","precision":2},
+  {"fieldname":"glass_specification","fieldtype":"Data","label":"Glass Specification","reqd":1},
+  {"fieldname":"pricing_column","fieldtype":"Column Break"},
+  {"fieldname":"sqm_rate","fieldtype":"Currency","in_list_view":1,"label":"Rate per SQM","non_negative":1,"reqd":1},
+  {"fieldname":"operable_available","fieldtype":"Check","label":"Operable Available"},
+  {"depends_on":"eval:doc.operable_available","fieldname":"operable_rate","fieldtype":"Currency","label":"Operable Rate","non_negative":1},
+  {"fieldname":"effective_from","fieldtype":"Date","label":"Effective From"},
+  {"fieldname":"effective_to","fieldtype":"Date","label":"Effective To"},
+  {"fieldname":"approval_section","fieldtype":"Section Break","label":"Pricing Approval"},
+  {"fieldname":"requires_approval","fieldtype":"Check","label":"Requires Pricing Approval"},
+  {"depends_on":"eval:doc.requires_approval","fieldname":"approval_reason","fieldtype":"Small Text","label":"Approval Reason"}
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-08-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "OTEC Selling",
+ "name": "OTEC Product Configuration",
+ "owner": "Administrator",
+ "permissions": [
+  {"create":1,"delete":1,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"System Manager","share":1,"write":1},
+  {"create":1,"delete":1,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"Business Owner","share":1,"write":1},
+  {"create":1,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"Sales Master Manager","share":1,"write":1},
+  {"read":1,"role":"Sales User"}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "configuration_label",
+ "track_changes": 1
+}

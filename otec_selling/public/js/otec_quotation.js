@@ -1,29 +1,21 @@
-const OTEC_ITEM_FIELDS = [
-	"item_name",
-	"otec_main_product_category",
-	"otec_secondary_product_category",
-	"otec_series",
-	"otec_minimum_sqm",
-	"otec_sqm_rate",
-	"otec_operable_available",
-	"otec_operable_rate",
-	"otec_aluminum_thickness",
-	"otec_glass_specification",
-	"otec_frame_specification",
-	"otec_color",
-	"otec_addon_notes",
-	"otec_addons",
-];
-
 frappe.ui.form.on("OTEC Quotation", {
 	refresh(frm) {
 		frm.set_query("contact_person", () => ({
 			query: "frappe.contacts.doctype.contact.contact.contact_query",
 			filters: { link_doctype: "Customer", link_name: frm.doc.customer },
 		}));
+		frm.set_query("item_code", "items", () => ({ filters: { item_group: "OTEC Products" } }));
 
 		if (frm.doc.docstatus === 0) {
 			frm.add_custom_btn(__("Calculate Totals"), () => calculate_totals(frm));
+			frm.add_custom_btn(__("Configure Selected Item"), () => {
+				const selected = frm.fields_dict.items.grid.get_selected_children();
+				if (selected.length !== 1) {
+					frappe.msgprint(__("Select exactly one quotation item row."));
+					return;
+				}
+				open_product_configurator(frm, selected[0].doctype, selected[0].name);
+			});
 		}
 	},
 });
@@ -31,97 +23,193 @@ frappe.ui.form.on("OTEC Quotation", {
 frappe.ui.form.on("OTEC Quotation Item", {
 	async item_code(frm, cdt, cdn) {
 		const row = locals[cdt][cdn];
+		remove_row_addons(frm, row.name);
 		if (!row.item_code) return;
+		await open_product_configurator(frm, cdt, cdn);
+	},
 
-		const result = await frappe.db.get_value("Item", row.item_code, OTEC_ITEM_FIELDS);
-		const item = result.message || {};
-		const values = {
-			item_name: item.item_name,
-			main_product_category: item.otec_main_product_category,
-			secondary_product_category: item.otec_secondary_product_category,
-			series: item.otec_series,
-			minimum_sqm: item.otec_minimum_sqm,
-			sqm_rate: item.otec_sqm_rate,
-			operable_available: item.otec_operable_available,
-			operable_rate: item.otec_operable_rate,
-			aluminum_thickness: item.otec_aluminum_thickness,
-			glass_specification: item.otec_glass_specification,
-			frame_specification: item.otec_frame_specification,
-			color: item.otec_color,
-			addon_notes: item.otec_addon_notes,
-			addons: item.otec_addons || [],
-		};
-		if (!item.otec_operable_available) values.operable = 0;
-		await frappe.model.set_value(cdt, cdn, values);
+	configure_product(frm, cdt, cdn) {
+		open_product_configurator(frm, cdt, cdn);
 	},
 });
+
+async function open_product_configurator(frm, cdt, cdn) {
+	const row = locals[cdt][cdn];
+	if (!row?.item_code) {
+		frappe.msgprint(__("Select an OTEC item first."));
+		return;
+	}
+
+	const response = await frappe.call({
+		method: "otec_selling.otec_selling.doctype.otec_quotation.otec_quotation.get_product_configurator",
+		args: { item_code: row.item_code },
+		freeze: true,
+		freeze_message: __("Loading product options..."),
+	});
+	const data = response.message || {};
+	const configurations = data.configurations || [];
+	const rules = data.add_on_rules || [];
+	if (!configurations.length) {
+		frappe.msgprint(__("No active product configuration exists for {0}.", [row.item_code]));
+		return;
+	}
+
+	const current_addons = {};
+	for (const addon of frm.doc.quotation_addons || []) {
+		if (addon.quotation_item_row_id === row.name) current_addons[addon.add_on] = addon;
+	}
+	const manual_rules = rules.filter((rule) =>
+		["Per Piece", "Per Pair", "Manual Quantity"].includes(rule.pricing_basis)
+	);
+	const fields = [
+		{
+			fieldname: "configuration",
+			fieldtype: "Select",
+			label: __("Product Configuration"),
+			options: configurations.map((config) => config.name),
+			default: row.configuration || configurations.find((config) => config.is_default)?.name || configurations[0].name,
+			reqd: 1,
+		},
+		{
+			fieldname: "panels",
+			fieldtype: "Int",
+			label: __("Panels per Set"),
+			default: row.panels || 1,
+			reqd: 1,
+		},
+		{
+			fieldname: "add_ons",
+			fieldtype: "MultiCheck",
+			label: __("Available Add-ons"),
+			options: rules.map((rule) => ({
+				label: `${rule.add_on} — ${format_currency(rule.rate)} ${rule.pricing_basis}${rule.requires_approval ? " • Approval required" : ""}`,
+				value: rule.add_on,
+				checked: Boolean(current_addons[rule.add_on] || rule.required || rule.default_selected),
+			})),
+		},
+	];
+	for (const [index, rule] of manual_rules.entries()) {
+		fields.push({
+			fieldname: `quantity_${index}`,
+			fieldtype: "Float",
+			label: __(`Quantity: ${rule.add_on}`),
+			default: current_addons[rule.add_on]?.quantity || rule.default_quantity || 1,
+			non_negative: 1,
+		});
+	}
+	fields.push({ fieldname: "pricing_preview", fieldtype: "HTML" });
+
+	const dialog = new frappe.ui.Dialog({
+		title: __("Configure {0}", [row.item_name || row.item_code]),
+		fields,
+		primary_action_label: __("Apply Configuration"),
+		async primary_action(values) {
+			const configuration = configurations.find((config) => config.name === values.configuration);
+			const selected = new Set(values.add_ons || []);
+			for (const rule of rules.filter((entry) => entry.required)) selected.add(rule.add_on);
+
+			await frappe.model.set_value(cdt, cdn, {
+				configuration: configuration.name,
+				aluminum_thickness: configuration.aluminum_thickness,
+				glass_specification: configuration.glass_specification,
+				sqm_rate: configuration.sqm_rate,
+				operable_available: configuration.operable_available,
+				operable_rate: configuration.operable_rate,
+				pricing_approval_required: configuration.requires_approval,
+				pricing_approval_reason: configuration.approval_reason,
+				panels: values.panels || 1,
+			});
+
+			remove_row_addons(frm, row.name);
+			for (const rule of rules.filter((entry) => selected.has(entry.add_on))) {
+				const manual_index = manual_rules.findIndex((entry) => entry.add_on === rule.add_on);
+				const quantity = manual_index >= 0 ? values[`quantity_${manual_index}`] : 0;
+				const child = frappe.model.add_child(frm.doc, "OTEC Quotation Add-on", "quotation_addons");
+				Object.assign(child, {
+					quotation_item_row_id: row.name,
+					item_code: row.item_code,
+					add_on: rule.add_on,
+					pricing_basis: rule.pricing_basis,
+					quantity: quantity || rule.default_quantity || 1,
+					rate: rule.rate,
+					requires_approval: rule.requires_approval,
+					notes: rule.notes,
+				});
+			}
+			frm.refresh_field("quotation_addons");
+			dialog.hide();
+			await calculate_totals(frm);
+		},
+	});
+
+	const update_preview = () => {
+		const config = configurations.find((entry) => entry.name === dialog.get_value("configuration"));
+		if (!config) return;
+		const approval = config.requires_approval
+			? `<div class="alert alert-warning">${frappe.utils.escape_html(config.approval_reason || __("Pricing approval required"))}</div>`
+			: "";
+		dialog.fields_dict.pricing_preview.$wrapper.html(`
+			<div class="mt-3 border rounded p-3">
+				<strong>${frappe.utils.escape_html(config.configuration_label)}</strong><br>
+				${__("Aluminum")}: ${config.aluminum_thickness || __("TBC")} mm &nbsp;•&nbsp;
+				${__("Glass")}: ${frappe.utils.escape_html(config.glass_specification)}<br>
+				${__("Base rate")}: ${format_currency(config.sqm_rate)} / SQM
+				${approval}
+			</div>`);
+	};
+	dialog.fields_dict.configuration.df.onchange = update_preview;
+	dialog.show();
+	update_preview();
+}
+
+function remove_row_addons(frm, row_name) {
+	frm.doc.quotation_addons = (frm.doc.quotation_addons || []).filter(
+		(addon) => addon.quotation_item_row_id !== row_name
+	);
+	frm.refresh_field("quotation_addons");
+}
 
 async function calculate_totals(frm) {
 	if (!frm.doc.items || !frm.doc.items.length) {
 		frappe.msgprint(__("Add quotation items before calculating totals."));
 		return;
 	}
-
 	frappe.dom.freeze(__("Calculating totals..."));
 	try {
 		const result = await frappe.call({
-			method:
-				"otec_selling.otec_selling.doctype.otec_quotation.otec_quotation.calculate_quotation",
+			method: "otec_selling.otec_selling.doctype.otec_quotation.otec_quotation.calculate_quotation",
 			args: { doc: frm.doc },
 		});
 		const data = result.message;
 		if (!data) return;
-
-		const rows_by_name = {};
-		for (const item of data.items || []) {
-			rows_by_name[item.name] = item;
-		}
-
+		const rows_by_name = Object.fromEntries((data.items || []).map((item) => [item.name, item]));
 		const fields_to_apply = [
-			"item_name",
-			"main_product_category",
-			"secondary_product_category",
-			"series",
-			"aluminum_thickness",
-			"glass_specification",
-			"frame_specification",
-			"color",
-			"addons",
-			"addon_notes",
-			"addon_amount",
-			"minimum_sqm",
-			"sqm_rate",
-			"operable_available",
-			"operable_rate",
-			"actual_sqm",
-			"sqm_shortfall",
-			"allocated_sqm",
-			"allocated_sqm_amount",
-			"base_line_amount",
-			"operable_amount",
-			"allocated_markup",
-			"unit_rate",
-			"amount",
+			"item_name", "main_product_category", "secondary_product_category", "series",
+			"configuration", "aluminum_thickness", "glass_specification", "frame_specification", "color",
+			"addons", "addon_notes", "addon_amount", "minimum_sqm", "sqm_rate", "operable_available",
+			"operable_rate", "actual_sqm", "sqm_shortfall", "allocated_sqm", "allocated_sqm_amount",
+			"base_line_amount", "operable_amount", "allocated_markup", "pricing_approval_required",
+			"pricing_approval_reason", "unit_rate", "amount",
 		];
-
 		for (const row of frm.doc.items || []) {
 			const computed = rows_by_name[row.name];
 			if (!computed) continue;
-			for (const field of fields_to_apply) {
-				if (field in computed) {
-					row[field] = computed[field];
-				}
+			for (const field of fields_to_apply) if (field in computed) row[field] = computed[field];
+		}
+		frm.clear_table("quotation_addons");
+		for (const values of data.quotation_addons || []) {
+			const child = frappe.model.add_child(frm.doc, "OTEC Quotation Add-on", "quotation_addons");
+			for (const field of ["quotation_item_row_id", "item_code", "add_on", "pricing_basis", "quantity", "rate", "amount", "requires_approval", "notes"]) {
+				child[field] = values[field];
 			}
 		}
-
-		frm.set_value("total_sets", data.total_sets);
-		frm.set_value("items_subtotal", data.items_subtotal);
-		frm.set_value("vat_amount", data.vat_amount);
-		frm.set_value("grand_total", data.grand_total);
+		await frm.set_value("total_sets", data.total_sets);
+		await frm.set_value("items_subtotal", data.items_subtotal);
+		await frm.set_value("vat_amount", data.vat_amount);
+		await frm.set_value("grand_total", data.grand_total);
 		frm.refresh_fields();
 	} catch (error) {
 		console.error(error);
-		frappe.msgprint(__("Failed to calculate totals. Please check the items and try again."));
 	} finally {
 		frappe.dom.unfreeze();
 	}

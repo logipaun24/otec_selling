@@ -2,6 +2,7 @@ from pathlib import Path
 
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+from otec_selling.quotation_catalog import setup_catalog
 
 ALUMINUM_THICKNESS = "\n1.4\n1.6\n1.8\n2.0\n3.0\n4.0"
 
@@ -136,11 +137,12 @@ ITEM_FIELDS = {
         },
         {
             "fieldname": "otec_addons",
-            "label": "Available Add-ons",
-            "fieldtype": "MultiSelect",
-            "options": "OTEC Add-on",
+            "label": "Legacy Available Add-ons",
+            "fieldtype": "Small Text",
             "insert_after": "otec_addon_notes",
-            "description": "Select the add-ons offered for this item. Rates come from the OTEC Add-on master.",
+            "hidden": 1,
+            "read_only": 1,
+            "description": "Legacy field retained for compatibility. Use OTEC Item Add-on Rules.",
         },
     ]
 }
@@ -149,11 +151,15 @@ ITEM_FIELDS = {
 def setup_otec_quotation():
     # OTEC Quotation previously existed as an empty custom DocType fixture.
     # Reload the version-controlled standard schema after fixtures are imported.
-    frappe.reload_doc("otec_selling", "doctype", "otec_addon", force=True)
-    frappe.reload_doc("otec_selling", "doctype", "otec_quotation", force=True)
+    frappe.reload_doc("otec_selling", "doctype", "otec_add_on", force=True)
+    frappe.reload_doc("otec_selling", "doctype", "otec_product_configuration", force=True)
+    frappe.reload_doc("otec_selling", "doctype", "otec_item_add_on_rule", force=True)
     frappe.reload_doc("otec_selling", "doctype", "otec_quotation_item", force=True)
+    frappe.reload_doc("otec_selling", "doctype", "otec_quotation_add_on", force=True)
+    frappe.reload_doc("otec_selling", "doctype", "otec_quotation", force=True)
     create_custom_fields(ITEM_FIELDS, update=True)
     _seed_addons()
+    setup_catalog()
     _install_print_format()
 
 

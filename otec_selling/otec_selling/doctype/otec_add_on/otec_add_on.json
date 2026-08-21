@@ -9,6 +9,8 @@
  "field_order": [
   "addon_name",
   "rate",
+  "default_pricing_basis",
+  "active",
   "description"
  ],
  "fields": [
@@ -27,6 +29,20 @@
    "label": "Rate",
    "non_negative": 1,
    "reqd": 1
+  },
+  {
+   "default": "Per Piece",
+   "fieldname": "default_pricing_basis",
+   "fieldtype": "Select",
+   "label": "Default Pricing Basis",
+   "options": "Per SQM\nPer Panel\nPer Set\nPer Piece\nPer Pair\nFlat\nManual Quantity",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "Active"
   },
   {
    "fieldname": "description",

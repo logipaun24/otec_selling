@@ -1,0 +1,47 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "field:rule_code",
+ "creation": "2026-08-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "rule_code", "item_code", "add_on", "active", "selection_section", "pricing_basis", "rate_override",
+  "default_quantity", "rule_column", "required", "default_selected", "requires_approval",
+  "notes", "incompatible_add_ons"
+ ],
+ "fields": [
+  {"fieldname":"rule_code","fieldtype":"Data","hidden":1,"label":"Rule Code","read_only":1,"reqd":1,"unique":1},
+  {"fieldname":"item_code","fieldtype":"Link","in_list_view":1,"label":"Item","options":"Item","reqd":1},
+  {"fieldname":"add_on","fieldtype":"Link","in_list_view":1,"label":"Add-on","options":"OTEC Add-on","reqd":1},
+  {"default":"1","fieldname":"active","fieldtype":"Check","label":"Active"},
+  {"fieldname":"selection_section","fieldtype":"Section Break","label":"Selection and Pricing"},
+  {"fieldname":"pricing_basis","fieldtype":"Select","in_list_view":1,"label":"Pricing Basis","options":"Per SQM\nPer Panel\nPer Set\nPer Piece\nPer Pair\nFlat\nManual Quantity","reqd":1},
+  {"description":"Leave zero to use the OTEC Add-on master rate.","fieldname":"rate_override","fieldtype":"Currency","label":"Rate Override","non_negative":1},
+  {"default":"1","fieldname":"default_quantity","fieldtype":"Float","label":"Default Manual Quantity","non_negative":1},
+  {"fieldname":"rule_column","fieldtype":"Column Break"},
+  {"fieldname":"required","fieldtype":"Check","label":"Required"},
+  {"fieldname":"default_selected","fieldtype":"Check","label":"Selected by Default"},
+  {"fieldname":"requires_approval","fieldtype":"Check","label":"Requires Pricing Approval"},
+  {"fieldname":"notes","fieldtype":"Small Text","label":"Notes"},
+  {"description":"Exact OTEC Add-on names separated by commas.","fieldname":"incompatible_add_ons","fieldtype":"Small Text","label":"Incompatible Add-ons"}
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-08-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "OTEC Selling",
+ "name": "OTEC Item Add-on Rule",
+ "owner": "Administrator",
+ "permissions": [
+  {"create":1,"delete":1,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"System Manager","share":1,"write":1},
+  {"create":1,"delete":1,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"Business Owner","share":1,"write":1},
+  {"create":1,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"Sales Master Manager","share":1,"write":1},
+  {"read":1,"role":"Sales User"}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "add_on",
+ "track_changes": 1
+}

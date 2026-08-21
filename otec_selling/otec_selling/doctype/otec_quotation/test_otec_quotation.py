@@ -18,6 +18,21 @@ IGNORE_TEST_RECORD_DEPENDENCIES = [
 
 
 class TestOTECQuotation(IntegrationTestCase):
+    def test_single_row_still_enforces_minimum_sqm(self):
+        doc = frappe.new_doc("OTEC Quotation")
+        row = doc.append("items", {})
+        row.main_product_category = "Windows"
+        row.width_m = 1
+        row.height_m = 1
+        row.minimum_sqm = 1.35
+        row.sqm_rate = 8400
+        row.sets = 1
+
+        doc.calculate_totals()
+
+        self.assertAlmostEqual(row.allocated_sqm, 0.35)
+        self.assertAlmostEqual(row.amount, 1.35 * 8400)
+
     def test_category_sqm_and_markup_are_allocated_per_row(self):
         doc = frappe.new_doc("OTEC Quotation")
         doc.total_manual_markup = 3000
