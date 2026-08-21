@@ -43,7 +43,6 @@ class OTECQuotation(Document):
 			"otec_operable_available",
 			"otec_operable_rate",
 			"otec_aluminum_thickness",
-			"otec_glass_specification",
 			"otec_frame_specification",
 			"otec_color",
 			"otec_addon_notes",
@@ -65,14 +64,12 @@ class OTECQuotation(Document):
 			configuration = _get_configuration(row.item_code, row.configuration)
 			if configuration:
 				row.configuration = configuration.name
-				row.glass_specification = values.get("otec_glass_specification")
 				row.base_product_sqm_rate = flt(configuration.sqm_rate)
 				row.operable_available = configuration.operable_available
 				row.operable_rate = flt(configuration.operable_rate)
 				row.pricing_approval_required = configuration.requires_approval
 				row.pricing_approval_reason = configuration.approval_reason
 			else:
-				row.glass_specification = values.get("otec_glass_specification")
 				row.base_product_sqm_rate = flt(values.get("otec_sqm_rate"))
 				row.operable_available = values.get("otec_operable_available")
 				row.operable_rate = flt(values.get("otec_operable_rate"))

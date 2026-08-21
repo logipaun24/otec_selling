@@ -7,12 +7,6 @@ from otec_selling.quotation_catalog import setup_catalog
 
 ALUMINUM_THICKNESS = "\n1.4\n1.6\n1.8\n2.0\n3.0\n4.0"
 
-GLASS_TYPES = (
-	"\n5mm + 20A + 5mm\n5mm + 14A + 5mm\n5mm + 12A + 5mm"
-	"\n8mm\n6mm\n6mm + 12A + 6mm\n6mm + 1.52pvb + 6mm"
-	"\nNylon Mesh\nMetal\nA10 Uchannel"
-)
-
 STOCK_COLORS = "\nGray\nBlack\nBrown"
 
 # Add-on options with their rates, from the OTEC price list (June 3, 2026).
@@ -128,18 +122,10 @@ ITEM_FIELDS = {
 			"hidden": 1,
 		},
 		{
-			"fieldname": "otec_glass_specification",
-			"label": "Glass Specification",
-			"fieldtype": "Select",
-			"options": GLASS_TYPES,
-			"insert_after": "otec_aluminum_thickness",
-			"hidden": 1,
-		},
-		{
 			"fieldname": "otec_frame_specification",
 			"label": "Frame Specification",
 			"fieldtype": "Data",
-			"insert_after": "otec_glass_specification",
+			"insert_after": "otec_aluminum_thickness",
 			"hidden": 1,
 		},
 		{
@@ -221,9 +207,21 @@ def setup_otec_quotation():
 	frappe.reload_doc("otec_selling", "doctype", "otec_quotation_add_on", force=True)
 	frappe.reload_doc("otec_selling", "doctype", "otec_quotation", force=True)
 	create_custom_fields(ITEM_FIELDS, update=True)
+	_remove_legacy_glass_build_field()
 	_seed_addons()
 	setup_catalog()
 	_install_print_format()
+
+
+def _remove_legacy_glass_build_field():
+	"""Remove the retired Item-level glass build default from form metadata."""
+	name = frappe.db.get_value(
+		"Custom Field",
+		{"dt": "Item", "fieldname": "otec_glass_specification"},
+		"name",
+	)
+	if name:
+		frappe.delete_doc("Custom Field", name, ignore_permissions=True)
 
 
 def _seed_addons():

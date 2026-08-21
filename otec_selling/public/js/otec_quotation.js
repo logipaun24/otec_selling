@@ -360,7 +360,6 @@ async function calculate_totals(frm) {
 			"aluminum_thickness",
 			"glass_type",
 			"glass_color",
-			"glass_specification",
 			"frame_specification",
 			"color",
 			"base_product_sqm_rate",

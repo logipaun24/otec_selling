@@ -20,7 +20,6 @@
   "aluminum_thickness",
   "glass_type",
   "glass_color",
-  "glass_specification",
   "frame_specification",
   "color",
   "addons",
@@ -147,12 +146,6 @@
    "label": "Glass Color",
    "options": "OTEC Glass Color",
    "reqd": 1
-  },
-  {
-   "fieldname": "glass_specification",
-   "fieldtype": "Data",
-   "label": "Glass Build Specification",
-   "read_only": 1
   },
   {
    "fieldname": "frame_specification",

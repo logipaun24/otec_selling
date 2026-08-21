@@ -660,7 +660,6 @@ def _upsert_item(product):
 		"otec_operable_available": 1 if product["operable_rate"] else 0,
 		"otec_operable_rate": product["operable_rate"],
 		"otec_aluminum_thickness": f"{float(product['thickness']):.1f}" if product["thickness"] else "",
-		"otec_glass_specification": product["glass"],
 		"otec_color": "Gray",
 	}
 	if frappe.db.exists("Item", product["item_code"]):
