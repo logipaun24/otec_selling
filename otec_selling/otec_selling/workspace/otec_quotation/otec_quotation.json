@@ -1,0 +1,48 @@
+{
+ "app": "otec_selling",
+ "charts": [],
+ "content": "[{\"id\":\"otec_title\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>OTEC Quotation</b></span>\",\"col\":12}},{\"id\":\"otec_new_quotation\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New OTEC Quotation\",\"col\":3}},{\"id\":\"otec_quotation_list\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"OTEC Quotations\",\"col\":3}},{\"id\":\"otec_items\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"OTEC Product Items\",\"col\":3}},{\"id\":\"otec_configuration\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Product Configurations\",\"col\":3}},{\"id\":\"otec_setup_header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Specification Pricing and Add-ons</b></span>\",\"col\":12}},{\"id\":\"otec_spec_card\",\"type\":\"card\",\"data\":{\"card_name\":\"Specification Pricing\",\"col\":6}},{\"id\":\"otec_addon_card\",\"type\":\"card\",\"data\":{\"card_name\":\"Add-on Setup\",\"col\":6}}]",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "file-text",
+ "is_hidden": 0,
+ "label": "OTEC Quotation",
+ "links": [
+  {"hidden":0,"is_query_report":0,"label":"Specification Pricing","link_count":0,"link_type":"DocType","onboard":0,"type":"Card Break"},
+  {"hidden":0,"is_query_report":0,"label":"Aluminum Thickness Pricing","link_count":0,"link_to":"OTEC Aluminum Thickness","link_type":"DocType","onboard":0,"type":"Link"},
+  {"hidden":0,"is_query_report":0,"label":"Glass Type Pricing","link_count":0,"link_to":"OTEC Glass Type","link_type":"DocType","onboard":0,"type":"Link"},
+  {"hidden":0,"is_query_report":0,"label":"Glass Color Pricing","link_count":0,"link_to":"OTEC Glass Color","link_type":"DocType","onboard":0,"type":"Link"},
+  {"hidden":0,"is_query_report":0,"label":"Add-on Setup","link_count":0,"link_type":"DocType","onboard":0,"type":"Card Break"},
+  {"hidden":0,"is_query_report":0,"label":"Add-on Master","link_count":0,"link_to":"OTEC Add-on","link_type":"DocType","onboard":0,"type":"Link"},
+  {"hidden":0,"is_query_report":0,"label":"Item Add-on Rules","link_count":0,"link_to":"OTEC Item Add-on Rule","link_type":"DocType","onboard":0,"type":"Link"}
+ ],
+ "module": "OTEC Selling",
+ "name": "OTEC Quotation",
+ "number_cards": [],
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "restrict_to_domain": "",
+ "roles": [
+  {"role":"Sales User"},
+  {"role":"Quotation Creator"},
+  {"role":"Sales Team Leader"},
+  {"role":"Sales Supervisor"},
+  {"role":"Sales Master Manager"},
+  {"role":"Senior Operations Manager"},
+  {"role":"General Manager"},
+  {"role":"Business Owner"}
+ ],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {"color":"Blue","doc_view":"New","label":"New OTEC Quotation","link_to":"OTEC Quotation","type":"DocType"},
+  {"color":"Blue","doc_view":"List","label":"OTEC Quotations","link_to":"OTEC Quotation","type":"DocType"},
+  {"color":"Orange","doc_view":"List","label":"OTEC Product Items","link_to":"Item","stats_filter":"[[\"Item\",\"item_group\",\"=\",\"OTEC Products\",false]]","type":"DocType"},
+  {"color":"Green","doc_view":"List","label":"Product Configurations","link_to":"OTEC Product Configuration","type":"DocType"}
+ ],
+ "title": "OTEC Quotation",
+ "type": "Workspace"
+}
