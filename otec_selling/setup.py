@@ -113,10 +113,11 @@ ITEM_FIELDS = {
 		},
 		{
 			"fieldname": "otec_specs_section",
-			"label": "Default Specifications",
+			"label": "Legacy Default Specifications",
 			"fieldtype": "Section Break",
 			"insert_after": "otec_operable_rate",
 			"collapsible": 1,
+			"hidden": 1,
 		},
 		{
 			"fieldname": "otec_aluminum_thickness",
@@ -124,6 +125,7 @@ ITEM_FIELDS = {
 			"fieldtype": "Select",
 			"options": ALUMINUM_THICKNESS,
 			"insert_after": "otec_specs_section",
+			"hidden": 1,
 		},
 		{
 			"fieldname": "otec_glass_specification",
@@ -131,12 +133,14 @@ ITEM_FIELDS = {
 			"fieldtype": "Select",
 			"options": GLASS_TYPES,
 			"insert_after": "otec_aluminum_thickness",
+			"hidden": 1,
 		},
 		{
 			"fieldname": "otec_frame_specification",
 			"label": "Frame Specification",
 			"fieldtype": "Data",
 			"insert_after": "otec_glass_specification",
+			"hidden": 1,
 		},
 		{
 			"fieldname": "otec_color",
@@ -144,12 +148,20 @@ ITEM_FIELDS = {
 			"fieldtype": "Select",
 			"options": STOCK_COLORS,
 			"insert_after": "otec_frame_specification",
+			"hidden": 1,
+		},
+		{
+			"fieldname": "otec_addon_information_section",
+			"label": "OTEC Quotation Add-on Information",
+			"fieldtype": "Section Break",
+			"insert_after": "otec_color",
+			"collapsible": 1,
 		},
 		{
 			"fieldname": "otec_addon_notes",
 			"label": "Add-on Notes",
 			"fieldtype": "Text",
-			"insert_after": "otec_color",
+			"insert_after": "otec_addon_information_section",
 			"description": "Surcharges and options from the OTEC price list (grills, screens, locksets, handles, minimum SQM rules, dimension limits, etc.).",
 		},
 		{
