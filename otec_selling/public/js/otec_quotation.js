@@ -142,7 +142,11 @@ async function open_product_configurator(frm, cdt, cdn) {
 				configuration: configuration.name,
 				aluminum_thickness: configuration.aluminum_thickness,
 				glass_specification: configuration.glass_specification,
-				sqm_rate: configuration.sqm_rate,
+				pricing_method: configuration.pricing_method,
+				base_product_sqm_rate: configuration.base_product_sqm_rate,
+				aluminum_price_per_sqm: configuration.aluminum_price_per_sqm,
+				glass_price_per_sqm: configuration.glass_price_per_sqm,
+				sqm_rate: configuration.effective_sqm_rate,
 				operable_available: configuration.operable_available,
 				operable_rate: configuration.operable_rate,
 				pricing_approval_required: configuration.requires_approval,
@@ -179,12 +183,19 @@ async function open_product_configurator(frm, cdt, cdn) {
 		const approval = config.requires_approval
 			? `<div class="alert alert-warning">${frappe.utils.escape_html(config.approval_reason || __("Pricing approval required"))}</div>`
 			: "";
+		const pricing = config.pricing_method === "Base Rate Plus Adjustments"
+			? `${__("Base product")}: ${format_currency(config.base_product_sqm_rate)}<br>
+				${__("Aluminum specification")}: +${format_currency(config.aluminum_price_per_sqm)}<br>
+				${__("Glass specification")}: +${format_currency(config.glass_price_per_sqm)}<br>`
+			: `${__("Exact specification-combination override")}: ${format_currency(config.effective_sqm_rate)}<br>`;
 		dialog.fields_dict.pricing_preview.$wrapper.html(`
 			<div class="mt-3 border rounded p-3">
 				<strong>${frappe.utils.escape_html(config.configuration_label)}</strong><br>
 				${__("Aluminum")}: ${config.aluminum_thickness || __("TBC")} mm &nbsp;•&nbsp;
 				${__("Glass")}: ${frappe.utils.escape_html(config.glass_specification)}<br>
-				${__("Base rate")}: ${format_currency(config.sqm_rate)} / SQM
+				${__("Pricing method")}: ${frappe.utils.escape_html(config.pricing_method)}<br>
+				${pricing}
+				<strong>${__("Effective rate")}: ${format_currency(config.effective_sqm_rate)} / SQM</strong>
 				${approval}
 			</div>`);
 	};
@@ -249,6 +260,7 @@ async function calculate_totals(frm) {
 		const fields_to_apply = [
 			"quotation_row_key", "item_name", "main_product_category", "secondary_product_category", "series",
 			"configuration", "aluminum_thickness", "glass_specification", "frame_specification", "color",
+			"pricing_method", "base_product_sqm_rate", "aluminum_price_per_sqm", "glass_price_per_sqm",
 			"addons", "addon_notes", "addon_amount", "minimum_sqm", "sqm_rate", "operable_available",
 			"operable_rate", "actual_sqm", "sqm_shortfall", "allocated_sqm", "allocated_sqm_amount",
 			"base_line_amount", "operable_amount", "allocated_markup", "pricing_approval_required",

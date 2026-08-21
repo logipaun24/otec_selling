@@ -8,7 +8,8 @@
  "field_order": [
   "configuration_code", "item_code", "configuration_label", "active", "is_default",
   "specification_section", "aluminum_thickness", "glass_specification", "pricing_column",
-  "sqm_rate", "operable_available", "operable_rate", "effective_from", "effective_to",
+  "pricing_method", "aluminum_price_per_sqm", "glass_price_per_sqm", "sqm_rate",
+  "operable_available", "operable_rate", "effective_from", "effective_to",
   "approval_section", "requires_approval", "approval_reason"
  ],
  "fields": [
@@ -21,7 +22,10 @@
   {"fieldname":"aluminum_thickness","fieldtype":"Float","label":"Aluminum Thickness (mm)","precision":2},
   {"fieldname":"glass_specification","fieldtype":"Data","label":"Glass Specification","reqd":1},
   {"fieldname":"pricing_column","fieldtype":"Column Break"},
-  {"fieldname":"sqm_rate","fieldtype":"Currency","in_list_view":1,"label":"Rate per SQM","non_negative":1,"reqd":1},
+  {"default":"Full Rate Override","fieldname":"pricing_method","fieldtype":"Select","in_list_view":1,"label":"Pricing Method","options":"Full Rate Override\nBase Rate Plus Adjustments","reqd":1},
+  {"depends_on":"eval:doc.pricing_method === 'Base Rate Plus Adjustments'","fieldname":"aluminum_price_per_sqm","fieldtype":"Currency","label":"Aluminum Adjustment per SQM","non_negative":1},
+  {"depends_on":"eval:doc.pricing_method === 'Base Rate Plus Adjustments'","fieldname":"glass_price_per_sqm","fieldtype":"Currency","label":"Glass Adjustment per SQM","non_negative":1},
+  {"depends_on":"eval:doc.pricing_method === 'Full Rate Override'","fieldname":"sqm_rate","fieldtype":"Currency","in_list_view":1,"label":"Full Rate Override per SQM","mandatory_depends_on":"eval:doc.pricing_method === 'Full Rate Override'","non_negative":1},
   {"fieldname":"operable_available","fieldtype":"Check","label":"Operable Available"},
   {"depends_on":"eval:doc.operable_available","fieldname":"operable_rate","fieldtype":"Currency","label":"Operable Rate","non_negative":1},
   {"fieldname":"effective_from","fieldtype":"Date","label":"Effective From"},

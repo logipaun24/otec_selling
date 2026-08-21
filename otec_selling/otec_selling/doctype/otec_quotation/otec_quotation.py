@@ -9,6 +9,8 @@ from frappe.utils import flt, getdate, nowdate
 
 
 PRICING_APPROVER_ROLES = {"System Manager", "Business Owner", "Sales Master Manager"}
+FULL_RATE_OVERRIDE = "Full Rate Override"
+BASE_RATE_PLUS_ADJUSTMENTS = "Base Rate Plus Adjustments"
 
 
 class OTECQuotation(Document):
@@ -56,10 +58,15 @@ class OTECQuotation(Document):
 
             configuration = _get_configuration(row.item_code, row.configuration)
             if configuration:
+                pricing = _configuration_pricing(configuration, values.get("otec_sqm_rate"))
                 row.configuration = configuration.name
                 row.aluminum_thickness = configuration.aluminum_thickness
                 row.glass_specification = configuration.glass_specification
-                row.sqm_rate = flt(configuration.sqm_rate)
+                row.pricing_method = pricing.pricing_method
+                row.base_product_sqm_rate = pricing.base_product_sqm_rate
+                row.aluminum_price_per_sqm = pricing.aluminum_price_per_sqm
+                row.glass_price_per_sqm = pricing.glass_price_per_sqm
+                row.sqm_rate = pricing.effective_sqm_rate
                 row.operable_available = configuration.operable_available
                 row.operable_rate = flt(configuration.operable_rate)
                 row.pricing_approval_required = configuration.requires_approval
@@ -67,6 +74,10 @@ class OTECQuotation(Document):
             else:
                 row.aluminum_thickness = values.get("otec_aluminum_thickness")
                 row.glass_specification = values.get("otec_glass_specification")
+                row.pricing_method = FULL_RATE_OVERRIDE
+                row.base_product_sqm_rate = flt(values.get("otec_sqm_rate"))
+                row.aluminum_price_per_sqm = 0
+                row.glass_price_per_sqm = 0
                 row.sqm_rate = flt(values.get("otec_sqm_rate"))
                 row.operable_available = values.get("otec_operable_available")
                 row.operable_rate = flt(values.get("otec_operable_rate"))
@@ -223,7 +234,8 @@ def _get_configuration(item_code, configuration_name=None):
     if configuration_name:
         configuration = frappe.db.get_value(
             "OTEC Product Configuration", configuration_name,
-            ["name", "item_code", "aluminum_thickness", "glass_specification", "sqm_rate",
+            ["name", "item_code", "aluminum_thickness", "glass_specification", "pricing_method",
+             "aluminum_price_per_sqm", "glass_price_per_sqm", "sqm_rate",
              "operable_available", "operable_rate", "requires_approval", "approval_reason", "active"],
             as_dict=True,
         )
@@ -240,13 +252,37 @@ def _active_configurations(item_code):
         "OTEC Product Configuration",
         filters={"item_code": item_code, "active": 1},
         fields=["name", "configuration_label", "item_code", "aluminum_thickness", "glass_specification",
-                "sqm_rate", "operable_available", "operable_rate", "requires_approval", "approval_reason",
+                "pricing_method", "aluminum_price_per_sqm", "glass_price_per_sqm", "sqm_rate",
+                "operable_available", "operable_rate", "requires_approval", "approval_reason",
                 "is_default", "effective_from", "effective_to"],
         order_by="is_default desc, configuration_label asc",
     )
     today = getdate(nowdate())
-    return [row for row in rows if (not row.effective_from or getdate(row.effective_from) <= today)
-            and (not row.effective_to or getdate(row.effective_to) >= today)]
+    active_rows = [row for row in rows if (not row.effective_from or getdate(row.effective_from) <= today)
+                   and (not row.effective_to or getdate(row.effective_to) >= today)]
+    base_rate = frappe.db.get_value("Item", item_code, "otec_sqm_rate")
+    for row in active_rows:
+        row.update(_configuration_pricing(row, base_rate))
+    return active_rows
+
+
+def _configuration_pricing(configuration, base_rate):
+    pricing_method = configuration.get("pricing_method") or FULL_RATE_OVERRIDE
+    aluminum_price = flt(configuration.get("aluminum_price_per_sqm"))
+    glass_price = flt(configuration.get("glass_price_per_sqm"))
+    base_rate = flt(base_rate)
+    effective_rate = (
+        base_rate + aluminum_price + glass_price
+        if pricing_method == BASE_RATE_PLUS_ADJUSTMENTS
+        else flt(configuration.get("sqm_rate"))
+    )
+    return frappe._dict(
+        pricing_method=pricing_method,
+        base_product_sqm_rate=base_rate,
+        aluminum_price_per_sqm=aluminum_price,
+        glass_price_per_sqm=glass_price,
+        effective_sqm_rate=effective_rate,
+    )
 
 
 def _addon_quantity(addon_row, item_row, rule):

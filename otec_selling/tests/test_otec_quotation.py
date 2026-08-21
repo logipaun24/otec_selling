@@ -3,13 +3,42 @@ import json
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from otec_selling.otec_selling.doctype.otec_quotation.otec_quotation import calculate_quotation
+from otec_selling.otec_selling.doctype.otec_quotation.otec_quotation import (
+    _configuration_pricing,
+    calculate_quotation,
+)
 
 
 # These tests exercise in-memory pricing math. Keeping them outside the
 # DocType test module prevents Frappe from generating unrelated ERPNext test
 # records merely to construct unsaved OTEC Quotation documents.
 class TestOTECQuotation(IntegrationTestCase):
+    def test_configuration_can_add_specification_prices_to_base_rate(self):
+        pricing = _configuration_pricing(
+            frappe._dict(
+                pricing_method="Base Rate Plus Adjustments",
+                aluminum_price_per_sqm=500,
+                glass_price_per_sqm=1200,
+                sqm_rate=99999,
+            ),
+            8400,
+        )
+
+        self.assertEqual(pricing.effective_sqm_rate, 10100)
+
+    def test_configuration_can_override_full_combination_rate(self):
+        pricing = _configuration_pricing(
+            frappe._dict(
+                pricing_method="Full Rate Override",
+                aluminum_price_per_sqm=500,
+                glass_price_per_sqm=1200,
+                sqm_rate=12500,
+            ),
+            8400,
+        )
+
+        self.assertEqual(pricing.effective_sqm_rate, 12500)
+
     def test_addon_link_survives_child_row_rename(self):
         doc = frappe.new_doc("OTEC Quotation")
         item = doc.append("items", {"item_code": "TEST-WINDOW"})

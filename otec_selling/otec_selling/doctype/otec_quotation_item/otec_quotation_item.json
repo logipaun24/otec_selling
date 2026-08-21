@@ -34,6 +34,10 @@
   "sqm_shortfall",
   "allocated_sqm",
   "pricing_section",
+  "pricing_method",
+  "base_product_sqm_rate",
+  "aluminum_price_per_sqm",
+  "glass_price_per_sqm",
   "sqm_rate",
   "base_line_amount",
   "allocated_sqm_amount",
@@ -242,9 +246,40 @@
    "permlevel": 1
   },
   {
+   "fieldname": "pricing_method",
+   "fieldtype": "Data",
+   "label": "Specification Pricing Method",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "base_product_sqm_rate",
+   "fieldtype": "Currency",
+   "label": "Base Product Rate per SQM",
+   "options": "currency",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "aluminum_price_per_sqm",
+   "fieldtype": "Currency",
+   "label": "Aluminum Price per SQM",
+   "options": "currency",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "glass_price_per_sqm",
+   "fieldtype": "Currency",
+   "label": "Glass Price per SQM",
+   "options": "currency",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
    "fieldname": "sqm_rate",
    "fieldtype": "Currency",
-   "label": "Rate per SQM",
+   "label": "Effective Rate per SQM",
    "options": "currency",
    "permlevel": 1,
    "read_only": 1
