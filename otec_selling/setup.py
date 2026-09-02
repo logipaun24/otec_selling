@@ -4,6 +4,7 @@ import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 from otec_selling.quotation_catalog import setup_catalog
+from otec_selling.sales_return_setup import setup_sales_returns
 
 ALUMINUM_THICKNESS = "\n1.4\n1.6\n1.8\n2.0\n3.0\n4.0"
 
@@ -211,6 +212,7 @@ def setup_otec_quotation():
 	_seed_addons()
 	setup_catalog()
 	_install_print_format()
+	setup_sales_returns()
 
 
 def _remove_legacy_glass_build_field():

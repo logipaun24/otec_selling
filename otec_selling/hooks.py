@@ -47,6 +47,8 @@ doctype_js = {
     "Container Receiving": "public/js/container_receiving.js",
     "Container Landed Cost": "public/js/container_landed_cost.js",
     "OTEC Quotation": "public/js/otec_quotation.js",
+    "Delivery Note": "public/js/standard_sales_return.js",
+    "Sales Invoice": "public/js/standard_sales_return.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -144,6 +146,21 @@ after_migrate = "otec_selling.setup.setup_otec_quotation"
 # Hook on document methods and events
 
 doc_events = {
+    "Delivery Note": {
+        "validate": "otec_selling.sales_returns.validate_linked_return",
+        "on_submit": "otec_selling.sales_returns.sync_from_linked_document",
+        "on_cancel": "otec_selling.sales_returns.sync_from_linked_document",
+    },
+    "Sales Invoice": {
+        "validate": "otec_selling.sales_returns.validate_linked_return",
+        "on_submit": "otec_selling.sales_returns.sync_from_linked_document",
+        "on_cancel": "otec_selling.sales_returns.sync_from_linked_document",
+    },
+    "Payment Entry": {
+        "validate": "otec_selling.sales_returns.validate_linked_return",
+        "on_submit": "otec_selling.sales_returns.sync_from_linked_document",
+        "on_cancel": "otec_selling.sales_returns.sync_from_linked_document",
+    },
     "Purchase Order": {
         "validate": "otec_selling.purchasing_lifecycle.validate_purchase_order",
         "before_submit": "otec_selling.purchasing_lifecycle.before_submit_purchase_order",
