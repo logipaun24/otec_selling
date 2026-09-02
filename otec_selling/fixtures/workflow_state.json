@@ -295,5 +295,23 @@
   "name": "Approved",
   "style": "Success",
   "workflow_state_name": "Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-02 21:30:45.317475",
+  "name": "For TL or Supervisor Approval",
+  "style": "Warning",
+  "workflow_state_name": "For TL or Supervisor Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-02 21:30:45.359104",
+  "name": "Revised",
+  "style": "Inverse",
+  "workflow_state_name": "Revised"
  }
 ]
