@@ -92,6 +92,7 @@ doctype_js = {
 # ------------
 
 # before_install = "otec_selling.install.before_install"
+after_install = "otec_selling.sales_return_setup.setup_sales_returns"
 after_sync = "otec_selling.patches.v0_0.configure_purchasing_lifecycle.execute"
 after_migrate = "otec_selling.setup.setup_otec_quotation"
 
