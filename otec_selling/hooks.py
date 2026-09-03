@@ -1,7 +1,9 @@
 app_name = "otec_selling"
 app_title = "OTEC Selling"
 app_publisher = "OTEC"
-app_description = "OTEC sales hierarchy, workflow, fulfillment, billing, collection, and workspace customizations"
+app_description = (
+	"OTEC sales hierarchy, workflow, fulfillment, billing, collection, and workspace customizations"
+)
 app_email = "ljpmallari@gmail.com"
 app_license = "mit"
 
@@ -44,11 +46,11 @@ app_license = "mit"
 
 # include js in doctype views
 doctype_js = {
-    "Container Receiving": "public/js/container_receiving.js",
-    "Container Landed Cost": "public/js/container_landed_cost.js",
-    "OTEC Quotation": "public/js/otec_quotation.js",
-    "Delivery Note": "public/js/standard_sales_return.js",
-    "Sales Invoice": "public/js/standard_sales_return.js",
+	"Container Receiving": "public/js/container_receiving.js",
+	"Container Landed Cost": "public/js/container_landed_cost.js",
+	"OTEC Quotation": "public/js/otec_quotation.js",
+	"Delivery Note": "public/js/standard_sales_return.js",
+	"Sales Invoice": "public/js/standard_sales_return.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -147,45 +149,49 @@ after_migrate = "otec_selling.setup.setup_otec_quotation"
 # Hook on document methods and events
 
 doc_events = {
-    "Sales Order": {
-        "before_validate": "otec_selling.sales_order_ownership.set_sales_order_ownership",
-        "before_submit": "otec_selling.sales_order_ownership.validate_sales_order_ownership",
-    },
-    "Delivery Note": {
-        "validate": "otec_selling.sales_returns.validate_linked_return",
-        "on_submit": "otec_selling.sales_returns.sync_from_linked_document",
-        "on_cancel": "otec_selling.sales_returns.sync_from_linked_document",
-    },
-    "Sales Invoice": {
-        "validate": "otec_selling.sales_returns.validate_linked_return",
-        "on_submit": "otec_selling.sales_returns.sync_from_linked_document",
-        "on_cancel": "otec_selling.sales_returns.sync_from_linked_document",
-    },
-    "Payment Entry": {
-        "validate": "otec_selling.sales_returns.validate_linked_return",
-        "on_submit": "otec_selling.sales_returns.sync_from_linked_document",
-        "on_cancel": "otec_selling.sales_returns.sync_from_linked_document",
-    },
-    "Purchase Order": {
-        "validate": "otec_selling.purchasing_lifecycle.validate_purchase_order",
-        "before_submit": "otec_selling.purchasing_lifecycle.before_submit_purchase_order",
-    },
-    "Purchase Receipt": {
-        "validate": "otec_selling.purchasing_lifecycle.validate_purchase_receipt",
-        "before_submit": "otec_selling.purchasing_lifecycle.before_submit_purchase_receipt",
-        "after_submit": "otec_selling.purchasing_lifecycle.sync_container_receiving_from_receipt",
-        "after_cancel": "otec_selling.purchasing_lifecycle.sync_container_receiving_from_receipt",
-    },
-    "Landed Cost Voucher": {
-        "validate": "otec_selling.purchasing_lifecycle.validate_landed_cost_voucher",
-        "before_submit": "otec_selling.purchasing_lifecycle.before_submit_landed_cost_voucher",
-        "after_submit": "otec_selling.purchasing_lifecycle.after_submit_landed_cost_voucher",
-        "after_cancel": "otec_selling.purchasing_lifecycle.after_cancel_landed_cost_voucher",
-    },
-    "Container Landed Cost": {
-        "before_submit": "otec_selling.purchasing_lifecycle.before_submit_container_landed_cost",
-        "before_cancel": "otec_selling.purchasing_lifecycle.before_cancel_container_landed_cost",
-    },
+	"Pick List": {
+		"before_validate": "otec_selling.fulfillment_ownership.set_fulfillment_ownership",
+	},
+	"Sales Order": {
+		"before_validate": "otec_selling.sales_order_ownership.set_sales_order_ownership",
+		"before_submit": "otec_selling.sales_order_ownership.validate_sales_order_ownership",
+	},
+	"Delivery Note": {
+		"before_validate": "otec_selling.fulfillment_ownership.set_fulfillment_ownership",
+		"validate": "otec_selling.sales_returns.validate_linked_return",
+		"on_submit": "otec_selling.sales_returns.sync_from_linked_document",
+		"on_cancel": "otec_selling.sales_returns.sync_from_linked_document",
+	},
+	"Sales Invoice": {
+		"validate": "otec_selling.sales_returns.validate_linked_return",
+		"on_submit": "otec_selling.sales_returns.sync_from_linked_document",
+		"on_cancel": "otec_selling.sales_returns.sync_from_linked_document",
+	},
+	"Payment Entry": {
+		"validate": "otec_selling.sales_returns.validate_linked_return",
+		"on_submit": "otec_selling.sales_returns.sync_from_linked_document",
+		"on_cancel": "otec_selling.sales_returns.sync_from_linked_document",
+	},
+	"Purchase Order": {
+		"validate": "otec_selling.purchasing_lifecycle.validate_purchase_order",
+		"before_submit": "otec_selling.purchasing_lifecycle.before_submit_purchase_order",
+	},
+	"Purchase Receipt": {
+		"validate": "otec_selling.purchasing_lifecycle.validate_purchase_receipt",
+		"before_submit": "otec_selling.purchasing_lifecycle.before_submit_purchase_receipt",
+		"after_submit": "otec_selling.purchasing_lifecycle.sync_container_receiving_from_receipt",
+		"after_cancel": "otec_selling.purchasing_lifecycle.sync_container_receiving_from_receipt",
+	},
+	"Landed Cost Voucher": {
+		"validate": "otec_selling.purchasing_lifecycle.validate_landed_cost_voucher",
+		"before_submit": "otec_selling.purchasing_lifecycle.before_submit_landed_cost_voucher",
+		"after_submit": "otec_selling.purchasing_lifecycle.after_submit_landed_cost_voucher",
+		"after_cancel": "otec_selling.purchasing_lifecycle.after_cancel_landed_cost_voucher",
+	},
+	"Container Landed Cost": {
+		"before_submit": "otec_selling.purchasing_lifecycle.before_submit_container_landed_cost",
+		"before_cancel": "otec_selling.purchasing_lifecycle.before_cancel_container_landed_cost",
+	},
 }
 
 # Scheduled Tasks
@@ -305,63 +311,117 @@ doc_events = {
 required_apps = ["erpnext"]
 
 _selling_doctypes = [
-    "Quotation", "Quotation Item", "Sales Order", "Sales Order Item",
-    "Pick List", "Pick List Item", "Delivery Note", "Delivery Note Item",
-    "Sales Invoice", "Sales Invoice Item", "Payment Entry", "Customer",
-    "Branch", "Warehouse", "User",
+	"Quotation",
+	"Quotation Item",
+	"Sales Order",
+	"Sales Order Item",
+	"Pick List",
+	"Pick List Item",
+	"Delivery Note",
+	"Delivery Note Item",
+	"Sales Invoice",
+	"Sales Invoice Item",
+	"Payment Entry",
+	"Customer",
+	"Branch",
+	"Warehouse",
+	"User",
 ]
 
 _custom_doctypes = [
-    "Branch Markup Setting", "Container Landed Cost",
-    "Container Landed Cost Item", "Container Landed Cost Receipt",
-    "Container Receiving", "Container Receiving Item",
-    "Container Receiving Warehouse Mapping", "DR Paper Batch",
-    "DR Paper Serial Log", "Employment Contract", "OTEC Quotation",
-    "PO Box Detail", "Sales Access Hierarchy", "Sales Hierarchy Branch Access",
-    "Sales Hierarchy Company Access", "Sales Hierarchy Team Access",
-    "Sales Team Group", "Sample Issuance", "Sample Issuance Item",
+	"Branch Markup Setting",
+	"Container Landed Cost",
+	"Container Landed Cost Item",
+	"Container Landed Cost Receipt",
+	"Container Receiving",
+	"Container Receiving Item",
+	"Container Receiving Warehouse Mapping",
+	"DR Paper Batch",
+	"DR Paper Serial Log",
+	"Employment Contract",
+	"OTEC Quotation",
+	"PO Box Detail",
+	"Sales Access Hierarchy",
+	"Sales Hierarchy Branch Access",
+	"Sales Hierarchy Company Access",
+	"Sales Hierarchy Team Access",
+	"Sales Team Group",
+	"Sample Issuance",
+	"Sample Issuance Item",
 ]
 
 _purchasing_doctypes = [
-    "Company", "Purchase Order", "Purchase Order Item", "Purchase Receipt",
-    "Purchase Receipt Item", "Landed Cost Voucher", "Landed Cost Item",
+	"Company",
+	"Purchase Order",
+	"Purchase Order Item",
+	"Purchase Receipt",
+	"Purchase Receipt Item",
+	"Landed Cost Voucher",
+	"Landed Cost Item",
 ]
 
 _hr_expense_doctypes = [
-    "Employee Advance", "Expense Claim", "Expense Claim Detail",
-    "Expense Claim Type",
+	"Employee Advance",
+	"Expense Claim",
+	"Expense Claim Detail",
+	"Expense Claim Type",
 ]
 
 _fixture_doctypes = _selling_doctypes + _purchasing_doctypes + _custom_doctypes
 
 fixtures = [
-    {"dt": "DocType", "filters": [["custom", "=", 1]]},
-    {"dt": "Custom Field", "filters": [["dt", "in", _fixture_doctypes]]},
-    {"dt": "Custom Field", "prefix": "hr_expense", "filters": [["dt", "in", _hr_expense_doctypes]]},
-    {"dt": "Property Setter", "filters": [
-        ["doc_type", "in", _fixture_doctypes],
-        ["property", "!=", "title_field"],
-    ]},
-    {"dt": "Property Setter", "prefix": "hr_expense", "filters": [
-        ["doc_type", "in", _hr_expense_doctypes],
-        ["property", "!=", "title_field"],
-    ]},
-    {"dt": "Custom DocPerm", "filters": [["parent", "in", _fixture_doctypes]]},
-    {"dt": "Client Script", "filters": [["dt", "in", _fixture_doctypes]]},
-    {"dt": "Server Script", "filters": [["reference_doctype", "in", _fixture_doctypes]]},
-    {"dt": "Workflow", "filters": [["document_type", "in", _selling_doctypes]]},
-    {"dt": "Workflow", "prefix": "hr_expense", "filters": [["document_type", "=", "Expense Claim"]]},
-    "Workflow State",
-    "Workflow Action Master",
-    {"dt": "Workspace", "filters": [["module", "=", "Selling"]]},
-    {"dt": "Number Card", "filters": [["module", "=", "Selling"], ["is_standard", "=", 0]]},
-    {"dt": "Dashboard Chart", "filters": [["module", "=", "Selling"], ["is_standard", "=", 0]]},
-    {"dt": "Report", "filters": [["ref_doctype", "in", _fixture_doctypes], ["is_standard", "=", "No"]]},
-    {"dt": "Report", "prefix": "hr_expense", "filters": [["ref_doctype", "=", "Expense Claim"], ["is_standard", "=", "No"]]},
-    {"dt": "Print Format", "filters": [["doc_type", "in", _selling_doctypes], ["custom_format", "=", 1]]},
-    {"dt": "Role", "filters": [["name", "in", [
-        "Business Owner", "General Manager", "Senior Operations Manager",
-        "Sales Master Manager", "Sales Supervisor", "Sales Team Leader",
-        "Sales User", "Quotation Creator",
-    ]]]},
+	{"dt": "DocType", "filters": [["custom", "=", 1]]},
+	{"dt": "Custom Field", "filters": [["dt", "in", _fixture_doctypes]]},
+	{"dt": "Custom Field", "prefix": "hr_expense", "filters": [["dt", "in", _hr_expense_doctypes]]},
+	{
+		"dt": "Property Setter",
+		"filters": [
+			["doc_type", "in", _fixture_doctypes],
+			["property", "!=", "title_field"],
+		],
+	},
+	{
+		"dt": "Property Setter",
+		"prefix": "hr_expense",
+		"filters": [
+			["doc_type", "in", _hr_expense_doctypes],
+			["property", "!=", "title_field"],
+		],
+	},
+	{"dt": "Custom DocPerm", "filters": [["parent", "in", _fixture_doctypes]]},
+	{"dt": "Client Script", "filters": [["dt", "in", _fixture_doctypes]]},
+	{"dt": "Server Script", "filters": [["reference_doctype", "in", _fixture_doctypes]]},
+	{"dt": "Workflow", "filters": [["document_type", "in", _selling_doctypes]]},
+	{"dt": "Workflow", "prefix": "hr_expense", "filters": [["document_type", "=", "Expense Claim"]]},
+	"Workflow State",
+	"Workflow Action Master",
+	{"dt": "Workspace", "filters": [["module", "=", "Selling"]]},
+	{"dt": "Number Card", "filters": [["module", "=", "Selling"], ["is_standard", "=", 0]]},
+	{"dt": "Dashboard Chart", "filters": [["module", "=", "Selling"], ["is_standard", "=", 0]]},
+	{"dt": "Report", "filters": [["ref_doctype", "in", _fixture_doctypes], ["is_standard", "=", "No"]]},
+	{
+		"dt": "Report",
+		"prefix": "hr_expense",
+		"filters": [["ref_doctype", "=", "Expense Claim"], ["is_standard", "=", "No"]],
+	},
+	{"dt": "Print Format", "filters": [["doc_type", "in", _selling_doctypes], ["custom_format", "=", 1]]},
+	{
+		"dt": "Role",
+		"filters": [
+			[
+				"name",
+				"in",
+				[
+					"Business Owner",
+					"General Manager",
+					"Senior Operations Manager",
+					"Sales Master Manager",
+					"Sales Supervisor",
+					"Sales Team Leader",
+					"Sales User",
+					"Quotation Creator",
+				],
+			]
+		],
+	},
 ]
