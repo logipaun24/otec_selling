@@ -147,6 +147,10 @@ after_migrate = "otec_selling.setup.setup_otec_quotation"
 # Hook on document methods and events
 
 doc_events = {
+    "Sales Order": {
+        "before_validate": "otec_selling.sales_order_ownership.set_sales_order_ownership",
+        "before_submit": "otec_selling.sales_order_ownership.validate_sales_order_ownership",
+    },
     "Delivery Note": {
         "validate": "otec_selling.sales_returns.validate_linked_return",
         "on_submit": "otec_selling.sales_returns.sync_from_linked_document",
