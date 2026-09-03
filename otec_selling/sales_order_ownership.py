@@ -7,6 +7,7 @@ from frappe import _
 
 HIERARCHY_DOCTYPE = "Sales Access Hierarchy"
 COMMERCIAL_POSITIONS = ("Sales Representative", "Team Leader", "Supervisor")
+MULTI_TEAM_MANAGER_POSITIONS = ("Team Leader", "Supervisor")
 
 
 def _unique(values: Iterable[str | None]) -> list[str]:
@@ -119,6 +120,11 @@ def _company_uses_sales_hierarchy(company: str | None) -> bool:
 	return bool(company and frappe.db.exists(HIERARCHY_DOCTYPE, {"company": company, "active": 1}))
 
 
+def _requires_team_scope(position: str | None) -> bool:
+	"""Managers with a branch and no default team manage every team in that branch."""
+	return position not in ("Business Owner", *MULTI_TEAM_MANAGER_POSITIONS)
+
+
 def validate_sales_order_ownership(doc, method=None) -> None:
 	"""Prevent new hierarchy-managed orders from becoming invisible after submit."""
 	set_sales_order_ownership(doc)
@@ -139,11 +145,18 @@ def validate_sales_order_ownership(doc, method=None) -> None:
 			_("Sales Person {0} needs an active Sales Access Hierarchy record.").format(doc.custom_sales_user)
 		)
 
-	if hierarchy.position != "Business Owner" and (not hierarchy.branch or not hierarchy.sales_team_group):
+	if hierarchy.position != "Business Owner" and not hierarchy.branch:
 		frappe.throw(
-			_(
-				"Complete Branch and Sales Team on the Sales Access Hierarchy record for {0} before submission."
-			).format(doc.custom_sales_user)
+			_("Complete Branch on the Sales Access Hierarchy record for {0} before submission.").format(
+				doc.custom_sales_user
+			)
+		)
+
+	if _requires_team_scope(hierarchy.position) and not hierarchy.sales_team_group:
+		frappe.throw(
+			_("Complete Sales Team on the Sales Access Hierarchy record for {0} before submission.").format(
+				doc.custom_sales_user
+			)
 		)
 
 
@@ -172,13 +185,13 @@ def backfill_sales_order_ownership(dry_run: bool = True) -> dict:
 				{"name": doc.name, "reason": source, "company": doc.company, "branch": doc.get("branch")}
 			)
 			continue
-		if hierarchy.position != "Business Owner" and (
-			not hierarchy.branch or not hierarchy.sales_team_group
+		if (hierarchy.position != "Business Owner" and not hierarchy.branch) or (
+			_requires_team_scope(hierarchy.position) and not hierarchy.sales_team_group
 		):
 			unresolved.append(
 				{
 					"name": doc.name,
-					"reason": "resolved hierarchy user has incomplete branch or sales team scope",
+					"reason": "resolved hierarchy user has incomplete required scope",
 					"company": doc.company,
 					"branch": doc.get("branch"),
 				}
