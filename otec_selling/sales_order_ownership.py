@@ -120,9 +120,26 @@ def _company_uses_sales_hierarchy(company: str | None) -> bool:
 	return bool(company and frappe.db.exists(HIERARCHY_DOCTYPE, {"company": company, "active": 1}))
 
 
-def _requires_team_scope(position: str | None) -> bool:
-	"""Managers with a branch and no default team manage every team in that branch."""
-	return position not in ("Business Owner", *MULTI_TEAM_MANAGER_POSITIONS)
+def _allows_multiple_team_scopes(position: str | None) -> bool:
+	return position in MULTI_TEAM_MANAGER_POSITIONS
+
+
+def _has_team_scope(hierarchy) -> bool:
+	if hierarchy.sales_team_group:
+		return True
+	if not _allows_multiple_team_scopes(hierarchy.position):
+		return False
+	return bool(
+		frappe.db.exists(
+			"Sales Hierarchy Team Access",
+			{
+				"parent": hierarchy.name,
+				"parenttype": HIERARCHY_DOCTYPE,
+				"parentfield": "allowed_sales_teams",
+				"sales_team_group": ["!=", ""],
+			},
+		)
+	)
 
 
 def validate_sales_order_ownership(doc, method=None) -> None:
@@ -152,11 +169,12 @@ def validate_sales_order_ownership(doc, method=None) -> None:
 			)
 		)
 
-	if _requires_team_scope(hierarchy.position) and not hierarchy.sales_team_group:
+	if hierarchy.position != "Business Owner" and not _has_team_scope(hierarchy):
 		frappe.throw(
-			_("Complete Sales Team on the Sales Access Hierarchy record for {0} before submission.").format(
-				doc.custom_sales_user
-			)
+			_(
+				"Configure a default Sales Team, or allowed Sales Teams for a Team Leader or Supervisor, "
+				"on the Sales Access Hierarchy record for {0} before submission."
+			).format(doc.custom_sales_user)
 		)
 
 
@@ -186,7 +204,7 @@ def backfill_sales_order_ownership(dry_run: bool = True) -> dict:
 			)
 			continue
 		if (hierarchy.position != "Business Owner" and not hierarchy.branch) or (
-			_requires_team_scope(hierarchy.position) and not hierarchy.sales_team_group
+			hierarchy.position != "Business Owner" and not _has_team_scope(hierarchy)
 		):
 			unresolved.append(
 				{
