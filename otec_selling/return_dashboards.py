@@ -21,6 +21,10 @@ STAGES = {
 	"draft": ("Draft", [["workflow_state", "=", "RMA Draft"]]),
 	"rejected": ("Rejected", [["workflow_state", "=", "RMA Rejected"]]),
 	"cancelled": ("Cancelled", [["docstatus", "=", 2]]),
+	"unassigned": (
+		"Unassigned Returns — Needs Review",
+		[["sales_team_group", "is", "not set"], ["docstatus", "<", 2]],
+	),
 }
 
 # Executed by Frappe's restricted Server Script API. Transaction reads MUST use
@@ -35,6 +39,8 @@ if mode not in ("my", "team"):
 stage = frappe.form_dict.get("stage") or "all"
 if stage not in STAGES:
     frappe.throw("Invalid return status filter.")
+if mode == "my" and stage == "unassigned":
+    frappe.throw("Unassigned review is only available in Team Sales Returns.")
 base_filters = []
 ownership_filters = []
 teams = []
@@ -85,29 +91,39 @@ if date_to:
     base_filters.append(["request_date", "<=", date_to])
 if date_from and date_to and date_from > date_to:
     frappe.throw("Request Date From must be on or before Request Date To.")
-customers = frappe.get_list("Sales Return Request", filters=base_filters, or_filters=ownership_filters,
+customer_filters = base_filters
+if stage == "unassigned":
+    customer_filters = [f for f in base_filters if f[0] != "sales_team_group"] + STAGES["unassigned"][1]
+customers = frappe.get_list("Sales Return Request", filters=customer_filters, or_filters=ownership_filters,
     fields=["customer"], group_by="customer", order_by="customer asc", limit_page_length=0)
 if frappe.form_dict.get("customer"):
     base_filters.append(["customer", "=", frappe.form_dict.customer])
 cards = []
 selected_count = 0
+selected_filters = []
 for key in STAGES:
+    if key == "unassigned" and mode != "team":
+        continue
     spec = STAGES[key]
-    result = frappe.get_list("Sales Return Request", filters=base_filters + spec[1],
+    card_filters = base_filters + spec[1]
+    if key == "unassigned":
+        card_filters = [f for f in base_filters if f[0] != "sales_team_group"] + spec[1]
+    result = frappe.get_list("Sales Return Request", filters=card_filters,
         or_filters=ownership_filters, fields=[{"COUNT": "name", "as": "total"}], limit_page_length=1)
     total = frappe.utils.cint(result[0].total) if result else 0
     cards.append({"key": key, "label": spec[0], "count": total})
     if key == stage:
         selected_count = total
+        selected_filters = card_filters
 offset = max(0, min(frappe.utils.cint(frappe.form_dict.get("offset")), 1000000))
-rows = frappe.get_list("Sales Return Request", filters=base_filters + STAGES[stage][1],
+rows = frappe.get_list("Sales Return Request", filters=selected_filters,
     or_filters=ownership_filters, fields=["name", "request_date", "customer", "sales_team_group",
         "workflow_state", "status", "receive_status", "credit_status", "refund_status"],
     order_by="request_date desc, creation desc, name desc", limit_start=offset, limit_page_length=20)
 frappe.response["message"] = {"cards": cards, "rows": rows, "total": selected_count,
     "teams": sorted(teams), "customers": [row.customer for row in customers if row.customer],
     "offset": offset, "page_size": 20,
-    "notice": "No managed teams are assigned. A default team is not required; add Allowed Sales Teams." if mode == "team" and not teams else ""}
+    "notice": "Unassigned review: authorized company/branch records only. The team selector does not apply; these requests are excluded from team totals." if stage == "unassigned" else ("No managed teams are assigned. A default team is not required; add Allowed Sales Teams." if mode == "team" and not teams else "")}
 """
 
 HTML = """<section class="returns-dashboard" data-mode="MODE">

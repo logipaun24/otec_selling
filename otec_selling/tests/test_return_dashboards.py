@@ -68,7 +68,7 @@ class TestReturnDashboards(IntegrationTestCase):
 
 	def test_my_counts_and_rows_use_ownership_and_permission_aware_reads(self):
 		result, calls = self.run_api()
-		self.assertEqual(len(result["cards"]), len(STAGES))
+		self.assertEqual(len(result["cards"]), len(STAGES) - 1)
 		for call in calls:
 			self.assertEqual(
 				{row[0] for row in call.kwargs["or_filters"]}, {"owner", "sales_user", "requested_by"}
@@ -79,7 +79,8 @@ class TestReturnDashboards(IntegrationTestCase):
 		result, calls = self.run_api(mode="team", teams=["B", "C"])
 		self.assertEqual(result["teams"], ["B", "C"])
 		for call in calls:
-			self.assertIn(["sales_team_group", "in", ["B", "C"]], call.kwargs["filters"])
+			if ["sales_team_group", "is", "not set"] not in call.kwargs["filters"]:
+				self.assertIn(["sales_team_group", "in", ["B", "C"]], call.kwargs["filters"])
 			self.assertIn(["company", "in", ["Company"]], call.kwargs["filters"])
 			self.assertIn(["branch", "in", ["Branch"]], call.kwargs["filters"])
 			self.assertEqual(call.kwargs["or_filters"], [])
@@ -89,6 +90,17 @@ class TestReturnDashboards(IntegrationTestCase):
 		self.assertTrue(result["notice"])
 		for call in calls:
 			self.assertIn(["name", "=", ""], call.kwargs["filters"])
+
+	def test_unassigned_queue_is_separate_and_company_branch_scoped(self):
+		result, calls = self.run_api(mode="team", teams=["B", "C"], stage="unassigned")
+		filters = calls[-1].kwargs["filters"]
+		self.assertIn(["sales_team_group", "is", "not set"], filters)
+		self.assertIn(["company", "in", ["Company"]], filters)
+		self.assertIn(["branch", "in", ["Branch"]], filters)
+		self.assertNotIn(["sales_team_group", "in", ["B", "C"]], filters)
+		self.assertIn("excluded from team totals", result["notice"])
+		with self.assertRaises(frappe.ValidationError):
+			self.run_api(mode="my", stage="unassigned")
 
 	def test_unassigned_team_cannot_be_requested(self):
 		with self.assertRaises(frappe.ValidationError):

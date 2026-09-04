@@ -100,12 +100,14 @@ after_sync = [
 	"otec_selling.branch_operations_setup.setup_branch_operations",
 	"otec_selling.delivery_item_returns.setup_delivery_item_returns",
 	"otec_selling.return_dashboards.setup_return_dashboards",
+	"otec_selling.team_controls.setup_team_controls",
 ]
 after_migrate = [
 	"otec_selling.setup.setup_otec_quotation",
 	"otec_selling.branch_operations_setup.setup_branch_operations",
 	"otec_selling.delivery_item_returns.setup_delivery_item_returns",
 	"otec_selling.return_dashboards.setup_return_dashboards",
+	"otec_selling.team_controls.setup_team_controls",
 ]
 
 # Uninstallation
