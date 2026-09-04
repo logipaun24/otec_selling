@@ -29,7 +29,14 @@ class TestBranchPolicy(TestCase):
 			patch.object(policy, "company_branch_scope", return_value=({"Co"}, {"Branch"}))
 		)
 		self.stack.enter_context(patch.object(policy, "scopes", return_value={"Team B", "Team C"}))
-		self.stack.enter_context(patch.object(policy.frappe.db, "get_value", return_value="Local"))
+		real_get_value = frappe.db.get_value
+
+		def branch_warehouse(doctype, name=None, fieldname="name", *args, **kwargs):
+			if doctype == "Branch" and fieldname == "custom_default_branch_warehouse":
+				return "Local"
+			return real_get_value(doctype, name, fieldname, *args, **kwargs)
+
+		self.stack.enter_context(patch.object(policy.frappe.db, "get_value", side_effect=branch_warehouse))
 		self.stack.enter_context(
 			patch.object(
 				policy, "warehouse_within", side_effect=lambda warehouse, root, company: warehouse == "Local"
