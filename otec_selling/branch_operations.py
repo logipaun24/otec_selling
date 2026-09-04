@@ -59,6 +59,12 @@ def is_manager(hierarchy, user):
 	return bool(hierarchy and MANAGERS.get(hierarchy.position) in frappe.get_roles(user))
 
 
+def is_business_owner(hierarchy, user):
+	return bool(
+		hierarchy and hierarchy.position == "Business Owner" and "Business Owner" in frappe.get_roles(user)
+	)
+
+
 def document_branch(doc):
 	return doc.get("custom_branch") if doc.doctype in ("Quotation", "Pick List") else doc.get("branch")
 
@@ -173,6 +179,8 @@ def has_permission(doc, user=None, ptype="read", **kwargs):
 		return True
 	hierarchy = hierarchy_for(user)
 	manager_role = bool(set(MANAGERS.values()).intersection(frappe.get_roles(user)))
+	if doc.doctype in APPROVED and is_business_owner(hierarchy, user):
+		return ptype == "create" or in_commercial_scope(doc, hierarchy, user)
 	if manager_role and not is_manager(hierarchy, user):
 		return False  # A role alone is not a branch/approval assignment.
 	if doc.doctype == "Stock Reservation Entry" and is_manager(hierarchy, user):
@@ -394,7 +402,9 @@ def validate_commercial_write(doc, method=None):
 	user = frappe.session.user
 	if user != "Administrator" and set(MANAGERS.values()).intersection(frappe.get_roles(user)):
 		hierarchy = hierarchy_for(user)
-		if not is_manager(hierarchy, user) or not in_commercial_scope(doc, hierarchy, user):
+		if not (is_manager(hierarchy, user) or is_business_owner(hierarchy, user)) or not in_commercial_scope(
+			doc, hierarchy, user
+		):
 			frappe.throw(
 				"Branch fulfillment access does not permit editing another team's sale.",
 				frappe.PermissionError,

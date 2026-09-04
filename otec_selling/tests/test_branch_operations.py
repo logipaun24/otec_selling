@@ -225,6 +225,25 @@ class TestBranchPolicy(TestCase):
 			with self.assertRaises(frappe.PermissionError):
 				policy.validate_approval(doc, "before_submit")
 
+	def test_business_owner_with_sales_roles_keeps_exception_authority(self):
+		self.hierarchy.position = "Business Owner"
+		doc = self.document(
+			doctype="Sales Order",
+			branch="Elsewhere",
+			owner="rep",
+			workflow_state="Approved for Fulfillment",
+			requires_business_owner_approval=1,
+			get_doc_before_save=lambda: None,
+		)
+		with (
+			patch.object(policy.frappe, "session", frappe._dict(user="boss")),
+			patch.object(policy.frappe, "get_roles", return_value=["Business Owner", "Sales Supervisor"]),
+		):
+			self.assertTrue(policy.has_permission(doc, "boss", "write"))
+			policy.validate_commercial_write(doc)
+			policy.validate_approval(doc, "before_submit")
+			self.assertEqual(doc.custom_commercial_approved_by, "boss")
+
 	def test_previous_branch_prevents_reassignment_bypass(self):
 		doc = self.document(get_doc_before_save=lambda: self.document(custom_branch="Elsewhere"))
 		with patch.object(policy.frappe, "session", frappe._dict(user="manager")):
