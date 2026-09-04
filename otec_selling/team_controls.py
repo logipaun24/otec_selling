@@ -75,6 +75,8 @@ def validate_team(record, required=False, filling_legacy=False, team_field=team_
         for source in sources:
             if source.company != record.company:
                 frappe.throw("The source sale belongs to another company.")
+            if required and source.docstatus != 1:
+                frappe.throw("Approve/submit the original sale before approving this document.")
             value = source.get(team_field(source)) or ""
             if value not in source_teams: source_teams.append(value)
         if len(source_teams) > 1:

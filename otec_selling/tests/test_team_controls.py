@@ -111,6 +111,11 @@ class TestTeamControls(TestCase):
 		source = self.record(custom_sales_team_group="A", docstatus=1)
 		self.assertEqual(self.run_guard(doc, sources={"SO": source}).custom_sales_team_group, "A")
 
+	def test_unsubmitted_source_cannot_be_approved_downstream(self):
+		doc = self.record(doctype="Delivery Note", items=[frappe._dict(against_sales_order="SO")])
+		with self.assertRaises(frappe.ValidationError):
+			self.run_guard(doc, sources={"SO": self.record(custom_sales_team_group="B")}, required=True)
+
 	def test_mixed_source_teams_rejected(self):
 		doc = self.record(
 			doctype="Pick List", locations=[frappe._dict(sales_order="A"), frappe._dict(sales_order="B")]
