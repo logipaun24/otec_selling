@@ -31,10 +31,10 @@ class TestBranchPolicy(TestCase):
 		self.stack.enter_context(patch.object(policy, "scopes", return_value={"Team B", "Team C"}))
 		real_get_value = frappe.db.get_value
 
-		def branch_warehouse(doctype, name=None, fieldname="name", *args, **kwargs):
+		def branch_warehouse(doctype, filters=None, fieldname="name", *args, **kwargs):
 			if doctype == "Branch" and fieldname == "custom_default_branch_warehouse":
 				return "Local"
-			return real_get_value(doctype, name, fieldname, *args, **kwargs)
+			return real_get_value(doctype, filters, fieldname, *args, **kwargs)
 
 		self.stack.enter_context(patch.object(policy.frappe.db, "get_value", side_effect=branch_warehouse))
 		self.stack.enter_context(
