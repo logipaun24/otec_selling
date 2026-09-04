@@ -94,9 +94,15 @@ doctype_js = {
 # ------------
 
 # before_install = "otec_selling.install.before_install"
-after_install = "otec_selling.sales_return_setup.setup_sales_returns"
+after_install = [
+	"otec_selling.sales_return_setup.setup_sales_returns",
+	"otec_selling.branch_operations_setup.setup_branch_operations",
+]
 after_sync = "otec_selling.patches.v0_0.configure_purchasing_lifecycle.execute"
-after_migrate = "otec_selling.setup.setup_otec_quotation"
+after_migrate = [
+	"otec_selling.setup.setup_otec_quotation",
+	"otec_selling.branch_operations_setup.setup_branch_operations",
+]
 
 # Uninstallation
 # ------------
@@ -149,15 +155,34 @@ after_migrate = "otec_selling.setup.setup_otec_quotation"
 # Hook on document methods and events
 
 doc_events = {
+	"User": {"validate": "otec_selling.branch_operations_setup.sync_workflow_role"},
+	"Quotation": {
+		"before_save": "otec_selling.branch_operations.validate_commercial_write",
+		"before_submit": "otec_selling.branch_operations.validate_approval",
+	},
+	"Sales Return Request": {
+		"before_save": "otec_selling.branch_operations.validate_commercial_write",
+		"before_submit": "otec_selling.branch_operations.validate_approval",
+	},
 	"Pick List": {
 		"before_validate": "otec_selling.fulfillment_ownership.set_fulfillment_ownership",
+		"before_save": "otec_selling.branch_operations.validate_operation",
+		"before_submit": "otec_selling.branch_operations.validate_operation",
+		"before_cancel": "otec_selling.branch_operations.validate_operation",
 	},
 	"Sales Order": {
 		"before_validate": "otec_selling.sales_order_ownership.set_sales_order_ownership",
-		"before_submit": "otec_selling.sales_order_ownership.validate_sales_order_ownership",
+		"before_save": "otec_selling.branch_operations.validate_commercial_write",
+		"before_submit": [
+			"otec_selling.sales_order_ownership.validate_sales_order_ownership",
+			"otec_selling.branch_operations.validate_approval",
+		],
 	},
 	"Delivery Note": {
 		"before_validate": "otec_selling.fulfillment_ownership.set_fulfillment_ownership",
+		"before_save": "otec_selling.branch_operations.validate_operation",
+		"before_submit": "otec_selling.branch_operations.validate_operation",
+		"before_cancel": "otec_selling.branch_operations.validate_operation",
 		"validate": "otec_selling.sales_returns.validate_linked_return",
 		"on_submit": "otec_selling.sales_returns.sync_from_linked_document",
 		"on_cancel": "otec_selling.sales_returns.sync_from_linked_document",
@@ -192,6 +217,15 @@ doc_events = {
 		"before_submit": "otec_selling.purchasing_lifecycle.before_submit_container_landed_cost",
 		"before_cancel": "otec_selling.purchasing_lifecycle.before_cancel_container_landed_cost",
 	},
+}
+
+# Document-level access guards (native role/User Permission checks still apply).
+has_permission = {
+	doctype: "otec_selling.branch_operations.has_permission"
+	for doctype in ("Quotation", "Sales Order", "Pick List", "Delivery Note", "Sales Return Request")
+}
+permission_query_conditions = {
+	"Sales Return Request": "otec_selling.branch_operations.rma_query",
 }
 
 # Scheduled Tasks

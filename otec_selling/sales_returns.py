@@ -115,7 +115,7 @@ def make_request_from_source(source_doctype: str, source_name: str) -> dict:
 
 @frappe.whitelist()
 def make_return_delivery_note(name: str) -> dict:
-    _require_role(WAREHOUSE_ROLES, _("receive a sales return"))
+    _require_role(WAREHOUSE_ROLES | {"Sales Team Leader", "Sales Supervisor"}, _("receive a sales return"))
     request = _get_submitted_rma(name)
     if not request.delivery_note:
         frappe.throw(_("Set the Delivery Note before receiving physical goods."))
@@ -143,6 +143,9 @@ def make_return_delivery_note(name: str) -> dict:
     target.sales_return_request = request.name
     target.set_warehouse = ""
     target.run_method("calculate_taxes_and_totals")
+    from otec_selling.branch_operations import validate_operation
+
+    validate_operation(target)
     return target.as_dict()
 
 

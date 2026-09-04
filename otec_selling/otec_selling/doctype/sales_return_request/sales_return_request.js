@@ -10,7 +10,7 @@ frappe.ui.form.on("Sales Return Request", {
     refresh(frm) {
         if (frm.doc.docstatus !== 1) return;
         const roles = frappe.user_roles || [];
-        if (["Stock User", "Stock Manager", "System Manager"].some(r => roles.includes(r)) && frm.doc.receive_status !== "Received") {
+        if (["Stock User", "Stock Manager", "System Manager", "Sales Team Leader", "Sales Supervisor"].some(r => roles.includes(r)) && frm.doc.receive_status !== "Received") {
             frm.add_custom_button(__("Return Receipt"), () => open_mapped(frm, "otec_selling.sales_returns.make_return_delivery_note", "Delivery Note"), __("Create"));
         }
         if (["Accounts User", "Accounts Manager", "System Manager"].some(r => roles.includes(r))) {
