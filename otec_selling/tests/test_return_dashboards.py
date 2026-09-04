@@ -1,8 +1,8 @@
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import frappe
 from frappe.tests import IntegrationTestCase
-from frappe.utils.safe_exec import safe_exec
+from frappe.utils.safe_exec import get_safe_globals, safe_exec
 
 from otec_selling.return_dashboards import API_NAME, STAGES, api_script, setup_return_dashboards
 
@@ -37,13 +37,17 @@ class TestReturnDashboards(IntegrationTestCase):
 			return []
 
 		response = {"type": "json"}
-		with (
-			patch.object(frappe.local, "session", frappe._dict(user=actor)),
-			patch.object(frappe.local, "form_dict", frappe._dict(mode=mode, **filters)),
-			patch.object(frappe, "response", response),
-			patch.object(frappe, "get_all", side_effect=metadata),
-			patch.object(frappe, "get_list", side_effect=transactions) as queries,
-		):
+		# Replace only the script's namespace, not Frappe's internal metadata reads.
+		globals_for_script = get_safe_globals()
+		queries = Mock(side_effect=transactions)
+		globals_for_script.frappe.update(
+			session=frappe._dict(user=actor),
+			form_dict=frappe._dict(mode=mode, **filters),
+			response=response,
+			get_all=Mock(side_effect=metadata),
+			get_list=queries,
+		)
+		with patch("frappe.utils.safe_exec.get_safe_globals", return_value=globals_for_script):
 			safe_exec(api_script(), restrict_commit_rollback=True)
 			return response["message"], queries.call_args_list
 
