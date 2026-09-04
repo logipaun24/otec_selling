@@ -4,7 +4,7 @@ from unittest.mock import Mock, patch
 import frappe
 from frappe.utils.safe_exec import get_safe_globals, safe_exec
 
-from otec_selling.team_controls import CORE
+from otec_selling.team_controls import CORE, CORRECTION
 
 
 class Record(frappe._dict):
@@ -16,6 +16,29 @@ class Record(frappe._dict):
 
 
 class TestTeamControls(TestCase):
+	def test_correction_requires_privilege_and_reason_and_cannot_reassign(self):
+		for roles, reason, existing_team in (
+			(["Sales Team Leader"], "Confirmed original team", ""),
+			(["System Manager"], "", ""),
+			(["System Manager"], "Confirmed original team", "B"),
+		):
+			namespace = get_safe_globals()
+			doc = self.record(custom_sales_team_group=existing_team)
+			doc.check_permission = Mock()
+			namespace.frappe.update(
+				session=frappe._dict(user="actor"),
+				get_all=Mock(return_value=roles),
+				get_doc=Mock(return_value=doc),
+				throw=Mock(side_effect=frappe.ValidationError),
+				form_dict=frappe._dict(doctype="Sales Order", name="SO", team="C", reason=reason),
+			)
+			writes = Mock()
+			namespace.frappe.db.set_value = writes
+			with patch("frappe.utils.safe_exec.get_safe_globals", return_value=namespace):
+				with self.assertRaises(frappe.ValidationError):
+					safe_exec(CORE + CORRECTION)
+			writes.assert_not_called()
+
 	def record(self, **values):
 		doc = Record(
 			doctype="Sales Order",
