@@ -224,6 +224,45 @@ def api_script():
 	return "STAGES = " + repr(STAGES) + "\n" + API_BODY
 
 
+def merge_return_icons(layout, permitted_icons):
+	"""Append missing return icons without resetting a user's saved desktop."""
+	merged = list(layout)
+	labels = {row.get("label") for row in layout}
+	for icon in permitted_icons:
+		if icon.get("label") in ("My Sales Returns", "Team Sales Returns") and icon["label"] not in labels:
+			merged.append(dict(icon))
+			labels.add(icon["label"])
+	return merged
+
+
+def sync_return_desktop_layout(user):
+	"""Targeted admin setup: only add icons permitted by native workspace rules."""
+	from frappe.boot import get_sidebar_items
+	from frappe.desk.desktop import get_workspaces
+	from frappe.desk.doctype.desktop_icon.desktop_icon import get_desktop_icons
+
+	if not frappe.db.exists("Desktop Layout", user):
+		return False  # No saved layout: the normal boot icons already apply.
+	original_user = frappe.session.user
+	try:
+		frappe.set_user(user)
+		allowed = [page.name for page in get_workspaces()["pages"]]
+		boot = frappe._dict(workspace_sidebar_item=get_sidebar_items(allowed))
+		frappe.cache.hdel("desktop_icons", user)
+		icons = get_desktop_icons(bootinfo=boot)
+	finally:
+		frappe.set_user(original_user)
+	doc = frappe.get_doc("Desktop Layout", user)
+	before = json.loads(doc.layout or "[]")
+	after = merge_return_icons(before, icons)
+	if before == after:
+		return False
+	doc.layout = json.dumps(after)
+	doc.save(ignore_permissions=True)
+	frappe.cache.hdel("bootinfo", user)
+	return True
+
+
 def setup_return_dashboards():
 	name = "OTEC Sales Return Dashboard API"
 	script = (

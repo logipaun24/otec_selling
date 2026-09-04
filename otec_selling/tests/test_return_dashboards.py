@@ -4,10 +4,25 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils.safe_exec import get_safe_globals, safe_exec
 
-from otec_selling.return_dashboards import API_NAME, STAGES, api_script, setup_return_dashboards
+from otec_selling.return_dashboards import (
+	API_NAME,
+	STAGES,
+	api_script,
+	merge_return_icons,
+	setup_return_dashboards,
+)
 
 
 class TestReturnDashboards(IntegrationTestCase):
+	def test_saved_layout_merge_preserves_customization_and_is_idempotent(self):
+		before = [{"label": "Selling", "hidden": 1, "idx": 9}]
+		icons = [{"label": "My Sales Returns", "hidden": 0}, {"label": "Unrelated"}]
+		after = merge_return_icons(before, icons)
+		self.assertEqual(after[:1], before)
+		self.assertEqual(len(after), 2)
+		self.assertEqual(after, merge_return_icons(after, icons))
+		self.assertEqual(before, [{"label": "Selling", "hidden": 1, "idx": 9}])
+
 	def run_api(self, mode="my", teams=None, **filters):
 		actor = "dashboard-test@example.invalid"
 		hierarchy = frappe._dict(
