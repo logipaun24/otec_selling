@@ -181,7 +181,7 @@ async function refresh() {
                 const td = document.createElement('td');
                 if (field === 'name') {
                     const link = document.createElement('a');
-                    link.href = '/app/sales-return-request/' + encodeURIComponent(row.name);
+                    link.href = '/desk/sales-return-request/' + encodeURIComponent(row.name);
                     link.textContent = row.name; td.append(link);
                 } else td.textContent = row[field] || '—';
                 tr.append(td);
@@ -291,4 +291,44 @@ def setup_return_dashboards():
 		workspace.set("roles", [{"role": role} for role in roles])
 		workspace.set("custom_blocks", [{"custom_block_name": block_name, "label": title}])
 		workspace.save(ignore_permissions=True)
+		setup_dashboard_navigation(title, roles)
 	frappe.clear_cache()
+
+
+def setup_dashboard_navigation(title, roles):
+	"""v16 navigation is separate from Workspace; preserve existing sidebar items."""
+	sidebar = (
+		frappe.get_doc("Workspace Sidebar", title)
+		if frappe.db.exists("Workspace Sidebar", title)
+		else frappe.get_doc(
+			{
+				"doctype": "Workspace Sidebar",
+				"title": title,
+				"standard": 1,
+				"app": "otec_selling",
+				"module": "OTEC Selling",
+				"header_icon": "refresh",
+			}
+		)
+	)
+	if not any(row.link_type == "Workspace" and row.link_to == title for row in sidebar.items):
+		sidebar.append("items", {"type": "Link", "label": title, "link_type": "Workspace", "link_to": title})
+		sidebar.save(ignore_permissions=True)
+	if not frappe.db.exists("Desktop Icon", title):
+		icon = frappe.get_doc(
+			{
+				"doctype": "Desktop Icon",
+				"label": title,
+				"standard": 1,
+				"app": "otec_selling",
+				"icon_type": "Link",
+				"link_type": "Workspace Sidebar",
+				"link_to": title,
+				"icon": "refresh",
+				"hidden": 0,
+			}
+		)
+		icon.set("roles", [{"role": role} for role in roles])
+		icon.insert(ignore_permissions=True)
+	frappe.cache.delete_key("desktop_icons")
+	frappe.cache.delete_key("bootinfo")

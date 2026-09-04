@@ -100,6 +100,16 @@ class TestReturnDashboards(IntegrationTestCase):
 			workspace = frappe.get_doc("Workspace", title)
 			self.assertEqual(len(workspace.custom_blocks), 1)
 			self.assertTrue(frappe.db.exists("Custom HTML Block", "OTEC " + title))
+			sidebar = frappe.get_doc("Workspace Sidebar", title)
+			self.assertEqual(
+				sum(row.link_type == "Workspace" and row.link_to == title for row in sidebar.items), 1
+			)
+			icon = frappe.get_doc("Desktop Icon", title)
+			self.assertEqual(icon.link_type, "Workspace Sidebar")
+			self.assertEqual(icon.link_to, title)
+			self.assertEqual(icon.standard, 1)
+			self.assertFalse(icon.hidden)
+			self.assertEqual({r.role for r in icon.roles}, {r.role for r in workspace.roles})
 
 	def test_native_query_builder_supports_dashboard_aggregate(self):
 		result = frappe.get_list(

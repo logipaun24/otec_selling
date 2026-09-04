@@ -1,6 +1,9 @@
 # Sales return dashboards
 
-Open **My Sales Returns** or **Team Sales Returns** from the workspace sidebar.
+Open **My Sales Returns** or **Team Sales Returns** from the desktop icons.
+On Frappe v16 the direct routes are `/desk/my-sales-returns` and
+`/desk/team-sales-returns`. Setup also creates the separate Workspace Sidebar
+and role-filtered Desktop Icon records required by v16 navigation.
 Click a status card to filter the paginated request list. Request links open the
 RMA. Request Date From/To are inclusive; blank dates include all dates. Customer,
 status and (for team mode) managed-team filters apply to the list. Cards retain
