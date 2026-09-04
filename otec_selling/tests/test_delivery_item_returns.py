@@ -114,3 +114,15 @@ class TestDeliveryItemReturnConfiguration(IntegrationTestCase):
 		doc = frappe.get_doc({"doctype": "Delivery Note", "is_return": 1, "items": [{"qty": -3}]})
 		apply_balances(doc)
 		self.assertEqual(doc.items[0].custom_client_retained_qty, 0)
+
+	def test_unsubmitted_delivery_is_not_yet_client_retained(self):
+		doc = frappe.get_doc(
+			{
+				"doctype": "Delivery Note",
+				"docstatus": 0,
+				"is_return": 0,
+				"items": [{"qty": 10, "conversion_factor": 1}],
+			}
+		)
+		apply_balances(doc)
+		self.assertEqual(doc.items[0].custom_client_retained_qty, 0)

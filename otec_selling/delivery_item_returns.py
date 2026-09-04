@@ -27,7 +27,7 @@ def apply_balances(doc, method=None):
 			)
 		)
 	for row in doc.items:
-		if doc.get("is_return") or doc.docstatus == 2:
+		if doc.get("is_return") or doc.docstatus != 1:
 			row.custom_returned_qty = row.custom_client_retained_qty = 0
 		else:
 			row.custom_returned_qty, row.custom_client_retained_qty = quantities(
@@ -71,7 +71,7 @@ GROUP BY item.dn_detail
 VALIDATE_SCRIPT = """
 returned_by_row = dict(frappe.db.sql(RETURN_QUERY, doc.name)) if doc.name and not doc.is_return else {}
 for row in doc.items:
-    if doc.is_return or doc.docstatus == 2:
+    if doc.is_return or doc.docstatus != 1:
         row.custom_returned_qty = 0
         row.custom_client_retained_qty = 0
     else:
