@@ -32,14 +32,14 @@ class TestReturnDashboards(IntegrationTestCase):
 
 		def transactions(doctype, **kwargs):
 			self.assertEqual(doctype, "Sales Return Request")
-			if kwargs["fields"] == ["count(name) as total"]:
+			if kwargs["fields"] == [{"COUNT": "name", "as": "total"}]:
 				return [frappe._dict(total=0)]
 			return []
 
-		response = {}
+		response = {"type": "json"}
 		with (
-			patch.object(frappe, "session", frappe._dict(user=actor)),
-			patch.object(frappe, "form_dict", frappe._dict(mode=mode, **filters)),
+			patch.object(frappe.local, "session", frappe._dict(user=actor)),
+			patch.object(frappe.local, "form_dict", frappe._dict(mode=mode, **filters)),
 			patch.object(frappe, "response", response),
 			patch.object(frappe, "get_all", side_effect=metadata),
 			patch.object(frappe, "get_list", side_effect=transactions) as queries,
@@ -96,3 +96,9 @@ class TestReturnDashboards(IntegrationTestCase):
 			workspace = frappe.get_doc("Workspace", title)
 			self.assertEqual(len(workspace.custom_blocks), 1)
 			self.assertTrue(frappe.db.exists("Custom HTML Block", "OTEC " + title))
+
+	def test_native_query_builder_supports_dashboard_aggregate(self):
+		result = frappe.get_list(
+			"Sales Return Request", fields=[{"COUNT": "name", "as": "total"}], limit_page_length=1
+		)
+		self.assertIn("total", result[0])

@@ -94,7 +94,7 @@ selected_count = 0
 for key in STAGES:
     spec = STAGES[key]
     result = frappe.get_list("Sales Return Request", filters=base_filters + spec[1],
-        or_filters=ownership_filters, fields=["count(name) as total"], limit_page_length=1)
+        or_filters=ownership_filters, fields=[{"COUNT": "name", "as": "total"}], limit_page_length=1)
     total = frappe.utils.cint(result[0].total) if result else 0
     cards.append({"key": key, "label": spec[0], "count": total})
     if key == stage:
