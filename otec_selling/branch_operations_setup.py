@@ -218,6 +218,7 @@ def setup_branch_operations():
 		for doctype in ("Pick List", "Delivery Note"):
 			_grant(doctype, role, ("read", "create", "write", "submit", "print"))
 		_grant("Stock Reservation Entry", role, ("read", "create", "write", "submit"))
+		_grant("Serial and Batch Bundle", role, ("read", "create", "write", "submit"))
 		for doctype in ("Warehouse", "Item", "UOM", "Batch", "Serial No", "Bin"):
 			_grant(doctype, role, ("read", "select"))
 	fields = {}

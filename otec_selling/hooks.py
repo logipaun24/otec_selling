@@ -155,6 +155,12 @@ after_migrate = [
 # Hook on document methods and events
 
 doc_events = {
+	"Serial and Batch Bundle": {
+		"before_save": "otec_selling.branch_operations.validate_bundle",
+		"before_submit": "otec_selling.branch_operations.validate_bundle",
+		"before_cancel": "otec_selling.branch_operations.validate_bundle",
+		"before_update_after_submit": "otec_selling.branch_operations.validate_bundle",
+	},
 	"Stock Reservation Entry": {
 		"before_save": "otec_selling.branch_operations.validate_reservation",
 		"before_submit": "otec_selling.branch_operations.validate_reservation",
@@ -235,9 +241,11 @@ has_permission = {
 		"Delivery Note",
 		"Sales Return Request",
 		"Stock Reservation Entry",
+		"Serial and Batch Bundle",
 	)
 }
 permission_query_conditions = {
+	"Serial and Batch Bundle": "otec_selling.branch_operations.bundle_query",
 	"Stock Reservation Entry": "otec_selling.branch_operations.reservation_query",
 	"Sales Return Request": "otec_selling.branch_operations.rma_query",
 }

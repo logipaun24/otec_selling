@@ -177,6 +177,8 @@ def has_permission(doc, user=None, ptype="read", **kwargs):
 		return False  # A role alone is not a branch/approval assignment.
 	if doc.doctype == "Stock Reservation Entry" and is_manager(hierarchy, user):
 		return ptype == "create" or reservation_in_scope(doc, user)
+	if doc.doctype == "Serial and Batch Bundle" and is_manager(hierarchy, user):
+		return ptype == "create" or bundle_in_scope(doc, user)
 	if doc.doctype in ("Pick List", "Delivery Note") and is_manager(hierarchy, user):
 		if ptype in ("read", "print", "email", "export", "report"):
 			return in_branch_scope(doc, hierarchy)
@@ -219,6 +221,64 @@ def reservation_in_scope(doc, user):
 		and row.item_code == doc.get("item_code")
 		and row.warehouse == doc.get("warehouse")
 		for row in pick.locations
+	)
+
+
+def bundle_in_scope(doc, user):
+	"""Allow sales packing metadata, never Stock Entry/manufacturing bundles."""
+	hierarchy = hierarchy_for(user)
+	if not is_manager(hierarchy, user) or doc.get("voucher_type") not in ("Pick List", "Delivery Note"):
+		return False
+	if doc.get("voucher_no") and frappe.db.exists(doc.voucher_type, doc.voucher_no):
+		voucher = frappe.get_doc(doc.voucher_type, doc.voucher_no)
+		if voucher.company != doc.company or not can_operate(voucher, user):
+			return False
+		root = frappe.db.get_value("Branch", document_branch(voucher), "custom_default_branch_warehouse")
+		return warehouse_within(doc.get("warehouse"), root, doc.company) or explicit_warehouse_access(
+			user, doc.get("warehouse"), doc.company, doc.voucher_type
+		)
+	# Native packing can create a bundle while its new parent is still in memory.
+	# Only local stock is allowed until that parent has been saved and validated.
+	companies, branches = company_branch_scope(hierarchy)
+	return doc.get("company") in companies and any(
+		warehouse_within(
+			doc.get("warehouse"),
+			frappe.db.get_value("Branch", branch, "custom_default_branch_warehouse"),
+			doc.company,
+		)
+		for branch in branches
+	)
+
+
+def validate_bundle(doc, method=None):
+	user = frappe.session.user
+	if user == "Administrator" or not set(MANAGERS.values()).intersection(frappe.get_roles(user)):
+		return
+	previous = doc.get_doc_before_save()
+	if not bundle_in_scope(doc, user) or (previous and not bundle_in_scope(previous, user)):
+		frappe.throw(
+			"Serial/batch bundles are restricted to branch delivery picking and receipts within your fulfillment scope.",
+			frappe.PermissionError,
+		)
+
+
+def bundle_query(user=None):
+	user = user or frappe.session.user
+	if user == "Administrator" or not set(MANAGERS.values()).intersection(frappe.get_roles(user)):
+		return ""
+	hierarchy = hierarchy_for(user)
+	if not is_manager(hierarchy, user):
+		return "1 = 0"
+	companies, branches = company_branch_scope(hierarchy)
+	if not companies or not branches:
+		return "1 = 0"
+	company_sql = ", ".join(frappe.db.escape(value) for value in sorted(companies))
+	branch_sql = ", ".join(frappe.db.escape(value) for value in sorted(branches))
+	return " OR ".join(
+		f"(`tabSerial and Batch Bundle`.`voucher_type` = {frappe.db.escape(doctype)} AND "
+		f"`tabSerial and Batch Bundle`.`voucher_no` IN (SELECT name FROM `tab{doctype}` "
+		f"WHERE company IN ({company_sql}) AND `{branch_field}` IN ({branch_sql})))"
+		for doctype, branch_field in (("Pick List", "custom_branch"), ("Delivery Note", "branch"))
 	)
 
 

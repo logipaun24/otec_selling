@@ -180,6 +180,15 @@ class TestBranchPolicy(TestCase):
 			doc.from_voucher_type = "Purchase Receipt"
 			self.assertFalse(policy.reservation_in_scope(doc, "manager"))
 
+	def test_unsaved_bundle_allows_only_local_sales_packing(self):
+		doc = frappe._dict(company="Co", voucher_type="Pick List", warehouse="Local")
+		self.assertTrue(policy.bundle_in_scope(doc, "manager"))
+		doc.warehouse = "Central"
+		self.assertFalse(policy.bundle_in_scope(doc, "manager"))
+		doc.warehouse = "Local"
+		doc.voucher_type = "Stock Entry"
+		self.assertFalse(policy.bundle_in_scope(doc, "manager"))
+
 	def test_self_approval_guard_and_audit(self):
 		doc = self.document(
 			doctype="Sales Order",

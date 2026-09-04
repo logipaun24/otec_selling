@@ -56,6 +56,9 @@ Stock Reservation Entry read/create/write/submit is limited by server guards to
 matching items of submitted delivery Pick Lists within the same fulfillment scope.
 The existing auto-reservation step is retained. Return receipts are excluded from
 outgoing central-route checks; normal return/RMA and DR paper checks remain active.
+Serial and Batch Bundle read/create/write/submit supports picking and delivery
+within the same scope, not manufacturing or Stock Entry bundles. Unsaved parent
+documents may prepare local bundles; central parents must be saved first.
 
 `Fulfillment Workflow User` is a helper role with **no document permissions**. It
 allows the common Pick List states to be edited by existing sales/stock roles;
