@@ -99,6 +99,8 @@ class TestReturnDashboards(IntegrationTestCase):
 		for title in ("My Sales Returns", "Team Sales Returns"):
 			workspace = frappe.get_doc("Workspace", title)
 			self.assertEqual(len(workspace.custom_blocks), 1)
+			# Frappe's Block.make matches content.custom_block_name against row.label.
+			self.assertEqual(workspace.custom_blocks[0].label, "OTEC " + title)
 			self.assertTrue(frappe.db.exists("Custom HTML Block", "OTEC " + title))
 			sidebar = frappe.get_doc("Workspace Sidebar", title)
 			self.assertEqual(

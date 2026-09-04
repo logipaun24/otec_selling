@@ -289,7 +289,7 @@ def setup_return_dashboards():
 			}
 		)
 		workspace.set("roles", [{"role": role} for role in roles])
-		workspace.set("custom_blocks", [{"custom_block_name": block_name, "label": title}])
+		workspace.set("custom_blocks", [{"custom_block_name": block_name, "label": block_name}])
 		workspace.save(ignore_permissions=True)
 		setup_dashboard_navigation(title, roles)
 	frappe.clear_cache()
@@ -330,5 +330,12 @@ def setup_dashboard_navigation(title, roles):
 		)
 		icon.set("roles", [{"role": role} for role in roles])
 		icon.insert(ignore_permissions=True)
+	# Place these beside the site's existing sales shortcuts inside ERPNext.
+	icon = frappe.get_doc("Desktop Icon", title)
+	if icon.link_type == "Workspace Sidebar" and icon.link_to == title:
+		parent = frappe.db.get_value("Desktop Icon", {"label": "Selling"}, "parent_icon")
+		if parent and not icon.parent_icon:
+			icon.parent_icon = parent
+			icon.save(ignore_permissions=True)
 	frappe.cache.delete_key("desktop_icons")
 	frappe.cache.delete_key("bootinfo")
