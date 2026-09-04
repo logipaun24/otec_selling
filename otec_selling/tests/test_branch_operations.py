@@ -12,6 +12,7 @@ from otec_selling.branch_operations_setup import (
 	MARKER,
 	WORKFLOW_ROLE,
 	commercial_transitions,
+	return_receipt_routing,
 	setup_branch_operations,
 	visibility_extension,
 )
@@ -131,6 +132,53 @@ class TestBranchPolicy(TestCase):
 	def test_server_script_extension_compiles(self):
 		for doctype in ("Sales Order", "Pick List", "Delivery Note"):
 			compile(visibility_extension(doctype), "visibility-extension", "exec")
+
+	def test_return_routing_change_is_narrow_and_idempotent(self):
+		source = (
+			"if not sales_order_values.custom_central_fulfillment:\n    continue\n# DR paper checks remain"
+		)
+		result = return_receipt_routing(source)
+		self.assertIn('if doc.get("is_return") or not sales_order_values.custom_central_fulfillment:', result)
+		self.assertIn("# DR paper checks remain", result)
+		self.assertEqual(result, return_receipt_routing(result))
+
+	def test_reservation_requires_matching_submitted_pick(self):
+		pick = self.document(
+			docstatus=1,
+			locations=[
+				frappe._dict(
+					name="row",
+					warehouse="Local",
+					item_code="item",
+					sales_order="order",
+					sales_order_item="order-row",
+				)
+			],
+		)
+		doc = frappe._dict(
+			doctype="Stock Reservation Entry",
+			company="Co",
+			from_voucher_type="Pick List",
+			from_voucher_no="pick",
+			from_voucher_detail_no="row",
+			voucher_type="Sales Order",
+			voucher_no="order",
+			voucher_detail_no="order-row",
+			warehouse="Local",
+			item_code="item",
+		)
+		with (
+			patch.object(frappe.db, "exists", return_value=True),
+			patch.object(frappe, "get_doc", return_value=pick),
+		):
+			self.assertTrue(policy.reservation_in_scope(doc, "manager"))
+			doc.warehouse = "Central"
+			self.assertFalse(policy.reservation_in_scope(doc, "manager"))
+			doc.warehouse = "Local"
+			pick.docstatus = 0
+			self.assertFalse(policy.reservation_in_scope(doc, "manager"))
+			doc.from_voucher_type = "Purchase Receipt"
+			self.assertFalse(policy.reservation_in_scope(doc, "manager"))
 
 	def test_self_approval_guard_and_audit(self):
 		doc = self.document(

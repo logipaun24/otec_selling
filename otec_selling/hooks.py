@@ -155,6 +155,12 @@ after_migrate = [
 # Hook on document methods and events
 
 doc_events = {
+	"Stock Reservation Entry": {
+		"before_save": "otec_selling.branch_operations.validate_reservation",
+		"before_submit": "otec_selling.branch_operations.validate_reservation",
+		"before_cancel": "otec_selling.branch_operations.validate_reservation",
+		"before_update_after_submit": "otec_selling.branch_operations.validate_reservation",
+	},
 	"User": {"validate": "otec_selling.branch_operations_setup.sync_workflow_role"},
 	"Quotation": {
 		"before_save": "otec_selling.branch_operations.validate_commercial_write",
@@ -222,9 +228,17 @@ doc_events = {
 # Document-level access guards (native role/User Permission checks still apply).
 has_permission = {
 	doctype: "otec_selling.branch_operations.has_permission"
-	for doctype in ("Quotation", "Sales Order", "Pick List", "Delivery Note", "Sales Return Request")
+	for doctype in (
+		"Quotation",
+		"Sales Order",
+		"Pick List",
+		"Delivery Note",
+		"Sales Return Request",
+		"Stock Reservation Entry",
+	)
 }
 permission_query_conditions = {
+	"Stock Reservation Entry": "otec_selling.branch_operations.reservation_query",
 	"Sales Return Request": "otec_selling.branch_operations.rma_query",
 }
 

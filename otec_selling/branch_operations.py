@@ -175,6 +175,8 @@ def has_permission(doc, user=None, ptype="read", **kwargs):
 	manager_role = bool(set(MANAGERS.values()).intersection(frappe.get_roles(user)))
 	if manager_role and not is_manager(hierarchy, user):
 		return False  # A role alone is not a branch/approval assignment.
+	if doc.doctype == "Stock Reservation Entry" and is_manager(hierarchy, user):
+		return ptype == "create" or reservation_in_scope(doc, user)
 	if doc.doctype in ("Pick List", "Delivery Note") and is_manager(hierarchy, user):
 		if ptype in ("read", "print", "email", "export", "report"):
 			return in_branch_scope(doc, hierarchy)
@@ -200,6 +202,55 @@ def has_permission(doc, user=None, ptype="read", **kwargs):
 			doc.get("requested_by"),
 		)
 	return True
+
+
+def reservation_in_scope(doc, user):
+	if doc.get("from_voucher_type") != "Pick List" or doc.get("voucher_type") != "Sales Order":
+		return False
+	if not doc.get("from_voucher_no") or not frappe.db.exists("Pick List", doc.from_voucher_no):
+		return False
+	pick = frappe.get_doc("Pick List", doc.from_voucher_no)
+	if pick.docstatus != 1 or pick.company != doc.company or not can_operate(pick, user, submitting=True):
+		return False
+	return any(
+		row.name == doc.get("from_voucher_detail_no")
+		and row.sales_order == doc.get("voucher_no")
+		and row.sales_order_item == doc.get("voucher_detail_no")
+		and row.item_code == doc.get("item_code")
+		and row.warehouse == doc.get("warehouse")
+		for row in pick.locations
+	)
+
+
+def validate_reservation(doc, method=None):
+	user = frappe.session.user
+	if user == "Administrator" or not set(MANAGERS.values()).intersection(frappe.get_roles(user)):
+		return
+	previous = doc.get_doc_before_save()
+	if not reservation_in_scope(doc, user) or (previous and not reservation_in_scope(previous, user)):
+		frappe.throw(
+			"Branch stock reservation must reference a submitted delivery Pick List within your fulfillment scope.",
+			frappe.PermissionError,
+		)
+
+
+def reservation_query(user=None):
+	user = user or frappe.session.user
+	if user == "Administrator" or not set(MANAGERS.values()).intersection(frappe.get_roles(user)):
+		return ""
+	hierarchy = hierarchy_for(user)
+	if not is_manager(hierarchy, user):
+		return "1 = 0"
+	companies, branches = company_branch_scope(hierarchy)
+	if not companies or not branches:
+		return "1 = 0"
+	company_sql = ", ".join(frappe.db.escape(value) for value in sorted(companies))
+	branch_sql = ", ".join(frappe.db.escape(value) for value in sorted(branches))
+	return (
+		"`tabStock Reservation Entry`.`from_voucher_type` = 'Pick List' AND "
+		"`tabStock Reservation Entry`.`from_voucher_no` IN (SELECT name FROM `tabPick List` "
+		f"WHERE company IN ({company_sql}) AND custom_branch IN ({branch_sql}) AND docstatus = 1)"
+	)
 
 
 def validate_operation(doc, method=None):

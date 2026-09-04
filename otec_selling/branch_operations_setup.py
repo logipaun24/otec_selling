@@ -17,6 +17,14 @@ WORKFLOW_MEMBERS = {"Sales User", "Sales Team Leader", "Sales Supervisor", "Stoc
 MARKER = "# OTEC BRANCH FULFILLMENT SCOPE V1"
 
 
+def return_receipt_routing(script):
+	"""Return receipts follow their receiving warehouse, not original dispatch root."""
+	return script.replace(
+		"if not sales_order_values.custom_central_fulfillment:",
+		'if doc.get("is_return") or not sales_order_values.custom_central_fulfillment:',
+	)
+
+
 def visibility_extension(doctype):
 	branch_field = "custom_branch" if doctype == "Pick List" else "branch"
 	status = " AND `tabSales Order`.`docstatus` = 1" if doctype == "Sales Order" else ""
@@ -209,6 +217,7 @@ def setup_branch_operations():
 			continue
 		for doctype in ("Pick List", "Delivery Note"):
 			_grant(doctype, role, ("read", "create", "write", "submit", "print"))
+		_grant("Stock Reservation Entry", role, ("read", "create", "write", "submit"))
 		for doctype in ("Warehouse", "Item", "UOM", "Batch", "Serial No", "Bin"):
 			_grant(doctype, role, ("read", "select"))
 	fields = {}
@@ -256,6 +265,11 @@ def setup_branch_operations():
 			},
 		]
 	create_custom_fields(fields, update=True)
+	for name in ("Central Fulfillment DR", "Delivery Note Validation"):
+		if frappe.db.exists("Server Script", name):
+			script = frappe.get_doc("Server Script", name)
+			script.script = return_receipt_routing(script.script)
+			script.save(ignore_permissions=True)
 	for doctype in ("Sales Order", "Pick List", "Delivery Note"):
 		name = QUERY_SCRIPTS[doctype]
 		if frappe.db.exists("Server Script", name):
